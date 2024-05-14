@@ -1,6 +1,7 @@
 package com.siw.siwfood.controller;
 
 import com.siw.siwfood.helpers.constants.GlobalValues;
+import com.siw.siwfood.helpers.credentials.Utils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.CredenzialiService;
@@ -70,7 +71,7 @@ public class GlobalController {
       Credenziali credenziali = null;
       Utente loggedUser = null;
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      if (false) { // Utils.userIsLoggedIn(authentication)
+      if (Utils.userIsLoggedIn(authentication)) {
          userDetails = (UserDetails) authentication.getPrincipal();
          //credenziali = this.credenzialiService.getCredentials(userDetails.getUsername());
          //loggedUser = this.utenteService.getUtente(credenziali);
