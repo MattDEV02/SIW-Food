@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
+
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Login')}">
+</head>
+<link rel="stylesheet" th:href="@{/css/login/style.css}"/>
+<body>
+<div class="container">
+   <div class="row justify-content-center">
+      <div class="col-12 mt-5">
+         <div class="row justify-content-center">
+            <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 col-xxl-5 shadow border rounded px-5 pt-4 pb-3 mt-3">
+               <div class="row text-center mt-2 mb-4">
+                  <h1 th:text="${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' Login 🕵️‍♂️'"></h1>
+               </div>
+               <div th:with="registrationSuccessful = ${param.registrationSuccessful != null}, logoutSuccessful = ${param.logoutSuccessful != null}, invalidCredentials = ${param.invalidCredentials != null}">
+                  <div
+                        th:replace="~{fragments/shared/message/successMessage.html :: successMessage(text = 'Registrato con successo.', condition = ${registrationSuccessful})}"></div>
+                  <div
+                        th:replace="~{fragments/shared/message/successMessage.html :: successMessage(text = 'Uscito con successo.', condition = ${logoutSuccessful})}"></div>
+                  <div
+                        th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = 'Username o password incorretti.', condition = ${invalidCredentials})}"></div>
+               </div>
+               <form id="login-form" method="POST" name="login-form" th:action="@{/login}" th:object="${credenziali}">
+                  <div class="mb-3">
+                     <label class="form-label" for="username">Username:</label>
+                     <input class="form-control py-2" id="username"
+                            name="username"
+                            placeholder="Inserisci il tuo username" required th:field="*{username}"
+                            th:maxlength="${FIELD_SIZES_MAP.get('USERNAME_MAX_LENGTH')}"
+                            th:minlength="${FIELD_SIZES_MAP.get('USERNAME_MIN_LENGTH')}"
+                            th:title="'Inserisco il tuo username ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + '.'"
+                            type="text"/>
+                  </div>
+                  <div class="mb-3">
+                     <label class="form-label" for="password">Password:</label>
+                     <div class="input-group">
+                        <input aria-describedby="toggle-password-visibility" aria-label="Password"
+                               class="form-control py-2"
+                               id="password" name="password" placeholder="Inserisci la tua password"
+                               required
+                               th:field="*{password}"
+                               th:maxlength="${FIELD_SIZES_MAP.get('PASSWORD_MAX_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_MIN_LENGTH')}"
+                               th:title="'Inserisci la tua password ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + '.'"
+                               type="password"/>
+                        <div
+                              th:replace="~{fragments/shared/showPasswordButton.html :: showPasswordButton()}"></div>
+                     </div>
+                  </div>
+                  <div class="my-4">
+                     <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="login-form"
+                             formmethod="POST"
+                             id="submit"
+                             name="submit" th:title="'Login to ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}"
+                             type="submit">
+                        Login
+                        <i class="fas fa-sign-in-alt mx-1"></i>
+                     </button>
+                  </div>
+               </form>
+               <div class="col-12">
+                  <div class="row text-center" id="login-footer">
+                     <p>
+                        <a class="text-decoration-none ms-3" th:href="@{/}"
+                           th:title="'Vai alla pagina di home di ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + '.'">Home</a>
+                        <a class="text-decoration-none ms-3" th:href="@{/registration}"
+                           th:title="'Vai alla pagina di registrationzr di ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + '.'">Register</a>
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<script th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}" th:src="@{/js/shared/showPassword.js}"
+        type="text/javascript"></script>
+</body>
+
+</html>
