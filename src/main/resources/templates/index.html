@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <title>Title</title>
-</head>
-<body>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
 
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Home')}">
+</head>
+<link rel="stylesheet" th:href="@{/css/login/style.css}"/>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<div class="container">
+   <div class="row justify-content-center">
+      <div class="col-12 mt-5">
+         <div class="row justify-content-center">
+            <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 col-xxl-5 shadow border rounded px-5 pt-4 pb-3 mt-3">
+               <div class="row text-center mt-2 mb-4">
+                  <div class="col-12 mt-5">
+                     <div class="row text-center">
+                        <h1 th:text="${'Benvenuto ' + loggedUser.credenziali.username + ' 👋'}">
+                        </h1>
+                        <h3 th:text="${'Ruolo ' + #strings.capitalize(loggedUser.credenziali.role.toLowerCase().replace('_role', ' '))}"></h3>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
 </body>
+
 </html>

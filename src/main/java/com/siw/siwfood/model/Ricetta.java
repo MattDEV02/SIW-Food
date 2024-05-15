@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity(name = "Ricetta")
-@Table(name = "Ricetta", schema = GlobalValues.SQL_SCHEMA_NAME)
+@Table(name = "Ricette", schema = GlobalValues.SQL_SCHEMA_NAME)
 public class Ricetta {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,15 +34,14 @@ public class Ricetta {
    private String descrizione;
 
    @NotNull
-   @Size(min = 1)
-   @Size.List(value = {})
+   @Size(min = 0)
    private List<String> immagini;
 
    @OneToMany(cascade = CascadeType.ALL, targetEntity = Ingrediente.class, orphanRemoval = true)
    @JoinColumn(name = "ricetta", referencedColumnName = "id", nullable = false)
    private List<Ingrediente> ingredienti;
 
-   @OneToOne(cascade = CascadeType.ALL, targetEntity = Utente.class, optional = false, orphanRemoval = true)
+   @OneToOne(cascade = {}, targetEntity = Utente.class, optional = false)
    private Utente cuoco;
 
    public Utente getCuoco() {
@@ -105,7 +104,7 @@ public class Ricetta {
               ", nome = '" + this.getNome() + '\'' +
               ", descrizione = " + this.getDescrizione() +
               ", immagini = '" + this.getImmagini().toString() + '\'' +
-              ", ingredienti = '" + this.getIngredienti().toString() + '\'' +
+              //", ingredienti = '" + this.getIngredienti().toString() + '\'' +
               " }";
    }
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
+
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Ricetta')}">
+
+</head>
+<link rel="stylesheet" th:href="@{/css/shared/style.css}"/>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<main>
+   <div class="container" th:with="isRicettaValid = ${ricetta != null}, isCuocoValid = ${ricetta.cuoco != null}">
+      <div class="row justify-content-center">
+         <div class="col-12 mb-5" th:if="${isCuocoValid}">
+            <div class="row">
+               <div th:replace="~{fragments/dashboard/shared/ricetta.html :: ricetta(ricetta = ${ricetta})}"></div>
+            </div>
+         </div>
+         <div class="col-12 mb-5" th:if="${isCuocoValid}">
+            <div class="row">
+               <div th:replace="~{fragments/dashboard/shared/cuoco.html :: cuoco(cuoco = ${ricetta.cuoco})}"></div>
+            </div>
+         </div>
+         <!--
+           <div th:unless="${areCuochiValid}"
+               th:with="productName = ${searchedProductName}, productCategory = ${searchedProductCategoryName}">
+             <div
+                   th:replace="~{fragments/dashboard/home/cuochiNotFound.html :: salesNotFound(hasSearchedSales = ${hasSearchedSales}, productName = ${productName}, productCategory = ${productCategory})}"></div>
+          </div>
+         -->
+      </div>
+   </div>
+</main>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
+</body>
+
+</html>

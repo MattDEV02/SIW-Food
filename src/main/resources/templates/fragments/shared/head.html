@@ -18,7 +18,7 @@
    <meta content="no-cache" http-equiv="content-type"/>
    <meta content="Owner of this Web-App" name="copyright"/>
    <meta content="NOINDEX, NOFOLLOW" name="robots"/>
-   <title th:text="${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' ' + ${title}"></title>
+   <title th:text="${title} + ' ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}"></title>
    <link rel="icon" sizes="64x64" th:href="@{/images/logo/logo.png}" type="image/x-icon"/>
    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/logo/logo.png}">
    <!-- FontAwesome 5 -->

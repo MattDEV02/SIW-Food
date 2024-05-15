@@ -2,7 +2,7 @@ package com.siw.siwfood.model;
 
 import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
-import com.siw.siwfood.helpers.credentials.Roles;
+import com.siw.siwfood.helpers.credenziali.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

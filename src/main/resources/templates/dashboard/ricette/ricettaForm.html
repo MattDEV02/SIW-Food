@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
+
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Registrazione nuova ricetta')}">
+</head>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<main>
+   <div class="container">
+      <div class="row justify-content-center">
+         <div class="col-12 my-5">
+            <div class="row justify-content-center">
+               <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
+                    th:title="'Form di registrazione nuova ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
+                  <div class="row text-center mt-2 mb-4">
+                     <h2 th:text="'Registrazione ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🥐'"></h2>
+                  </div>
+                  <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
+                        th:action="@{/dashboard/ricette/register}" enctype="multipart/form-data">
+                     <div class="mb-3">
+                        <label class="form-label" for="nome">Nome:</label>
+                        <input class="form-control py-2" id="nome" name="nome"
+                               placeholder="Inserisci il nome della ricetta"
+                               required th:field="${ricetta.nome}"
+                               th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
+                               th:object="${ricetta}" title="Inserisci nome della ricetta" type="text"/>
+                        <div
+                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ricetta.nome')}"></div>
+                     </div>
+                     <div class="mb-3">
+                        <label class="form-label" for="descrizione">Descrizione:</label>
+                        <textarea class="form-control py-2" id="descrizione" name="descrizione"
+                               placeholder="Inserisci la descrizione della ricetta"
+                               required th:field="${ricetta.descrizione}"
+                               th:maxlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MIN_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MAX_LENGTH')}"
+                               th:object="${ricetta}" title="Inserisci la descrizione della ricetta" type="text"></textarea>
+                        <div
+                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ricetta.descrizione')}"></div>
+                     </div>
+                     <div class="mb-3">
+                        <label class="form-label" for="immagini-ricetta">Immagini</label>
+                        <input accept="image/png, image/jpeg, image/jpg, image/" class="form-control py-2"
+                               form="ricetta-registration-form"
+                               id="immagini-ricetta"
+                               name="immagini-ricetta"
+                               placeholder="Inserisci la tua fotografia" required
+                               th:size="${FIELD_SIZES_MAP.get('IMAGE_MAX_BYTE_SIZE')}"
+                               multiple="true"
+                               type="file"/>
+                        <div
+                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageEmptyError}, condition = ${productImageEmptyError != null})}"></div>
+                        <div
+                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageSizeError}, condition = ${productImageSizeError != null})}"></div>
+                        <div
+                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageExtensionError}, condition = ${productImageExtensionError != null})}"></div>
+                     </div>
+                     <div class="mb-3">
+                        <label class="form-label" for="cuoco-ricetta">Cuoco:</label>
+                        <select class="form-control form-select py-2" id="cuoco-ricetta" name="cuoco-ricetta" required
+                                title="Inserisci il cuoco della ricetta">
+                           <option th:each="cuoco : ${cuochi}"
+                                   th:id="${cuoco.nome + '#' + cuoco.id }"
+                                   th:name="${cuoco.nome + '#' + cuoco.id }"
+                                   th:text="${cuoco.credenziali.username}"
+                                   th:value="${cuoco.id}"></option>
+                        </select>
+                     </div>
+                     <div class="my-4">
+                        <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="ricetta-registration-form"
+                                formmethod="POST"
+                                id="submit"
+                                name="submit" title="Registra una nuova ricetta"
+                                type="submit">
+                           Registra ricetta
+                           <i class="fas fa-registered mx-1"></i>
+                        </button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
+</body>
+
+</html>

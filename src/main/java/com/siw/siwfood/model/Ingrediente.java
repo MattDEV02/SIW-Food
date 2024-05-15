@@ -12,7 +12,7 @@ import jdk.jfr.Unsigned;
 import java.util.Objects;
 
 @Entity(name = "Ingrediente")
-@Table(name = "Ingrediente", schema = GlobalValues.SQL_SCHEMA_NAME)
+@Table(name = "Ingredienti", schema = GlobalValues.SQL_SCHEMA_NAME)
 public class Ingrediente {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)

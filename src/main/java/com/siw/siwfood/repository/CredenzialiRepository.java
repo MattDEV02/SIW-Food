@@ -1,4 +1,9 @@
 package com.siw.siwfood.repository;
 
-public interface CredenzialiRepository {
+import com.siw.siwfood.model.Credenziali;
+import org.springframework.data.repository.CrudRepository;
+
+public interface CredenzialiRepository extends CrudRepository<Credenziali, Long> {
+   Credenziali findByUsername(String username);
+
 }

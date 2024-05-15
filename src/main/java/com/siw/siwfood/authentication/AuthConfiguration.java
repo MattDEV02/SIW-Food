@@ -1,5 +1,6 @@
 package com.siw.siwfood.authentication;
 
+import com.siw.siwfood.helpers.credenziali.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ import javax.sql.DataSource;
 //@EnableWebMvc
 public class AuthConfiguration implements WebMvcConfigurer {
 
-   private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:" + ProjectPaths._STATIC + "/"};
+   private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:" + ProjectPaths.STATIC + "/"};
    @Autowired
    private DataSource dataSource;
 
@@ -36,6 +37,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
       ;
    }
 
+
    @Autowired
    public void configureGlobal(@NonNull AuthenticationManagerBuilder auth)
            throws Exception {
@@ -43,9 +45,9 @@ public class AuthConfiguration implements WebMvcConfigurer {
               //use the autowired datasource to access the saved credentials
               .dataSource(this.dataSource)
               //retrieve username and role
-              .authoritiesByUsernameQuery("SELECT username, role FROM credentials WHERE username = ?")
+              .authoritiesByUsernameQuery("SELECT username, role FROM Credenziali WHERE username = ?")
               //retrieve username, password and a boolean flag specifying whether the user is enabled or not (always enabled in our case)
-              .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM credentials WHERE username = ?");
+              .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM Credenziali WHERE username = ?");
    }
 
 
@@ -64,16 +66,22 @@ public class AuthConfiguration implements WebMvcConfigurer {
       httpSecurity
               .cors(AbstractHttpConfigurer::disable)
               .csrf(AbstractHttpConfigurer::disable)
+
               .authorizeHttpRequests(
                       auth -> auth
-                              .requestMatchers(HttpMethod.GET, "/", "/registration", "/login", "/forgotUsername", "/logout", "/FAQs", "/css/**", "/js/**", "/images/**").permitAll()
-                              .requestMatchers(HttpMethod.POST, "/registerNewUser", "/sendForgotUsernameEmail").permitAll()
-                           //   .requestMatchers(new RegexRequestMatcher(".*newSale.*", null)).hasAnyAuthority(Roles.SELLER_AND_BUYER_ROLE.toString(), Roles.SELLER_ROLE.toString())
-                             // .requestMatchers(new RegexRequestMatcher(".*cart.*", null)).hasAnyAuthority(Roles.SELLER_AND_BUYER_ROLE.toString(), Roles.BUYER_ROLE.toString())
-                              //.requestMatchers(new RegexRequestMatcher(".*order.*", null)).hasAnyAuthority(Roles.SELLER_AND_BUYER_ROLE.toString(), Roles.BUYER_ROLE.toString())
-                              .requestMatchers(HttpMethod.DELETE).denyAll()
-                           //   .requestMatchers(HttpMethod.GET, "/" + APIPrefixes.DASHBOARD + "/**").authenticated()
-                             // .requestMatchers(HttpMethod.POST, "/" + APIPrefixes.DASHBOARD + "/**").authenticated()
+                              .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/logout", "/css/**", "/js/**", "/images/**").permitAll()
+                              .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/cuochi/register", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/cuochi/delete/**", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/cuochi", null)).permitAll()
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ricette/register", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ricette/delete/**", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ricette", null)).permitAll()
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ingredienti/register", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ingredienti/delete/**", null)).hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers(new AntPathRequestMatcher("/dashboard/ingredienti", null)).permitAll()
+                              .requestMatchers(HttpMethod.GET, "/dashboard/**").authenticated()
+                              .requestMatchers(HttpMethod.POST, "/dashboard/**").authenticated()
                               .anyRequest().authenticated()
               )
               .formLogin(formLogin -> formLogin
@@ -87,11 +95,10 @@ public class AuthConfiguration implements WebMvcConfigurer {
               .logout(logout -> logout
                       .logoutUrl("/logout")
                       .logoutSuccessUrl("/login?logoutSuccessful=true")
+                      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                       .invalidateHttpSession(true)
                       .clearAuthentication(true)
                       .deleteCookies("JSESSIONID")
-                      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                      .clearAuthentication(true)
                       .permitAll());
       return httpSecurity.build();
    }

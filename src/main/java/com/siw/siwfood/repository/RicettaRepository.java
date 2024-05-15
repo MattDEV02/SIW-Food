@@ -1,4 +1,7 @@
 package com.siw.siwfood.repository;
 
-public interface RicettaRepository {
+import com.siw.siwfood.model.Ricetta;
+import org.springframework.data.repository.CrudRepository;
+
+public interface RicettaRepository extends CrudRepository<Ricetta, Long> {
 }

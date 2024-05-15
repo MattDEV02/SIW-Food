@@ -1,0 +1,28 @@
+<div class="card text-center shadow mt-5" th:fragment="ricetta(ricetta)"
+     th:title="${ricetta.descrizione}">
+   <a th:href="@{'/dashboard/ricette/' + ${ricetta.id}}">
+      <img class="card-img-top"
+           th:alt="${ricetta.nome}"
+           th:src="@{${ricetta.immagini}}"
+           th:title="${ricetta.nome}"/>
+   </a>
+   <div class="card-body border">
+      <h3 class="card-title" th:text="${ricetta.nome}"></h3>
+      <p class="card-text" th:text="${ricetta.descrizione}"></p>
+   </div>
+   <div class="card-footer">
+      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
+         th:href="@{'/dashboard/cuochi/' + ${ricetta.cuoco.id}}"
+         th:title="'Visualizza i dati del Cuoco ' + ${ricetta.cuoco.credenziali.username}"
+      >
+         Cuoco
+      </a>
+      <a class="btn btn-danger ms-3 mb-2" role="button"
+         th:href="@{'/dashboard/ricette/delete/' + ${ricetta.id}}"
+         th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}"
+         title="Rimuovi questa ricetta"
+      >
+         <i class="fas fa-trash"></i>
+      </a>
+   </div>
+</div>

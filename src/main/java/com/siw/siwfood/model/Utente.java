@@ -11,11 +11,13 @@ import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity(name = "Utente")
-@Table(name = "Utente", schema = GlobalValues.SQL_SCHEMA_NAME)
+@Table(name = "Utenti", schema = GlobalValues.SQL_SCHEMA_NAME)
 public class Utente {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,24 +36,35 @@ public class Utente {
    @Column(name = "cognome", nullable = false)
    private String cognome;
 
-  @DateTimeFormat(pattern = Temporals.DATE_FORMAT)
+   @DateTimeFormat(pattern = Temporals.DATE_FORMAT)
    @Past
    @Column(name = "datanascita", nullable = false)
    @Temporal(TemporalType.DATE)
    private Date dataNascita;
 
+   //@NotBlank
+   @Size(min = FieldSizes.IMAGE_RELATIVEPATH_MIN_LENGTH)
+   @Column(name = "fotografia", nullable = true)
+   private String fotografia;
+
    @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, orphanRemoval = true)
    @JoinColumn(name = "credenziali", referencedColumnName = "id", nullable = false, unique = true)
    private Credenziali credenziali;
 
-   @NotBlank
-   @Size(min = FieldSizes.IMAGE_RELATIVEPATH_MIN_LENGTH)
-   @Column(name = "fotografia", nullable = false)
-   private String fotografia;
+   @OneToMany(cascade = CascadeType.REMOVE, targetEntity = Ricetta.class, orphanRemoval = true)
+   private List<Ricetta> ricette;
 
 
    public Utente() {
+      this.ricette = new ArrayList<Ricetta>();
+   }
 
+   public List<Ricetta> getRicette() {
+      return this.ricette;
+   }
+
+   public void setRicette(List<Ricetta> ricette) {
+      this.ricette = ricette;
    }
 
    public String getCognome() {

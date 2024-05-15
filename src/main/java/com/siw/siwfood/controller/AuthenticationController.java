@@ -1,11 +1,11 @@
 package com.siw.siwfood.controller;
+import com.siw.siwfood.helpers.utente.Utils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.UtenteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -30,40 +31,45 @@ public class AuthenticationController {
    //@Autowired
    //private UserValidator userValidator;
    //@Autowired
-   //private CredenzialiValidator credentzialiValidator;
+   //private CredenzialiValidator credenzialiValidator;
 
-   @GetMapping(value = {"/registration", "/registration/"})
+   @GetMapping(value = {"/register", "/register/"})
    public ModelAndView showRegisterForm() {
-      ModelAndView modelAndView = new ModelAndView("registration.html");
-      modelAndView.addObject("Utente", new Utente());
+      ModelAndView modelAndView = new ModelAndView("utenteForm.html");
+      modelAndView.addObject("utente", new Utente());
       modelAndView.addObject("credenziali", new Credenziali());
       return modelAndView;
    }
 
-   @PostMapping(value = {"/registerNewUser", "/registerNewUser/"})
+   @PostMapping(value = {"/register", "/register/"})
    public ModelAndView registerUser(@Valid @NonNull @ModelAttribute("utente") Utente utente,
                                     @NonNull BindingResult utenteBindingResult,
                                     @Valid @NonNull @ModelAttribute("credenziali") Credenziali credenziali,
                                     @NonNull BindingResult credenzialiBindingResult,
-                                    @NonNull @RequestParam("confirm-password") String confirmPassword) {
+                                    @NonNull @RequestParam("confirm-password") String confirmPassword,
+                                    @NonNull @RequestParam("fotografia-utente") MultipartFile fotografiaUtente) {
       ModelAndView modelAndView = new ModelAndView(AuthenticationController.REGISTRATION_ERROR);
       //this.credentialsValidator.setConfirmPassword(confirmPassword);
       //this.userValidator.validate(user, userBindingResult);
       //this.credentialsValidator.validate(credentials, credentialsBindingResult);
       if (!utenteBindingResult.hasErrors() && !credenzialiBindingResult.hasErrors()) {
-         //Utils.cryptAndSaveUserCredentialsPassword(credenziali, passwordEncoder);
-        // utente.setCredenziali(credenziali);
-         //User savedUser = this.utenteService.saveUser(utente);
-        // if (savedUser != null) {
-          //  modelAndView.setViewName(AuthenticationController.REGISTRATION_SUCCESSFUL);
-         //}
+         String encodedPassword = passwordEncoder.encode(credenziali.getPassword());
+         credenziali.setPassword(encodedPassword);
+         utente.setCredenziali(credenziali);
+         Utente savedUser = this.utenteService.saveUtente(utente);
+         if (savedUser != null) {
+            Utils.storeUtenteFotografia(savedUser, fotografiaUtente);
+            modelAndView.setViewName(AuthenticationController.REGISTRATION_SUCCESSFUL);
+         }
       } else {
-         List<ObjectError> userGlobalErrors = utenteBindingResult.getGlobalErrors();
+         List<ObjectError> userGlobalErrors = utenteBindingResult.getAllErrors();
          for (ObjectError userGlobalError : userGlobalErrors) {
+            System.out.println(userGlobalError.getDefaultMessage());
             modelAndView.addObject(Objects.requireNonNull(userGlobalError.getCode()), userGlobalError.getDefaultMessage());
          }
-         List<ObjectError> credentialsGlobalErrors = credenzialiBindingResult.getGlobalErrors();
+         List<ObjectError> credentialsGlobalErrors = credenzialiBindingResult.getAllErrors();
          for (ObjectError credentialGlobalErrors : credentialsGlobalErrors) {
+            System.out.println(credentialGlobalErrors.getDefaultMessage());
             modelAndView.addObject(Objects.requireNonNull(credentialGlobalErrors.getCode()), credentialGlobalErrors.getDefaultMessage());
          }
       }
