@@ -33,15 +33,13 @@ public class Ricetta {
    @Column(name = "descrizione", nullable = false)
    private String descrizione;
 
-   @NotNull
-   @Size(min = 0)
+   @Column(columnDefinition = "TEXT[] NOT NULL")
    private List<String> immagini;
 
-   @OneToMany(cascade = CascadeType.ALL, targetEntity = Ingrediente.class, orphanRemoval = true)
-   @JoinColumn(name = "ricetta", referencedColumnName = "id", nullable = false)
+   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
    private List<Ingrediente> ingredienti;
 
-   @OneToOne(cascade = {}, targetEntity = Utente.class, optional = false)
+   @ManyToOne(targetEntity = Utente.class, optional = false)
    private Utente cuoco;
 
    public Utente getCuoco() {
@@ -117,11 +115,11 @@ public class Ricetta {
          return false;
       }
       Ricetta that = (Ricetta) object;
-      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getDescrizione(), that.getDescrizione()) && Objects.equals(this.getIngredienti(), that.getIngredienti()));
+      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getCuoco(), that.getCuoco()));
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(this.getId(), this.getNome(), this.getDescrizione(),this.getIngredienti());
+      return Objects.hash(this.getId(), this.getNome(), this.getCuoco());
    }
 }

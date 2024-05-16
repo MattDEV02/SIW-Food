@@ -9,6 +9,7 @@ import com.siw.siwfood.repository.UtenteRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class UtenteService {
    @Autowired
    private UtenteRepository utenteRepository;
 
+   @Transactional
    public Utente saveUtente(@NotNull Utente utente) {
       Utente savedUser = this.utenteRepository.save(utente);
       savedUser.setFotografia(ProjectPaths.IMAGES + Utils.getUtenteRelativePathFotografiaDirectoryName(savedUser) + "/" + Utils.getUtenteFotografiaFileName(savedUser));
@@ -40,6 +42,7 @@ public class UtenteService {
       return result;
    }
 
+   @Transactional
    public void deleteCuoco(Long cuocoId) {
       this.utenteRepository.deleteById(cuocoId);
    }
@@ -50,5 +53,12 @@ public class UtenteService {
          return null;
       }
       return cuoco;
+   }
+
+   public Utente getCuoco(@NotNull Credenziali credenziali) {
+      if(!credenziali.getRole().contains(Roles.REGISTRATO_ROLE.toString())) {
+         return null;
+      }
+      return this.utenteRepository.findByCredenziali(credenziali);
    }
 }

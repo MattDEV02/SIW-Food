@@ -40,29 +40,27 @@
                </li>
             </ul>
             <form class="d-flex ms-5 mt-4 mt-xl-0" id="search-product-form" method="GET"
-                  name="search-utenti-form" th:action="@{/dashboard/searchUtenti}">
-               <label class="form-label visually-hidden" for="username"></label>
-               <input class="form-control p-2 mx-3" id="username"
-                      name="username" placeholder="Cerca Utenti"
-                      th:maxlength="${FIELD_SIZES_MAP.get('PRODUCT_NAME_MAX_LENGTH')}"
-                      th:minlength="${FIELD_SIZES_MAP.get('PRODUCT_NAME_MIN_LENGTH')}"
-                      th:value="${param != null ? param.get('username') : null}"
-                      title="Cerca Utenti dal loro username"
+                  name="search-ricette-form" th:action="@{/dashboard/ricette/searchRicette}">
+               <label class="form-label visually-hidden" for="nome"></label>
+               <input class="form-control p-2 mx-3" id="nome"
+                      name="nome" placeholder="Cerca ricette"
+                      th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
+                      th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
+                      th:value="${param != null ? param.get('nome') : null}"
+                      title="Cerca ricette dal loro nome"
                       type="text"/>
-               <label class="form-label visually-hidden" for="role">Ruolo Utente:</label>
-               <select class="form-control form-select py-2" id="role" name="role" required
-                       th:field="${searchedCredenziali.role}" th:object="${searchedCredenziali}"
-                       title="Inserisci il ruolo Utente da cercare">
-                  <option th:each="roleEntry : ${ALL_ROLES_MAP}" th:field="${searchedCredenziali.role}"
-                          th:id="${roleEntry.key + '#role' }"
-                          th:name="${roleEntry.key + '#role' }"
-                          th:selected="${roleEntry.key.contains('OCCASIONALE')}"
-                          th:text="${#strings.capitalize(roleEntry.key.toLowerCase().replace('_', ' '))}"
-                          th:value="${roleEntry.value}"></option>
+               <label class="form-label visually-hidden" for="cuoco">Cuoco:</label>
+               <select class="form-control form-select py-2" id="cuoco" name="cuoco" required
+                       title="Inserisci il cuoco delle ricette da cercare">
+                  <option th:each="cuoco : ${cuochiSelect}"
+                          th:id="${cuoco.nome + '#' + cuoco.id}"
+                          th:name="${cuoco.nome + '#' + cuoco.id}"
+                          th:text="${cuoco.credenziali.username}"
+                          th:value="${cuoco.credenziali.username}"></option>
                </select>
                <button class="form-control btn btn-outline-success form-control mx-3" id="submit" name="submit"
-                       title="Search products" type="submit" value="submit">
-                  Search
+                       title="Cerca ricette" type="submit" value="submit">
+                  Cerca
                   <i class="fas fa-search mx-1"></i>
                </button>
             </form>

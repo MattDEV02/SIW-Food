@@ -44,11 +44,11 @@ public class Utente {
 
    //@NotBlank
    @Size(min = FieldSizes.IMAGE_RELATIVEPATH_MIN_LENGTH)
-   @Column(name = "fotografia", nullable = true)
+   @Column(name = "fotografia")
    private String fotografia;
 
    @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, orphanRemoval = true)
-   @JoinColumn(name = "credenziali", referencedColumnName = "id", nullable = false, unique = true)
+   @JoinColumn(name = "credenziali_id", referencedColumnName = "id", nullable = false, unique = true)
    private Credenziali credenziali;
 
    @OneToMany(cascade = CascadeType.REMOVE, targetEntity = Ricetta.class, orphanRemoval = true)

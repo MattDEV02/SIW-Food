@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <title>Title</title>
-</head>
-<body>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
 
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Cuoco')}">
+
+</head>
+<link rel="stylesheet" th:href="@{/css/shared/style.css}"/>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<main>
+   <div class="container" th:with="isIngredienteValid = ${ingrediente != null}">
+      <div class="row justify-content-center">
+         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mb-5" th:if="${isIngredienteValid}">
+            <div class="row">
+               <div th:replace="~{fragments/dashboard/shared/ingrediente.html :: ingrediente(ingrediente = ${ingrediente})}"></div>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
 </body>
+
 </html>

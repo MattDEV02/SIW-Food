@@ -1,25 +1,53 @@
 <div class="card text-center shadow mt-5" th:fragment="ricetta(ricetta)"
      th:title="${ricetta.descrizione}">
-   <a th:href="@{'/dashboard/ricette/' + ${ricetta.id}}">
-      <img class="card-img-top"
-           th:alt="${ricetta.nome}"
-           th:src="@{${ricetta.immagini}}"
-           th:title="${ricetta.nome}"/>
-   </a>
+   <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      </div>
+      <div class="carousel-inner">
+         <div class="carousel-item active">
+            <img th:src="@{${ricetta.immagini[0]}}" class="d-block w-100 h-100" th:title="${ricetta.nome}" th:alt="${ricetta.nome}">
+         </div>
+         <div class="carousel-item">
+            <img th:src="@{${ricetta.immagini[1]}}" class="d-block w-100  h-100" alt="...">
+         </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+         <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+         <span class="visually-hidden">Next</span>
+      </button>
+   </div>
+   <!-- Fine Carousel -->
    <div class="card-body border">
       <h3 class="card-title" th:text="${ricetta.nome}"></h3>
       <p class="card-text" th:text="${ricetta.descrizione}"></p>
    </div>
    <div class="card-footer">
-      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
+      <a class="card-link link-primary text-decoration-underline fs-6"
          th:href="@{'/dashboard/cuochi/' + ${ricetta.cuoco.id}}"
          th:title="'Visualizza i dati del Cuoco ' + ${ricetta.cuoco.credenziali.username}"
+         th:text="'Cuoco ' + ${ricetta.cuoco.credenziali.username}"
       >
-         Cuoco
       </a>
-      <a class="btn btn-danger ms-3 mb-2" role="button"
+      <a class="card-link link-primary text-decoration-underline fs-6 me-2"
+         th:href="@{'/dashboard/ingredienti/' + ${ricetta.id}}"
+         title="Visualizza gli ingredienti di questa ricetta."
+      >Ingredienti</a>
+      <a class="btn btn-primary mb-2 ms-2 me-2" role="button"
+         th:href="@{'/dashboard/ingredienti/' + ${ricetta.id} + '/register'}"
+         th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')}"
+         title="Aggiungi un ingrediente per questa ricetta"
+      >
+         <i class="fas fa-plus"></i>
+      </a>
+      <a class="btn btn-danger mb-2" role="button"
          th:href="@{'/dashboard/ricette/delete/' + ${ricetta.id}}"
-         th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}"
+         th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')}"
          title="Rimuovi questa ricetta"
       >
          <i class="fas fa-trash"></i>

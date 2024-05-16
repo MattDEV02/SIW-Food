@@ -1,0 +1,20 @@
+<div class="card text-center shadow mt-5" th:fragment="ingrediente(ingrediente)"
+     th:title="${ingrediente.nome} + ' usato nella ricetta ' + ${ingrediente.ricetta.nome}">
+   <div class="card-body border">
+      <h3 class="card-title" th:text="${ingrediente.nome + ' X' + ingrediente.quantita}"></h3>
+      <p class="card-text" th:text="'Ingrediente usato nella ricetta: ' + ${ingrediente.ricetta.nome} + '.'"></p>
+   </div>
+   <div class="card-footer pb-2">
+      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
+         th:href="@{'/dashboard/ricette/' + ${ingrediente.ricetta.id}}"
+         title="Visualizza la ricette relativa a questo ingrediente."
+      >Ricetta</a>
+      <a class="btn btn-danger ms-3 mb-2" role="button"
+         th:href="@{'/dashboard/ingredienti/delete/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
+         th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')  || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')}"
+         title="Rimuovi questo ingrediente"
+      >
+         <i class="fas fa-trash"></i>
+      </a>
+   </div>
+</div>

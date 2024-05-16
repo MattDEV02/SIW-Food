@@ -83,4 +83,9 @@ public class AuthenticationController {
       return modelAndView;
    }
 
+   @GetMapping(value = {"/dashboard", "/dashboard/"})
+   public ModelAndView showDashBoard() {
+      return new ModelAndView("index.html");
+   }
+
 }

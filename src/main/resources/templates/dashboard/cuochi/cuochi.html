@@ -11,9 +11,9 @@
 <main>
    <div class="container" th:with="areCuochiValid = ${cuochi != null && !#sets.isEmpty(cuochi)}">
       <div class="row justify-content-center">
-         <div class="col-12" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
+         <div class="col-12 mt-5" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
             <div class="row text-center">
-               <a th:href="@{/dashboard/cuochi/registrazioneNuovoCuoco}">Inserisci un nuovo cuoco</a>
+               <a th:href="@{/dashboard/cuochi/register}">Inserisci un nuovo cuoco</a>
             </div>
          </div>
          <div class="col-12 mb-5" th:if="${areCuochiValid}">

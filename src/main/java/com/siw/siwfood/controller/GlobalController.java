@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @ControllerAdvice
 public class GlobalController {
@@ -91,13 +92,15 @@ public class GlobalController {
       return loggedUser;
    }
 
-   @ModelAttribute("searchedCredenziali")
-   public Credenziali getSearchedCredenziali(@NotNull Model model) {
-      Credenziali searchedCredenziali = new Credenziali();
-      model.addAttribute("searchedCredenziali", searchedCredenziali);
-      return searchedCredenziali;
+   @ModelAttribute("cuochiSelect")
+   public Set<Utente> getCuochiSelect(@NotNull Model model) {
+      Set<Utente> cuochiSelect = null;
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if(Utils.userIsLoggedIn(authentication)) {
+         cuochiSelect = this.utenteService.getAllCuochi();
+         model.addAttribute("cuochiSelect", cuochiSelect);
+      }
+      return cuochiSelect;
    }
-
-
 
 }

@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
 
-<head th:replace="~{fragments/shared/head.html :: head(title = 'Cuochi')}">
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Ricette')}">
 
 </head>
 <link rel="stylesheet" th:href="@{/css/shared/style.css}"/>
+<style>
+</style>
 <body>
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
    <div class="container" th:with="areRicetteValid = ${ricette != null && !#sets.isEmpty(ricette)}">
       <div class="row justify-content-center">
-         <div class="col-12" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')}">
+         <div class="col-12 mt-5" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')}">
             <div class="row text-center">
                <a th:href="@{/dashboard/ricette/register}">Inserisci una nuova ricetta</a>
             </div>
@@ -35,6 +37,9 @@
 </main>
 <div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>

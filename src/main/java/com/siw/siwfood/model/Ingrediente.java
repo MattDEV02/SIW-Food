@@ -3,10 +3,7 @@ package com.siw.siwfood.model;
 import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import jdk.jfr.Unsigned;
 
 import java.util.Objects;
@@ -26,11 +23,14 @@ public class Ingrediente {
    @Column(name = "nome", nullable = false)
    private String nome;
 
-   @NotBlank
+   @NotNull
    @Min(FieldSizes.QUANTITA_INGREDIENTE_MIN_VALUE)
    @Max(FieldSizes.QUANTITA_INGREDIENTE_MAX_VALUE)
    @Column(name = "quantita", nullable = false)
    private Integer quantita;
+
+   @ManyToOne(targetEntity = Ricetta.class, optional = false)
+   private Ricetta ricetta;
 
    public Long getId() {
       return this.id;
@@ -56,6 +56,14 @@ public class Ingrediente {
       this.quantita = quantita;
    }
 
+   public Ricetta getRicetta() {
+      return this.ricetta;
+   }
+
+   public void setRicetta(Ricetta ricetta) {
+      this.ricetta = ricetta;
+   }
+
    public Ingrediente() {
 
    }
@@ -66,6 +74,7 @@ public class Ingrediente {
               " id = " + this.getId().toString() +
               ", nome = '" + this.getNome() + '\'' +
               ", quantita = " + this.getQuantita() +
+              ", ricetta = " + this.getRicetta() +
               " }";
    }
 
@@ -78,7 +87,7 @@ public class Ingrediente {
          return false;
       }
       Ingrediente that = (Ingrediente) object;
-      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getQuantita(), that.getQuantita()));
+      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getRicetta(), that.getRicetta()) && Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getQuantita(), that.getQuantita()));
    }
 
    @Override

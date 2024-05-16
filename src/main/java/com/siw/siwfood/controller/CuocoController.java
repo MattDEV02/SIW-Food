@@ -1,23 +1,16 @@
 package com.siw.siwfood.controller;
 
 import com.siw.siwfood.model.Credenziali;
-import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.UtenteService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/dashboard/cuochi")
-public class CuochiController {
+public class CuocoController {
    @Autowired
    private UtenteService utenteService;
 
@@ -39,7 +32,6 @@ public class CuochiController {
    @PostMapping(value = {"/register", "/register/"})
    public ModelAndView registerCuoco() {
       ModelAndView modelAndView = new ModelAndView("dashboard/cuochi/cuochiForm.html");
-
       modelAndView.setViewName("redirect:/dashboard/cuochi/" + "id");
       return modelAndView;
    }
@@ -50,7 +42,7 @@ public class CuochiController {
       Utente cuoco = this.utenteService.getCuoco(cuocoId);
       modelAndView.addObject("cuoco", cuoco);
       //List<Ricetta> ricette = cuoco.getRicette();
-      modelAndView.addObject("ricette", Collections.emptyList());
+     // modelAndView.addObject("ricette", Collections.emptyList());
       return modelAndView;
    }
 
