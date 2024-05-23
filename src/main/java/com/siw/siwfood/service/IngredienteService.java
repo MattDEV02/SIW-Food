@@ -16,20 +16,7 @@ public class IngredienteService {
    @Autowired
    private IngredienteRepository ingredienteRepository;
 
-   public Set<Ingrediente> getAllIngredienti() {
-      Set<Ingrediente> result = new HashSet<Ingrediente>();
-      Iterable<Ingrediente> ingredienti = this.ingredienteRepository.findAll();
-      for(Ingrediente ingrediente : ingredienti) {
-         result.add(ingrediente);
-      }
-      return result;
-   }
-
-   public Ingrediente getIngrediente(Long ingredienteId) {
-      return this.ingredienteRepository.findById(ingredienteId).orElse(null);
-   }
-
-   public Set<Ingrediente> getAllIngredientiRicetta(Ricetta ricetta) {
-      return this.ingredienteRepository.findAllByRicetta(ricetta);
+   public Iterable<Ingrediente> getAllIngredienti() {
+      return this.ingredienteRepository.findAll();
    }
 }

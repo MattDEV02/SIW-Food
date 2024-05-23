@@ -16,10 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Controller
-@RequestMapping(value = "/dashboard/ingredienti")
+@RequestMapping(value = "/ingredienti")
 public class IngredienteController {
    @Autowired
    private IngredienteService ingredienteService;
@@ -30,14 +29,14 @@ public class IngredienteController {
 
    @GetMapping(value = {"", "/"})
    public ModelAndView showAllIngredienti() {
-      ModelAndView modelAndView = new ModelAndView("dashboard/ingredienti/ingredienti.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienti.html");
       modelAndView.addObject("ingredienti", this.ingredienteService.getAllIngredienti());
       return modelAndView;
    }
 
    @GetMapping(value = {"/{ricettaId}/register", "/{ricettaId}/register/"})
    public ModelAndView registerIngrediente(@PathVariable("ricettaId") Long ricettaId) {
-      ModelAndView modelAndView = new ModelAndView("dashboard/ingredienti/ingredienteForm.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       modelAndView.addObject("ingrediente", new Ingrediente());
       modelAndView.addObject("ricetta", this.ricettaService.getRicetta(ricettaId));
       return modelAndView;
@@ -48,11 +47,12 @@ public class IngredienteController {
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,
            @PathVariable("ricettaId") Long ricettaId) {
-      ModelAndView modelAndView = new ModelAndView("dashboard/ingredienti/ingrediente.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
       Ricetta ricetta = this.ricettaRepository.findById(ricettaId).orElse(null);
       if(!ingredienteBindingResult.hasErrors() && ricetta != null) {
          Ingrediente savedIngrediente = this.ricettaService.makeIngrediente(ricetta, ingrediente);
-         modelAndView.setViewName("redirect:/dashboard/ingredienti/" + ricetta.getId() + "/" + savedIngrediente.getId());
+         modelAndView.setViewName("redirect:/ingredienti/" + ricetta.getId() + "/" + savedIngrediente.getId());
+         modelAndView.addObject("isIngredienteRegistered", true);
       } else {
          List<ObjectError> ingredientiGlobalErrors = ingredienteBindingResult.getAllErrors();
          for (ObjectError ingredientiGlobalError : ingredientiGlobalErrors) {
@@ -66,9 +66,9 @@ public class IngredienteController {
 
    @GetMapping(value = {"/{ricettaId}", "/{ricettaId}/"})
    public ModelAndView showIngrediente(@PathVariable("ricettaId") Long ricettaId) {
-      ModelAndView modelAndView = new ModelAndView("dashboard/ingredienti/ingredienti.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienti.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Set<Ingrediente> ingredienti = this.ingredienteService.getAllIngredientiRicetta(ricetta);
+      List<Ingrediente> ingredienti = ricetta.getIngredienti();
       modelAndView.addObject("ricetta", ricetta);
       modelAndView.addObject("ingredienti", ingredienti);
       return modelAndView;
@@ -76,9 +76,9 @@ public class IngredienteController {
 
    @GetMapping(value = {"/{ricettaId}/{ingredienteId}", "/{ricettaId}/{ingredienteId}/"})
    public ModelAndView showIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
-      ModelAndView modelAndView = new ModelAndView("dashboard/ingredienti/ingrediente.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Ingrediente ingrediente = this.ingredienteService.getIngrediente(ingredienteId);
+      Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
       modelAndView.addObject("ricetta", ricetta);
       modelAndView.addObject("ingrediente", ingrediente);
       return modelAndView;
@@ -86,10 +86,11 @@ public class IngredienteController {
 
    @GetMapping(value = {"/delete/{ricettaId}/{ingredienteId}", "/delete/{ricettaId}/{ingredienteId}"})
    public ModelAndView deleteIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
-      ModelAndView modelAndView = new ModelAndView("redirect:/dashboard/ingredienti");
+      ModelAndView modelAndView = new ModelAndView("redirect:/ingredienti");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Ingrediente ingrediente = this.ingredienteService.getIngrediente(ingredienteId);
+      Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
       this.ricettaService.destroyIngrediente(ricetta, ingrediente);
+      modelAndView.addObject("isIngredienteDeleted", true);
       return modelAndView;
    }
 

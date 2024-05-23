@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
+
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Registrazione nuovo Cuoco')}">
+</head>
+<link rel="stylesheet" th:href="@{/css/cuoco-update/style.css}"/>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<main>
+<div class="container">
+   <div class="row justify-content-center">
+      <div class="col-12 my-5">
+         <div class="row justify-content-center">
+            <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
+                 th:title="'Form di registrazione cuochi' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
+               <div class="row text-center mt-2 mb-4">
+                  <h2 th:text="'Registrazione cuoco ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'"></h2>
+               </div>
+               <form id="cuoco-update-form" method="POST" name="cuoco-update-form"
+                     th:action="@{/cuochi/register}">
+                  <div class="mb-3">
+                     <label class="form-label" for="nome">Nome:</label>
+                     <input class="form-control py-2" id="nome" name="nome"
+                            placeholder="Aggiorna il nome del Cuoco"
+                            required th:field="${cuoco.utente.nome}"
+                            th:value="${cuoco.utente.nome}"
+                            th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
+                            th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
+                            th:object="${cuoco}" title="Aggiorna il nome del Cuoco" type="text"/>
+                     <div
+                           th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'cuoco.utente.nome')}"></div>
+                  </div>
+                  <div class="mb-3">
+                     <label class="form-label" for="cognome">Cognome:</label>
+                     <input class="form-control py-2" id="cognome" name="cognome"
+                            placeholder="Aggiorna il cognome del Cuoco"
+                            required  th:field="${cuoco.utente.cognome}"
+                            th:value="${cuoco.utente.cognome}"
+                            th:maxlength="${FIELD_SIZES_MAP.get('COGNOME_MAX_LENGTH')}"
+                            th:minlength="${FIELD_SIZES_MAP.get('COGNOME_MIN_LENGTH')}"
+                            th:object="${cuoco}" title="Aggiorna il cognome del Cuoco"
+                            type="text"/>
+                     <div
+                           th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'cuoco.utente.cognome')}"></div>
+                  </div>
+                  <div class="mb-3">
+                     <label class="form-label" for="data-nascita">Data di nascita:</label>
+                     <input class="form-control py-2" id="data-nascita" name="data-nascita"
+                            th:fieldFormat="${TEMPORALS_MAP.get('DATE_FORMAT')}"
+                            th:format="${TEMPORALS_MAP.get('DATE_FORMAT')}"
+                            th:max="${TEMPORALS_MAP.get('DATANASCITA_MIN_VALUE')}"
+                            th:min="${TEMPORALS_MAP.get('DATANASCITA_MAX_VALUE')}"
+                            th:object="${cuoco}"
+                            th:field="${cuoco.utente.dataNascita}"
+                            th:value="${cuoco.utente.dataNascita}"
+                            required
+                            placeholder="Aggiorna la data di nascita del Cuoco"
+                            title="Aggiorna la data di nascita del Cuoco" type="date"/>
+                     <div
+                           th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'cuoco.utente.dataNascita')}"></div>
+                  </div>
+                  
+                  <div class="mb-3">
+                     <label class="form-label" for="username">Username:</label>
+                     <input class="form-control py-2" id="username" name="username"
+                            placeholder="Aggiorna lo username del cuoco" required
+                            th:maxlength="${FIELD_SIZES_MAP.get('USERNAME_MAX_LENGTH')}"
+                            th:minlength="${FIELD_SIZES_MAP.get('USERNAME_MIN_LENGTH')}"
+                            th:object="${cuoco}"
+                            th:field="${cuoco.utente.credenziali.username}"
+                            th:value="${cuoco.utente.credenziali.username}"
+                            th:title="'Aggiorna lo username ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' del Cuoco'"
+                            type="text">
+                     <div
+                           th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'cuoco.utente.credenziali.username')}"></div>
+                  </div>
+                  <div class="my-4">
+                     <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="cuoco-update-form"
+                             formmethod="POST"
+                             id="submit"
+                             name="submit" title="Aggiorna il Cuoco."
+                             type="submit">
+                        Aggiorna Cuoco
+                        <i class="fas fa-edit mx-1"></i>
+                     </button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</main>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
+<script th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}" th:src="@{/js/shared/maxDateInputValue.js}"
+        type="text/javascript"></script>
+<script th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}" th:src="@{/js/shared/showPassword.js}"
+        type="text/javascript"></script>
+</body>
+
+</html>

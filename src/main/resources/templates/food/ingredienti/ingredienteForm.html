@@ -17,7 +17,7 @@
                      <h3 th:text="'Registrazione ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'"></h3>
                   </div>
                   <form id="ingrediente-registration-form" method="POST" name="ingrediente-registration-form"
-                        th:action="@{'/dashboard/ingredienti/' + ${ricetta.id} + '/register'}">
+                        th:action="@{'/ingredienti/' + ${ricetta.id} + '/register'}">
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"

@@ -68,6 +68,10 @@ public class Ingrediente {
 
    }
 
+   public Ingrediente(Ricetta ricetta) {
+      this.ricetta = ricetta;
+   }
+
    @Override
    public String toString() {
       return "Ingrediente: {" +

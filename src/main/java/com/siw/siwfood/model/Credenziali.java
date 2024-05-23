@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity(name = "Credenziali")
 @Table(name = "Credenziali", schema = GlobalValues.SQL_SCHEMA_NAME)
 public class Credenziali {
-   public static Roles DEFAULT_ROLE = Roles.OCCASIONALE_ROLE;
+   public static Roles DEFAULT_ROLE = Roles.REGISTRATO_ROLE;
 
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,18 +47,6 @@ public class Credenziali {
       this.role = Credenziali.DEFAULT_ROLE.toString();
    }
 
-
-   public Credenziali(String username, String password, @NotNull Roles role) {
-      this.username = username;
-      this.password = password;
-      this.role = role.toString();
-   }
-
-   public Credenziali(String username, String password, String role) {
-      this.username = username;
-      this.password = password;
-      this.role = role;
-   }
 
    public Long getId() {
       return this.id;

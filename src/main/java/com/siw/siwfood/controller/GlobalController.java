@@ -1,11 +1,15 @@
 package com.siw.siwfood.controller;
 
+import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
+import com.siw.siwfood.helpers.constants.Temporals;
 import com.siw.siwfood.helpers.credenziali.Roles;
 import com.siw.siwfood.helpers.credenziali.Utils;
 import com.siw.siwfood.model.Credenziali;
+import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.CredenzialiService;
+import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.UtenteService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +37,18 @@ public class GlobalController {
    }
 
    static {
-     // GlobalValues.fillGlobalMap(FieldSizes.class, GlobalController.FIELD_SIZES_MAP);
+     GlobalValues.fillGlobalMap(FieldSizes.class, GlobalController.FIELD_SIZES_MAP);
    }
 
    static {
-      //GlobalValues.fillGlobalMap(Temporals.class, GlobalController.TEMPORALS_MAP);
+      GlobalValues.fillGlobalMap(Temporals.class, GlobalController.TEMPORALS_MAP);
    }
 
-   static {
-      //GlobalValues.fillGlobalMap(APIPrefixes.class, GlobalController.API_PREFIXES_MAP);
-   }
 
    @Autowired
    private UtenteService utenteService;
+   @Autowired
+   private CuocoService cuocoService;
    @Autowired
    private CredenzialiService credenzialiService;
 
@@ -64,15 +67,10 @@ public class GlobalController {
       return GlobalController.TEMPORALS_MAP;
    }
 
-   @ModelAttribute("API_PREFIXES_MAP")
-   public Map<String, Object> getApiPrefixesMap() {
-      return GlobalController.API_PREFIXES_MAP;
-   }
-
-   @ModelAttribute("ALL_ROLES_MAP")
-   public @NotNull Map<String, Roles> getAllRolesMap() {
-      return GlobalController.ALL_ROLES_MAP;
-   }
+   //@ModelAttribute("ALL_ROLES_MAP")
+   //public @NotNull Map<String, Roles> getAllRolesMap() {
+     // return GlobalController.ALL_ROLES_MAP;
+   //}
 
    @ModelAttribute("loggedUser")
    public Utente getLoggedUser(Model model) {
@@ -82,7 +80,6 @@ public class GlobalController {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (Utils.userIsLoggedIn(authentication)) {
          userDetails = (UserDetails) authentication.getPrincipal();
-         System.out.println(userDetails);
          credenziali = this.credenzialiService.getCredenziali(userDetails.getUsername());
          System.out.println(credenziali);
          loggedUser = this.utenteService.getUtente(credenziali);
@@ -93,13 +90,9 @@ public class GlobalController {
    }
 
    @ModelAttribute("cuochiSelect")
-   public Set<Utente> getCuochiSelect(@NotNull Model model) {
-      Set<Utente> cuochiSelect = null;
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      if(Utils.userIsLoggedIn(authentication)) {
-         cuochiSelect = this.utenteService.getAllCuochi();
-         model.addAttribute("cuochiSelect", cuochiSelect);
-      }
+   public Set<Cuoco> getCuochiSelect(@NotNull Model model) {
+      Set<Cuoco> cuochiSelect = this.cuocoService.getAllCuochi();
+      model.addAttribute("cuochiSelect", cuochiSelect);
       return cuochiSelect;
    }
 

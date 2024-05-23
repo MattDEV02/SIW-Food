@@ -16,8 +16,6 @@
                </div>
                <form id="registration-form" method="POST" name="registration-form"
                      th:action="@{/register}" enctype="multipart/form-data">
-                  <div
-                        th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${userNotRegisteredError}, condition = ${utenteNotRegisteredError != null})}"></div>
                   <div class="mb-3">
                      <label class="form-label" for="nome">Nome:</label>
                      <input class="form-control py-2" id="nome" name="nome"
@@ -46,8 +44,8 @@
                      <input class="form-control py-2" id="data-nascita" name="data-nascita"
                             th:field="${utente.dataNascita}" th:fieldFormat="${TEMPORALS_MAP.get('DATE_FORMAT')}"
                             th:format="${TEMPORALS_MAP.get('DATE_FORMAT')}"
-                            th:max="${TEMPORALS_MAP.get('DATANASCITA_MIN_VALUE')}"
-                            th:min="${TEMPORALS_MAP.get('DATANASCITA_MAX_VALUE')}"
+                            th:min="${TEMPORALS_MAP.get('DATANASCITA_MIN_VALUE')}"
+                            th:max="${TEMPORALS_MAP.get('DATANASCITA_MAX_VALUE')}"
                             th:object="${utente}"
                             required
                             title="Inserisci la tua data di nascita" type="date"/>
@@ -94,39 +92,22 @@
                             th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_MIN_LENGTH')}"
                             th:title="'Conferma la tua password ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}"
                             type="password"/>
-                     <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${passwordDifferentFromConfirmPasswordError}, condition = ${passwordDifferentFromConfirmPasswordError != null})}"></div>
                   </div>
                   <div class="mb-3">
                      <label class="form-label" for="fotografia-utente">Fotografia</label>
-                     <input accept="image/png, image/jpeg, image/jpg, image/" class="form-control py-2"
+                     <input  class="form-control py-2"
                             form="registration-form"
                             id="fotografia-utente"
                             name="fotografia-utente"
-                            placeholder="Inserisci la tua fotografia" required
-                            th:size="${FIELD_SIZES_MAP.get('IMAGE_MAX_BYTE_SIZE')}"
+                            placeholder="Inserisci la tua fotografia"
+                           
                             type="file"/>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageEmptyError}, condition = ${productImageEmptyError != null})}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaEmptyFile}, condition = ${utenteFotografiaEmptyFile != null})}"></div>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageSizeError}, condition = ${productImageSizeError != null})}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaFileSizeExceedsLimit}, condition = ${utenteFotografiaFileSizeExceedsLimit != null})}"></div>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageExtensionError}, condition = ${productImageExtensionError != null})}"></div>
-                  </div>
-                  <div class="mb-3">
-                     <label class="form-label" for="role">Role:</label>
-                     <select class="form-control form-select py-2" id="role" name="role" required
-                             th:field="${credenziali.role}" th:object="${credenziali}"
-                             th:title="'Inserisci il tuo ruolo ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
-                        <option th:each="roleEntry : ${ALL_ROLES_MAP}" th:field="${credenziali.role}"
-                                th:id="${roleEntry.key + '#role' }"
-                                th:name="${roleEntry.key + '#role' }"
-                                th:selected="${roleEntry.key.contains('OCCASIONALE')}"
-                                th:text="'Utente ' + ${#strings.capitalize(roleEntry.key.toLowerCase().replace('_', ' '))}"
-                                th:value="${roleEntry.value}"></option>
-                     </select>
-                     <div
-                           th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'credenziali.role')}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaUnsupportedFileType}, condition = ${utenteFotografiaUnsupportedFileType != null})}"></div>
                   </div>
                   <div class="my-4">
                      <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="registration-form"

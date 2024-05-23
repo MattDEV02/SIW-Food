@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html th:lang="${GLOBAL_CONSTANTS_MAP.get('LANG')}" th:xmlns:th="${GLOBAL_CONSTANTS_MAP.get('TEMPLATES_XMLNS')}">
+
+<head th:replace="~{fragments/shared/head.html :: head(title = 'Ricette')}">
+
+</head>
+<link rel="stylesheet" th:href="@{/css/shared/style.css}"/>
+<body>
+<div th:replace="~{fragments/shared/pagination/header.html :: header()}">
+</div>
+<main>
+   <div class="container" th:with="areRicetteValid = ${ricette != null && !#sets.isEmpty(ricette)}, isRicettaDeleted = ${param.isRicettaDeleted}">
+      <div class="row justify-content-center">
+         <div class="col-12 mt-5" th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO'))}">
+            <div class="row text-center">
+               <a th:href="@{ricette/register}">Inserisci una nuova ricetta</a>
+            </div>
+         </div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ricetta eliminata con successo.', condition = ${isRicettaDeleted})}"></div>
+         <div class="col-12 mb-5" th:if="${areRicetteValid}">
+            <div class="row">
+               <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5 col-xxl-5" th:each="ricetta : ${ricette}">
+                  <div th:replace="~{fragments/food/ricetta.html :: ricetta(ricetta = ${ricetta})}"></div>
+               </div>
+            </div>
+         </div>
+         <!--
+           <div th:unless="${areRicetteValid}"
+               th:with="productName = ${searchedProductName}, productCategory = ${searchedProductCategoryName}">
+             <div
+                   th:replace="~{fragments/home/ricetteNotFound.html :: salesNotFound(hasSearchedSales = ${hasSearchedSales}, productName = ${productName}, productCategory = ${productCategory})}"></div>
+          </div>
+         -->
+      </div>
+   </div>
+</main>
+<div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
+</div>
+<script th:src="@{/js/jquery/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap/bootstrap.js}"></script>
+</body>
+
+</html>

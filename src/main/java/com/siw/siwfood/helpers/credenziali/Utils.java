@@ -20,4 +20,14 @@ public class Utils {
       }
       return result;
    }
+
+   public static @NotNull Boolean existsRole(String stringRole) {
+      Roles[] roles = Roles.values();
+      for (Roles role : roles) {
+         if (role.toString().equals(stringRole)) {
+           return true;
+         }
+      }
+      return false;
+   }
 }

@@ -11,8 +11,6 @@ import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 import java.util.Objects;
 
@@ -42,29 +40,21 @@ public class Utente {
    @Temporal(TemporalType.DATE)
    private Date dataNascita;
 
-   //@NotBlank
    @Size(min = FieldSizes.IMAGE_RELATIVEPATH_MIN_LENGTH)
    @Column(name = "fotografia")
    private String fotografia;
 
-   @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, orphanRemoval = true)
+   @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
    @JoinColumn(name = "credenziali_id", referencedColumnName = "id", nullable = false, unique = true)
    private Credenziali credenziali;
 
-   @OneToMany(cascade = CascadeType.REMOVE, targetEntity = Ricetta.class, orphanRemoval = true)
-   private List<Ricetta> ricette;
-
 
    public Utente() {
-      this.ricette = new ArrayList<Ricetta>();
+      // this.credenziali = null;
    }
 
-   public List<Ricetta> getRicette() {
-      return this.ricette;
-   }
-
-   public void setRicette(List<Ricetta> ricette) {
-      this.ricette = ricette;
+   public Utente(Credenziali credenziali) {
+      this.credenziali = credenziali;
    }
 
    public String getCognome() {
@@ -141,7 +131,6 @@ public class Utente {
               ", dataNascita = " + this.getDataNascita().toString() +
               ", fotografia = " + this.getFotografia() +
               ", credenziali = " + this.getCredenziali().toString() +
-              // ", ricette = " + this.getRicette().toString() +
               " }";
    }
 }

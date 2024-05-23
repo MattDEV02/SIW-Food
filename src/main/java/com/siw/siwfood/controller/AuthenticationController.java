@@ -1,7 +1,12 @@
 package com.siw.siwfood.controller;
+import com.siw.siwfood.controller.validator.CredenzialiValidator;
+import com.siw.siwfood.controller.validator.UtenteValidator;
+import com.siw.siwfood.helpers.constants.ProjectPaths;
 import com.siw.siwfood.helpers.utente.Utils;
 import com.siw.siwfood.model.Credenziali;
+import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Utente;
+import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.UtenteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +27,16 @@ import java.util.Objects;
 
 @Controller
 public class AuthenticationController {
-   public final static String REGISTRATION_SUCCESSFUL = "redirect:/login?registrationSuccessful=true";
-   public final static String REGISTRATION_ERROR = "registration.html";
    @Autowired
    private PasswordEncoder passwordEncoder;
    @Autowired
+   private CuocoService cuocoService;
+   @Autowired
    private UtenteService utenteService;
-   //@Autowired
-   //private UserValidator userValidator;
-   //@Autowired
-   //private CredenzialiValidator credenzialiValidator;
+   @Autowired
+   private UtenteValidator utenteValidator;
+   @Autowired
+   private CredenzialiValidator credenzialiValidator;
 
    @GetMapping(value = {"/register", "/register/"})
    public ModelAndView showRegisterForm() {
@@ -42,35 +47,40 @@ public class AuthenticationController {
    }
 
    @PostMapping(value = {"/register", "/register/"})
-   public ModelAndView registerUser(@Valid @NonNull @ModelAttribute("utente") Utente utente,
+   public ModelAndView registerUser(
+                                    @Valid @NonNull @ModelAttribute("utente") Utente utente,
                                     @NonNull BindingResult utenteBindingResult,
                                     @Valid @NonNull @ModelAttribute("credenziali") Credenziali credenziali,
                                     @NonNull BindingResult credenzialiBindingResult,
                                     @NonNull @RequestParam("confirm-password") String confirmPassword,
                                     @NonNull @RequestParam("fotografia-utente") MultipartFile fotografiaUtente) {
-      ModelAndView modelAndView = new ModelAndView(AuthenticationController.REGISTRATION_ERROR);
-      //this.credentialsValidator.setConfirmPassword(confirmPassword);
-      //this.userValidator.validate(user, userBindingResult);
-      //this.credentialsValidator.validate(credentials, credentialsBindingResult);
+      ModelAndView modelAndView = new ModelAndView("utenteForm.html");
+      this.utenteValidator.setFotografia(fotografiaUtente);
+      this.credenzialiValidator.setConfirmPassword(confirmPassword);
+      this.utenteValidator.validate(utente, utenteBindingResult);
+      this.credenzialiValidator.validate(credenziali, credenzialiBindingResult);
       if (!utenteBindingResult.hasErrors() && !credenzialiBindingResult.hasErrors()) {
          String encodedPassword = passwordEncoder.encode(credenziali.getPassword());
          credenziali.setPassword(encodedPassword);
          utente.setCredenziali(credenziali);
-         Utente savedUser = this.utenteService.saveUtente(utente);
-         if (savedUser != null) {
-            Utils.storeUtenteFotografia(savedUser, fotografiaUtente);
-            modelAndView.setViewName(AuthenticationController.REGISTRATION_SUCCESSFUL);
+         Utente savedUtente = this.utenteService.saveUtente(utente);
+         if (savedUtente != null) {
+            Utils.storeUtenteFotografia(savedUtente, fotografiaUtente);
+            Cuoco cuoco = new Cuoco(savedUtente);
+            this.cuocoService.saveCuoco(cuoco);
+            modelAndView.setViewName("redirect:/login");
+            modelAndView.addObject("isUtenteRegistered", true);
          }
       } else {
-         List<ObjectError> userGlobalErrors = utenteBindingResult.getAllErrors();
-         for (ObjectError userGlobalError : userGlobalErrors) {
-            System.out.println(userGlobalError.getDefaultMessage());
-            modelAndView.addObject(Objects.requireNonNull(userGlobalError.getCode()), userGlobalError.getDefaultMessage());
+         List<ObjectError> userErrors = utenteBindingResult.getAllErrors();
+         for (ObjectError userError : userErrors) {
+            System.out.println(userError.getDefaultMessage());
+            modelAndView.addObject(Objects.requireNonNull(userError.getCode()), userError.getDefaultMessage());
          }
-         List<ObjectError> credentialsGlobalErrors = credenzialiBindingResult.getAllErrors();
-         for (ObjectError credentialGlobalErrors : credentialsGlobalErrors) {
-            System.out.println(credentialGlobalErrors.getDefaultMessage());
-            modelAndView.addObject(Objects.requireNonNull(credentialGlobalErrors.getCode()), credentialGlobalErrors.getDefaultMessage());
+         List<ObjectError> credentialsErrors = credenzialiBindingResult.getAllErrors();
+         for (ObjectError credentialErrors : credentialsErrors) {
+            System.out.println(credentialErrors.getDefaultMessage());
+            modelAndView.addObject(Objects.requireNonNull(credentialErrors.getCode()), credentialErrors.getDefaultMessage());
          }
       }
       return modelAndView;
@@ -83,7 +93,7 @@ public class AuthenticationController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/dashboard", "/dashboard/"})
+   @GetMapping(value = {"", "/"})
    public ModelAndView showDashBoard() {
       return new ModelAndView("index.html");
    }

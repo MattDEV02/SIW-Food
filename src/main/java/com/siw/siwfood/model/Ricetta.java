@@ -36,17 +36,17 @@ public class Ricetta {
    @Column(columnDefinition = "TEXT[] NOT NULL")
    private List<String> immagini;
 
-   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
+   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
    private List<Ingrediente> ingredienti;
 
-   @ManyToOne(targetEntity = Utente.class, optional = false)
-   private Utente cuoco;
+   @ManyToOne(targetEntity = Cuoco.class, optional = false)
+   private Cuoco cuoco;
 
-   public Utente getCuoco() {
+   public Cuoco getCuoco() {
       return this.cuoco;
    }
 
-   public void setCuoco(Utente cuoco) {
+   public void setCuoco(Cuoco cuoco) {
       this.cuoco = cuoco;
    }
 
@@ -95,6 +95,12 @@ public class Ricetta {
       this.ingredienti = new ArrayList<Ingrediente>();
    }
 
+   public Ricetta(Cuoco cuoco) {
+      this.cuoco = cuoco;
+      this.immagini = new ArrayList<String>();
+      this.ingredienti = new ArrayList<Ingrediente>();
+   }
+
    @Override
    public String toString() {
       return "Ricetta: {" +
@@ -102,7 +108,7 @@ public class Ricetta {
               ", nome = '" + this.getNome() + '\'' +
               ", descrizione = " + this.getDescrizione() +
               ", immagini = '" + this.getImmagini().toString() + '\'' +
-              //", ingredienti = '" + this.getIngredienti().toString() + '\'' +
+              ", ingredienti = '" + this.getIngredienti().toString() + '\'' +
               " }";
    }
 

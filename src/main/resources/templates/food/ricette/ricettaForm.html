@@ -17,7 +17,7 @@
                      <h2 th:text="'Registrazione ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🥐'"></h2>
                   </div>
                   <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
-                        th:action="@{/dashboard/ricette/register}" enctype="multipart/form-data">
+                        th:action="@{${isUpdate ? ('/ricette/update/' + ricetta.id)  : '/ricette/register'}}" enctype="multipart/form-data">
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
@@ -34,8 +34,8 @@
                         <textarea class="form-control py-2" id="descrizione" name="descrizione"
                                placeholder="Inserisci la descrizione della ricetta"
                                required th:field="${ricetta.descrizione}"
-                               th:maxlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MIN_LENGTH')}"
-                               th:minlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MAX_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MIN_LENGTH')}"
+                               th:maxlength="${FIELD_SIZES_MAP.get('DESCRIZIONE_RICETTA_MAX_LENGTH')}"
                                th:object="${ricetta}" title="Inserisci la descrizione della ricetta" type="text"></textarea>
                         <div
                               th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ricetta.descrizione')}"></div>
@@ -50,21 +50,15 @@
                                th:size="${FIELD_SIZES_MAP.get('IMAGE_MAX_BYTE_SIZE')}"
                                multiple="true"
                                type="file"/>
-                        <div
-                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageEmptyError}, condition = ${productImageEmptyError != null})}"></div>
-                        <div
-                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageSizeError}, condition = ${productImageSizeError != null})}"></div>
-                        <div
-                              th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${productImageExtensionError}, condition = ${productImageExtensionError != null})}"></div>
                      </div>
-                     <div class="mb-3">
+                     <div class="mb-3" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
                         <label class="form-label" for="cuoco-ricetta">Cuoco:</label>
                         <select class="form-control form-select py-2" id="cuoco-ricetta" name="cuoco-ricetta" required
                                 title="Inserisci il cuoco della ricetta">
-                           <option th:each="cuoco : ${cuochi}"
-                                   th:id="${cuoco.nome + '#' + cuoco.id }"
-                                   th:name="${cuoco.nome + '#' + cuoco.id }"
-                                   th:text="${cuoco.credenziali.username}"
+                           <option th:each="cuoco : ${cuochiSelect}"
+                                   th:id="${cuoco.utente.nome + '#' + cuoco.id }"
+                                   th:name="${cuoco.utente.nome + '#' + cuoco.id }"
+                                   th:text="${cuoco.utente.credenziali.username}"
                                    th:value="${cuoco.id}"></option>
                         </select>
                      </div>

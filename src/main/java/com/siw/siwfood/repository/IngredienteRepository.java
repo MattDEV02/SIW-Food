@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Set;
 
 public interface IngredienteRepository extends CrudRepository<Ingrediente, Long> {
-   public Set<Ingrediente> findAllByRicetta(Ricetta ricetta);
+   public Iterable<Ingrediente> findAllByRicetta(Ricetta ricetta);
 }

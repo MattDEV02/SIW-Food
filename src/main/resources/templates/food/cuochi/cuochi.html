@@ -9,17 +9,18 @@
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
-   <div class="container" th:with="areCuochiValid = ${cuochi != null && !#sets.isEmpty(cuochi)}">
+   <div class="container" th:with="areCuochiValid = ${cuochi != null && !#sets.isEmpty(cuochi)}, isCuocoDeleted = ${param.isCuocoDeleted}">
       <div class="row justify-content-center">
-         <div class="col-12 mt-5" th:if="${#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
+         <div class="col-12 mt-5" th:if="${#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
             <div class="row text-center">
-               <a th:href="@{/dashboard/cuochi/register}">Inserisci un nuovo cuoco</a>
+               <a th:href="@{/cuochi/register}">Inserisci un nuovo cuoco</a>
             </div>
          </div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco eliminato con successo.', condition = ${isCuocoDeleted})}"></div>
          <div class="col-12 mb-5" th:if="${areCuochiValid}">
             <div class="row">
                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4" th:each="cuoco : ${cuochi}">
-                  <div th:replace="~{fragments/dashboard/shared/cuoco.html :: cuoco(cuoco = ${cuoco})}"></div>
+                  <div th:replace="~{fragments/food/cuoco.html :: cuoco(cuoco = ${cuoco})}"></div>
                </div>
             </div>
          </div>
@@ -27,7 +28,7 @@
           <div th:unless="${areCuochiValid}"
               th:with="productName = ${searchedProductName}, productCategory = ${searchedProductCategoryName}">
             <div
-                  th:replace="~{fragments/dashboard/home/cuochiNotFound.html :: salesNotFound(hasSearchedSales = ${hasSearchedSales}, productName = ${productName}, productCategory = ${productCategory})}"></div>
+                  th:replace="~{fragments/home/cuochiNotFound.html :: salesNotFound(hasSearchedSales = ${hasSearchedSales}, productName = ${productName}, productCategory = ${productCategory})}"></div>
          </div>
         -->
       </div>

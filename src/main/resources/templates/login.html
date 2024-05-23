@@ -13,11 +13,11 @@
                <div class="row text-center mt-2 mb-4">
                   <h1 th:text="${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' Login 🕵️‍♂️'"></h1>
                </div>
-               <div th:with="registrationSuccessful = ${param.registrationSuccessful != null}, logoutSuccessful = ${param.logoutSuccessful != null}, invalidCredentials = ${param.invalidCredentials != null}">
+               <div th:with="isUtenteRegistered = ${param.isUtenteRegistered != null}, logoutSuccessful = ${param.logoutSuccessful != null}, invalidCredentials = ${param.invalidCredentials != null}">
                   <div
-                        th:replace="~{fragments/shared/message/successMessage.html :: successMessage(text = 'Registrato con successo.', condition = ${registrationSuccessful})}"></div>
+                        th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Registrato con successo.', condition = ${isUtenteRegistered})}"></div>
                   <div
-                        th:replace="~{fragments/shared/message/successMessage.html :: successMessage(text = 'Uscito con successo.', condition = ${logoutSuccessful})}"></div>
+                        th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Uscito con successo.', condition = ${logoutSuccessful})}"></div>
                   <div
                         th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = 'Username o password incorretti.', condition = ${invalidCredentials})}"></div>
                </div>

@@ -9,11 +9,13 @@
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
-   <div class="container" th:with="isIngredienteValid = ${ingrediente != null}">
+   <div class="container" th:with="isIngredienteValid = ${ingrediente != null}, isIngredienteRegistered = ${param.isIngredienteRegistered}, isIngredienteUpdated = ${param.isIngredienteUpdated}">
       <div class="row justify-content-center">
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente registrato con successo.', condition = ${isIngredienteRegistered})}"></div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente aggiornato con successo.', condition = ${isIngredienteUpdated})}"></div>
          <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mb-5" th:if="${isIngredienteValid}">
             <div class="row">
-               <div th:replace="~{fragments/dashboard/shared/ingrediente.html :: ingrediente(ingrediente = ${ingrediente})}"></div>
+               <div th:replace="~{fragments/food/ingrediente.html :: ingrediente(ingrediente = ${ingrediente})}"></div>
             </div>
          </div>
       </div>

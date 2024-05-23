@@ -13,7 +13,7 @@ public class Utils {
    public final static String UTENTE_FOTOGRAFIE_EXTENSION = ".jpeg";
 
    public static @NonNull String getUtenteRelativePathFotografiaDirectoryName(@NonNull Utente utente) {
-      return Utils.UTENTE_FOTOGRAFIE_DIRECTORY + '/' + utente.getId().toString();
+      return ProjectPaths.IMAGES +  Utils.UTENTE_FOTOGRAFIE_DIRECTORY + "/" + utente.getId().toString();
    }
 
    public static @NonNull String getUtenteFotografiaFileName(@NonNull Utente utente) {
@@ -23,7 +23,7 @@ public class Utils {
    public static void storeUtenteFotografia(Utente utente, @NonNull MultipartFile fotografia) {
       if (!fotografia.isEmpty()) {
          try {
-            String destinationDirectory = ProjectPaths.getStaticPath() + utente.getFotografia().replace(utente.getCredenziali().getUsername().toLowerCase() + Utils.UTENTE_FOTOGRAFIE_EXTENSION, "");
+            String destinationDirectory = ProjectPaths.getStaticPath() + utente.getFotografia().replace(utente.getNome().toLowerCase() + Utils.UTENTE_FOTOGRAFIE_EXTENSION, "");
             File directory = new File(destinationDirectory);
             if (directory.mkdir()) {
                File file = new File(destinationDirectory + utente.getNome().toLowerCase() + Utils.UTENTE_FOTOGRAFIE_EXTENSION);

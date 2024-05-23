@@ -21,44 +21,14 @@ public class UtenteService {
 
    @Transactional
    public Utente saveUtente(@NotNull Utente utente) {
-      Utente savedUser = this.utenteRepository.save(utente);
-      savedUser.setFotografia(ProjectPaths.IMAGES + Utils.getUtenteRelativePathFotografiaDirectoryName(savedUser) + "/" + Utils.getUtenteFotografiaFileName(savedUser));
-      System.out.println(savedUser.getFotografia());
-      return savedUser;
+      Utente savedUtente = this.utenteRepository.save(utente);
+      savedUtente.setFotografia(Utils.getUtenteRelativePathFotografiaDirectoryName(savedUtente) + "/" + Utils.getUtenteFotografiaFileName(savedUtente));
+      return savedUtente;
    }
 
    public Utente getUtente(Credenziali credenziali) {
-      return this.utenteRepository.findByCredenziali(credenziali);
+      return this.utenteRepository.findByCredenziali(credenziali).orElse(null);
    }
 
-   public Set<Utente> getAllCuochi() {
-      Set<Utente> result = new HashSet<Utente>();
-      Iterable<Utente> utenti = this.utenteRepository.findAll();
-      for(Utente utente : utenti) {
-         if(utente.getCredenziali().getRole().contains(Roles.REGISTRATO_ROLE.toString())) {
-            result.add(utente);
-         }
-      }
-      return result;
-   }
 
-   @Transactional
-   public void deleteCuoco(Long cuocoId) {
-      this.utenteRepository.deleteById(cuocoId);
-   }
-
-   public Utente getCuoco(Long cuocoId) {
-      Utente cuoco = this.utenteRepository.findById(cuocoId).orElse(null);
-      if(!cuoco.getCredenziali().getRole().contains(Roles.REGISTRATO_ROLE.toString())) {
-         return null;
-      }
-      return cuoco;
-   }
-
-   public Utente getCuoco(@NotNull Credenziali credenziali) {
-      if(!credenziali.getRole().contains(Roles.REGISTRATO_ROLE.toString())) {
-         return null;
-      }
-      return this.utenteRepository.findByCredenziali(credenziali);
-   }
 }

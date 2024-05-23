@@ -11,6 +11,6 @@ public class CredenzialiService {
    private CredenzialiRepository credenzialiRepository;
 
    public Credenziali getCredenziali(String username) {
-      return this.credenzialiRepository.findByUsername(username);
+      return this.credenzialiRepository.findByUsername(username).orElse(null);
    }
 }

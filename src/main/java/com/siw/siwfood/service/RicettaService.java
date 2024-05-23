@@ -2,13 +2,14 @@ package com.siw.siwfood.service;
 
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
-import com.siw.siwfood.model.Utente;
+import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.repository.IngredienteRepository;
 import com.siw.siwfood.repository.RicettaRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.siw.siwfood.helpers.ricetta.Utils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,18 +21,12 @@ public class RicettaService {
    @Autowired
    private IngredienteRepository ingredientRepository;
 
-   public Set<Ricetta> getAllRicette() {
-      Set<Ricetta> result = new HashSet<Ricetta>();
-      Iterable<Ricetta> ricette = this.ricettaRepository.findAll();
-      for(Ricetta ricetta : ricette) {
-         System.out.println(ricetta);
-         result.add(ricetta);
-      }
-      return result;
+   public Iterable<Ricetta> getAllRicette() {
+      return this.ricettaRepository.findAll();
    }
 
-   public Set<Ricetta> getAllRicetteCuoco(Utente cuoco) {
-      return this.ricettaRepository.findAllByCuoco(cuoco);
+   public Iterable<Ricetta> getAllRicetteCuoco(Cuoco cuoco) {
+      return this.ricettaRepository.findAllByCuocoOrderByIdDesc(cuoco);
    }
 
    public Long getRicetteCount() {
@@ -43,8 +38,8 @@ public class RicettaService {
    }
 
    @Transactional
-   public void deleteRicetta(Long ricettaId) {
-      this.ricettaRepository.deleteById(ricettaId);
+   public void deleteRicetta(Ricetta ricetta) {
+      this.ricettaRepository.delete(ricetta);
    }
 
    @Transactional
@@ -52,12 +47,12 @@ public class RicettaService {
       return this.ricettaRepository.save(ricetta);
    }
 
-   public Set<Ricetta> getAllRicettaByNome(String nome) {
-      return this.ricettaRepository.findAllByNome(nome);
+   public Iterable<Ricetta> getAllRicettaByNome(String nome) {
+      return this.ricettaRepository.findAllByNomeContainingIgnoreCaseOrderByIdDesc(nome);
    }
 
-   public Set<Ricetta> getAllRicettaCuocoByNome(Utente cuoco, String nome) {
-      return this.ricettaRepository.findAllByCuocoAndNomeContainingIgnoreCaseOrdOrderByIdDesc(cuoco, nome);
+   public Iterable<Ricetta> getAllRicettaCuocoByNome(Cuoco cuoco, String nome) {
+      return this.ricettaRepository.findAllByCuocoAndNomeContainingIgnoreCaseOrderByIdDesc(cuoco, nome);
    }
 
    @Transactional
@@ -72,5 +67,22 @@ public class RicettaService {
    public void destroyIngrediente(@NotNull Ricetta ricetta, @NotNull Ingrediente ingrediente) {
       ricetta.getIngredienti().remove(ingrediente);
       this.ricettaRepository.save(ricetta);
+   }
+
+   public Ingrediente findIngrediente(@NotNull Ricetta ricetta, Long ingredienteId) {
+      return ricetta.getIngredienti().stream().filter(ingrediente -> ingrediente.getId().equals(ingredienteId)).findFirst().orElse(null);
+   }
+
+
+   public Ricetta updateRicetta(Long ricettaId, Ricetta ricetta) {
+      Ricetta ricettaToUpdate = null;
+      ricettaToUpdate = this.ricettaRepository.findById(ricettaId).orElse(null);
+      if(ricettaToUpdate != null) {
+         ricettaToUpdate.setNome(ricetta.getNome());
+         ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
+         ricettaToUpdate.setImmagini(ricetta.getImmagini());
+         ricettaToUpdate = this.ricettaRepository.save(ricettaToUpdate);
+      }
+      return ricettaToUpdate;
    }
 }
