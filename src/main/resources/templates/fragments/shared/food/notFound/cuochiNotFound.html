@@ -1,0 +1,15 @@
+<div class="col-12 pt-4 pb-5 text-center border rounded shadow mt-5 mb-4"
+     th:fragment="cuochiNotFound()">
+   <h1 class="display-2 fw-bold"
+       th:text="${'Cuoco/hi cercato/i non presente/i'}"></h1>
+   <h5 class="text-muted mt-5"
+       th:text="${'Prova a cambiare i parametri di ricerca.'}"></h5>
+   <a class="btn btn-outline-dark mt-5 me-1" role="button" th:href="@{/static}">
+      Torna alla Home
+      <i class="fas fa-home mx-1"></i>
+   </a>
+   <a class="btn btn-outline-dark mt-5 ms-1" role="button" th:href="@{/cuochi}">
+      Guarda gli altri cuochi
+      <i class="fas fa-user-friends mx-1"></i>
+   </a>
+</div>

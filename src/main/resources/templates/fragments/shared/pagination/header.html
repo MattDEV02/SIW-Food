@@ -26,7 +26,7 @@
                   </a>
                </li>
                <li class="nav-item">
-                  <a class="nav-link link-primary" th:href="@{/ingredienti}"
+                  <a class="nav-link link-info" th:href="@{/ingredienti}"
                      th:title="'Vai agli ingredienti di' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                      Ingredienti
                      <i class="fas fa-cookie mx-1"></i>
@@ -37,27 +37,33 @@
                      Logout
                      <i class="fas fa-sign-out-alt mx-1"></i>
                   </a>
+                  <a class="nav-link link-primary fw-bold" th:href="@{/login}" th:unless="${#authentication.getPrincipal() != 'anonymousUser'}" title="Login">
+                     Login
+                     <i class="fas fa-sign-in-alt mx-1"></i>
+                  </a>
                </li>
             </ul>
             <form class="d-flex ms-5 mt-4 mt-xl-0" id="search-product-form" method="GET"
                   name="search-ricette-form" th:action="@{/ricette/searchRicette}">
-               <label class="form-label visually-hidden" for="nome"></label>
-               <input class="form-control p-2 mx-3" id="nome"
-                      name="nome" placeholder="Cerca ricette"
+               <label class="form-label visually-hidden" for="nome-ricetta"></label>
+               <input class="form-control p-2 mx-3" id="nome-ricetta"
+                      name="nome-ricetta" placeholder="Cerca ricette"
                       th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
                       th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
-                      th:value="${param != null ? param.get('nome') : null}"
+                      th:value="${param != null ? param.get('nome-ricetta') : null}"
                       title="Cerca ricette dal loro nome"
                       type="text"/>
-               <label class="form-label visually-hidden" for="cuoco">Cuoco:</label>
-               <select class="form-control form-select py-2" id="cuoco" name="cuoco"
+               <label class="form-label visually-hidden" for="username-cuoco-ricetta">Cuoco:</label>
+               <select class="form-control form-select py-2" id="username-cuoco-ricetta" name="username-cuoco-ricetta"
                        title="Inserisci il cuoco delle ricette da cercare">
                   <option value="">Tutti</option>
                   <option th:each="cuoco : ${cuochiSelect}"
                           th:id="${cuoco.utente.nome + '#' + cuoco.id}"
                           th:name="${cuoco.utente.nome + '#' + cuoco.id}"
                           th:text="${cuoco.utente.credenziali.username}"
-                          th:value="${cuoco.utente.credenziali.username}"></option>
+                          th:value="${cuoco.utente.credenziali.username}"
+                          th:selected="${cuoco != null && param != null && (cuoco.utente.credenziali.username + '') == (param.get('username-cuoco-ricetta') + '')}"
+                  ></option>
                </select>
                <button class="form-control btn btn-outline-success form-control mx-3" id="submit" name="submit"
                        title="Cerca ricette" type="submit" value="submit">

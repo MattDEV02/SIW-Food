@@ -3,7 +3,6 @@ package com.siw.siwfood.controller;
 import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
 import com.siw.siwfood.helpers.constants.Temporals;
-import com.siw.siwfood.helpers.credenziali.Roles;
 import com.siw.siwfood.helpers.credenziali.Utils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Cuoco;
@@ -22,22 +21,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @ControllerAdvice
 public class GlobalController {
    private static final Map<String, Object> GLOBAL_CONSTANTS_MAP = new HashMap<String, Object>();
    private static final Map<String, Object> FIELD_SIZES_MAP = new HashMap<String, Object>();
-   private static final Map<String, Object> TEMPORALS_MAP = new HashMap<String, Object>();
-   private static final Map<String, Object> API_PREFIXES_MAP = new HashMap<String, Object>();
-   private static final @NotNull Map<String, Roles> ALL_ROLES_MAP = Utils.getAllRoles();
+   private static final Map<String, Object> TEMPORALS_MAP = new HashMap<String, Object>();;
 
    static {
       GlobalValues.fillGlobalMap(GlobalValues.class, GlobalController.GLOBAL_CONSTANTS_MAP);
    }
 
    static {
-     GlobalValues.fillGlobalMap(FieldSizes.class, GlobalController.FIELD_SIZES_MAP);
+      GlobalValues.fillGlobalMap(FieldSizes.class, GlobalController.FIELD_SIZES_MAP);
    }
 
    static {
@@ -67,13 +63,8 @@ public class GlobalController {
       return GlobalController.TEMPORALS_MAP;
    }
 
-   //@ModelAttribute("ALL_ROLES_MAP")
-   //public @NotNull Map<String, Roles> getAllRolesMap() {
-     // return GlobalController.ALL_ROLES_MAP;
-   //}
-
    @ModelAttribute("loggedUser")
-   public Utente getLoggedUser(Model model) {
+   public Utente getLoggedUser(@NotNull Model model) {
       UserDetails userDetails = null;
       Credenziali credenziali = null;
       Utente loggedUser = null;
@@ -81,17 +72,15 @@ public class GlobalController {
       if (Utils.userIsLoggedIn(authentication)) {
          userDetails = (UserDetails) authentication.getPrincipal();
          credenziali = this.credenzialiService.getCredenziali(userDetails.getUsername());
-         System.out.println(credenziali);
          loggedUser = this.utenteService.getUtente(credenziali);
-         System.out.println(loggedUser);
          model.addAttribute("loggedUser", loggedUser);
       }
       return loggedUser;
    }
 
    @ModelAttribute("cuochiSelect")
-   public Set<Cuoco> getCuochiSelect(@NotNull Model model) {
-      Set<Cuoco> cuochiSelect = this.cuocoService.getAllCuochi();
+   public Iterable<Cuoco> getCuochiSelect(@NotNull Model model) {
+      Iterable<Cuoco> cuochiSelect = this.cuocoService.getAllCuochi();
       model.addAttribute("cuochiSelect", cuochiSelect);
       return cuochiSelect;
    }

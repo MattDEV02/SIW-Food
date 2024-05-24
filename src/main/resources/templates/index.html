@@ -3,11 +3,10 @@
 
 <head th:replace="~{fragments/shared/head.html :: head(title = 'Home')}">
 </head>
-<link rel="stylesheet" th:href="@{/css/login/style.css}"/>
 <body>
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
-<div class="container">
+<div class="container" th:with="areRicetteValid = ${ricette != null && !#lists.isEmpty(ricette)}">
    <div class="row justify-content-center">
       <div class="col-12 mt-5">
          <div class="row text-center">
@@ -32,6 +31,23 @@
                   <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'id account', value = ${loggedUser.credenziali.id})}"></div>
                </div>
             </div>
+      </div>
+      <div th:if="${areRicetteValid}">
+         <div class="col-12 mt-5">
+            <div class="row text-center">
+               <h1>Le tue ricette</h1>
+            </div>
+         </div>
+         <div class="col-12 mb-5" th:if="${areRicetteValid}">
+            <div class="row">
+               <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5 col-xxl-5" th:each="ricetta : ${ricette}">
+                  <div th:replace="~{fragments/food/ricetta.html :: ricetta(ricetta = ${ricetta})}"></div>
+               </div>
+            </div>
+         </div>
+         <div th:unless="${areRicetteValid}">
+            <div th:replace="~{fragments/food/notFound/ricetteNotFound.html :: ricetteNotFound()}"></div>
+         </div>
       </div>
    </div>
 </div>

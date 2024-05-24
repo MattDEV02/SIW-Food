@@ -3,7 +3,7 @@
    <a th:href="@{'/cuochi/' + ${cuoco.id}}">
       <img class="card-img-top"
            th:alt="${cuoco.utente.credenziali.username}"
-           th:src="@{${cuoco.utente.fotografia}}"
+           th:src="@{${cuoco.fotografia}}"
            th:title="${cuoco.utente.credenziali.username}"/>
    </a>
    <div class="card-body border">
@@ -11,12 +11,12 @@
       <p class="card-text" th:text="'Nato il ' + ${cuoco.utente.dataNascita}"></p>
       <p class="card-text fw-bold" th:text="'Utente ' + ${#strings.capitalize(cuoco.utente.credenziali.role.toLowerCase().replace('_role', ' '))}"></p>
    </div>
-   <div class="card-footer">
-      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
+   <div class="card-footer pb-3">
+      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3 mt-1"
          th:href="@{'/ricette/cuoco/' + ${cuoco.id}}"
          th:title="'Visualizza le ricette del Cuoco ' + ${cuoco.utente.credenziali.username}"
       >Ricette</a>
-      <a class="btn btn-danger ms-3 mb-2" role="button"
+      <a class="btn btn-danger ms-3" role="button"
          th:href="@{'/cuochi/delete/' + ${cuoco.id}}"
          th:if="${#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}"
          title="Rimuovi questo cuoco"

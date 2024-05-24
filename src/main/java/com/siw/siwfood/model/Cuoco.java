@@ -24,6 +24,9 @@ public class Cuoco {
    @JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
    private Utente utente;
 
+   @Column(name = "fotografia", nullable = false)
+   private String fotografia;
+
    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.REMOVE }, targetEntity = Ricetta.class, orphanRemoval = true,  mappedBy = "cuoco")
    private List<Ricetta> ricette;
 
@@ -60,6 +63,14 @@ public class Cuoco {
       this.ricette = ricette;
    }
 
+   public String getFotografia() {
+      return this.fotografia;
+   }
+
+   public void setFotografia(String fotografia) {
+      this.fotografia = fotografia;
+   }
+
    @Override
    public boolean equals(Object object) {
       if (this == object) {
@@ -81,7 +92,8 @@ public class Cuoco {
    public String toString() {
       return "Utente: {" +
               "id = " + this.getId().toString() +
-              ", utente: = '" + this.getUtente().toString() + '\'' +
+              ", utente: = '" + this.getUtente().toString() +
+              ", fotografia = " + this.getFotografia() +
               // ", ricette = " + this.getRicette().toString() +
               " }";
    }

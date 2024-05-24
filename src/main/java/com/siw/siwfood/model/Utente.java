@@ -40,17 +40,13 @@ public class Utente {
    @Temporal(TemporalType.DATE)
    private Date dataNascita;
 
-   @Size(min = FieldSizes.IMAGE_RELATIVEPATH_MIN_LENGTH)
-   @Column(name = "fotografia")
-   private String fotografia;
-
    @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
    @JoinColumn(name = "credenziali_id", referencedColumnName = "id", nullable = false, unique = true)
    private Credenziali credenziali;
 
 
    public Utente() {
-      // this.credenziali = null;
+
    }
 
    public Utente(Credenziali credenziali) {
@@ -71,14 +67,6 @@ public class Utente {
 
    public void setDataNascita(Date dataNascita) {
       this.dataNascita = dataNascita;
-   }
-
-   public String getFotografia() {
-      return this.fotografia;
-   }
-
-   public void setFotografia(String fotografia) {
-      this.fotografia = fotografia;
    }
 
    public Long getId() {
@@ -129,7 +117,6 @@ public class Utente {
               ", nome = '" + this.getNome() + '\'' +
               ", cognome = '" + this.getCognome() + '\'' +
               ", dataNascita = " + this.getDataNascita().toString() +
-              ", fotografia = " + this.getFotografia() +
               ", credenziali = " + this.getCredenziali().toString() +
               " }";
    }

@@ -1,0 +1,28 @@
+<div class="card text-center shadow mt-5" th:fragment="ingrediente(ingrediente)"
+     th:title="${ingrediente.nome} + ' usato nella ricetta ' + ${ingrediente.ricetta.nome}">
+   <div class="card-body border">
+      <h3 class="card-title" th:text="${ingrediente.nome + ' X' + ingrediente.quantita}"></h3>
+      <p class="card-text mt-3" th:text="'Ingrediente usato nella ricetta: ' + ${ingrediente.ricetta.nome} + '.'"></p>
+      <p class="card-text" th:text="'Ingrediente usato dal cuoco: ' + ${ingrediente.ricetta.cuoco.utente.credenziali.username} + '.'"></p>
+   </div>
+   <div class="card-footer pb-2">
+      <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
+         th:href="@{'/ricette/' + ${ingrediente.ricetta.id}}"
+         title="Visualizza la ricette relativa a questo ingrediente."
+      >Ricetta</a>
+      <a class="btn btn-danger ms-2 mb-1" role="button"
+         th:href="@{'/ingredienti/delete/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
+         th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')  || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ingrediente.ricetta.cuoco.utente == loggedUser))}"
+         title="Rimuovi questo ingrediente"
+      >
+         <i class="fas fa-trash"></i>
+      </a>
+      <a class="btn btn-warning ms-3 mb-1" role="button"
+         th:href="@{'/ingredienti/update/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
+         th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ingrediente.ricetta.cuoco.utente == loggedUser))}"
+         title="Modifica questa ricetta"
+      >
+         <i class="fas fa-pen"></i>
+      </a>
+   </div>
+</div>

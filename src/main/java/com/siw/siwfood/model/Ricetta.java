@@ -33,7 +33,7 @@ public class Ricetta {
    @Column(name = "descrizione", nullable = false)
    private String descrizione;
 
-   @Column(columnDefinition = "TEXT[] NOT NULL")
+   @Column(name = "immagini", nullable = false, columnDefinition = "TEXT[] NOT NULL")
    private List<String> immagini;
 
    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
@@ -121,11 +121,11 @@ public class Ricetta {
          return false;
       }
       Ricetta that = (Ricetta) object;
-      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getCuoco(), that.getCuoco()));
+      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getCuoco(), that.getCuoco())) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getIngredienti(), that.getIngredienti())) ;
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(this.getId(), this.getNome(), this.getCuoco());
+      return Objects.hash(this.getId(), this.getNome(), this.getCuoco(), this.getIngredienti());
    }
 }

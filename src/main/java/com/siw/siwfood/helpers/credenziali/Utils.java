@@ -1,33 +1,18 @@
 package com.siw.siwfood.helpers.credenziali;
 
+import com.siw.siwfood.model.Utente;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class Utils {
    public static boolean userIsLoggedIn(Authentication authentication) {
       return !(authentication instanceof AnonymousAuthenticationToken);
    }
 
-   public static @NotNull Map<String, Roles> getAllRoles() {
-      Map<String, Roles> result = new HashMap<String, Roles>();
-      Roles[] allRoles = Roles.values();
-      for (Roles role : allRoles) {
-         result.put(role.name().replace("_ROLE", ""), role);
-      }
-      return result;
-   }
-
-   public static @NotNull Boolean existsRole(String stringRole) {
-      Roles[] roles = Roles.values();
-      for (Roles role : roles) {
-         if (role.toString().equals(stringRole)) {
-           return true;
-         }
-      }
-      return false;
+   public static @NotNull Boolean isCuoco(Utente utente) {
+      return utente != null && utente.getCredenziali().getRole().contains(Roles.REGISTRATO_ROLE.toString());
    }
 }
+

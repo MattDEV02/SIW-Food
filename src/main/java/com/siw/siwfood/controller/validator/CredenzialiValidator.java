@@ -1,6 +1,6 @@
 package com.siw.siwfood.controller.validator;
 
-import com.siw.siwfood.helpers.credenziali.Utils;
+import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.repository.CredenzialiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 @Component
 public class CredenzialiValidator implements Validator {
    private String confirmPassword;
-   private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8}$";
+   private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{" + FieldSizes.PASSWORD_LENGTH + "}$";
    private static final Pattern PASSWORD_PATTERN = Pattern.compile(CredenzialiValidator.PASSWORD_REGEX);
    @Autowired
    private CredenzialiRepository credenzialiRepository;

@@ -1,5 +1,6 @@
 package com.siw.siwfood.controller;
 
+import com.siw.siwfood.controller.validator.RicettaValidator;
 import com.siw.siwfood.helpers.credenziali.Roles;
 import com.siw.siwfood.helpers.ricetta.Utils;
 import com.siw.siwfood.model.Cuoco;
@@ -22,7 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.siw.siwfood.model.Credenziali;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
+import static com.siw.siwfood.helpers.credenziali.Utils.isCuoco;
 
 @Controller
 @RequestMapping(value = "/ricette")
@@ -35,10 +37,11 @@ public class RicettaController {
    private CuocoService cuocoService;
    @Autowired
    private CredenzialiService credenzialiService;
+   @Autowired
+   private RicettaValidator ricettaValidator;
 
-   @GetMapping(value = {"", "/"})
+   @GetMapping(value ={"", "/"})
    public ModelAndView showAllRicette() {
-      System.out.println("ppp");
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricette.html");
       modelAndView.addObject("ricette", this.ricettaService.getAllRicette());
       return modelAndView;
@@ -53,13 +56,11 @@ public class RicettaController {
    }
 
    @GetMapping(value = {"/register", "/register/"})
-   public ModelAndView showRicetteForm( @Valid @ModelAttribute("cuochiSelect") @NonNull Set<Cuoco> cuochi) {
+   public ModelAndView showRicetteForm() {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       modelAndView.addObject("ricetta", new Ricetta());
       modelAndView.addObject("isUpdate", false);
-      if(cuochi.isEmpty()) {
-         modelAndView.addObject("noCuochi", true);
-      }
+      modelAndView.addObject("noCuochi", true);
       return modelAndView;
    }
 
@@ -68,16 +69,17 @@ public class RicettaController {
                                     @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
                                     @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                     @NonNull BindingResult ricettaBindingResult,
-                                    @RequestParam(value = "cuoco-ricetta", required = false) Long cuocoId,
+                                    @RequestParam(name = "cuoco-ricetta", required = false) Long cuocoId,
                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
+      this.ricettaValidator.setImmagini(immaginiRicetta);
+      this.ricettaValidator.validate(ricetta, ricettaBindingResult);
       if (!ricettaBindingResult.hasErrors()) {
-         Cuoco cuoco = null;
-         cuoco = loggedUser.getCredenziali().getRole().equals(Roles.REGISTRATO_ROLE.toString()) ? this.cuocoService.getCuoco(loggedUser) : this.cuocoService.getCuoco(cuocoId);
+         Cuoco cuoco = isCuoco(loggedUser) || cuocoId == null ? this.cuocoService.getCuoco(loggedUser) : this.cuocoService.getCuoco(cuocoId);
          ricetta.setCuoco(cuoco);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-            ricetta.getImmagini().add(Utils.getRicettaRelativePathImmagineDirectoryName(this.ricettaService.getRicetteCount()) + Utils.getRicettaImmagineFileName(ricetta, i));
+            ricetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(this.ricettaService.getRicetteCount(), i));
          }
          Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta);
          if (savedRicetta != null) {
@@ -90,7 +92,6 @@ public class RicettaController {
       } else {
          List<ObjectError> ricettaErrors = ricettaBindingResult.getAllErrors();
          for (ObjectError ricettaError : ricettaErrors) {
-            System.out.println(ricettaError.getObjectName() + " " + ricettaError.getCode() + " " + ricettaError.getDefaultMessage());
             modelAndView.addObject(Objects.requireNonNull(ricettaError.getCode()), ricettaError.getDefaultMessage());
          }
          modelAndView.addObject("isUpdate", true);
@@ -114,14 +115,14 @@ public class RicettaController {
       Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
       Iterable<Ricetta> ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
       modelAndView.addObject("ricette", ricette);
+      modelAndView.addObject("usernameCuoco", cuoco.getUtente().getCredenziali().getUsername());
       return modelAndView;
    }
 
    @GetMapping(value = {"/searchRicette", "/searchRicette/"})
    public ModelAndView searchRicette(@NonNull HttpServletRequest request) {
-      String nomeRicetta = request.getParameter("nome");
-      String usernameCuoco = request.getParameter("cuoco");
-      System.out.println("ccc" + usernameCuoco.isEmpty());
+      String nomeRicetta = request.getParameter("nome-ricetta");
+      String usernameCuoco = request.getParameter("username-cuoco-ricetta");
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricette.html");
       Iterable<Ricetta> searchedRicette = null;
       if (nomeRicetta.isEmpty() && usernameCuoco.isEmpty()) {
@@ -139,7 +140,6 @@ public class RicettaController {
          }
       }
       modelAndView.addObject("ricette", searchedRicette);
-     // modelAndView.addObject("searchedProductName", productName);
       return modelAndView;
    }
 
@@ -155,23 +155,24 @@ public class RicettaController {
    @PostMapping(value = {"/update/{ricettaId}", "/update/ricettaId/"})
    public ModelAndView updateRicetta(@Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                      @NonNull BindingResult ricettaBindingResult,
-                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta,
-                                     @RequestParam("cuoco-ricetta") Long cuocoId,
+                                     @RequestParam(name = "immagini-ricetta", required = false) MultipartFile[] immaginiRicetta,
+                                     @RequestParam(name = "cuoco-ricetta", required = false) Long cuocoId,
                                      @PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       if (!ricettaBindingResult.hasErrors()) {
-         ricetta.getImmagini().clear();
-         Utils.deleteRicettaImmagini(ricetta);
-         for(Integer i = 0; i < immaginiRicetta.length; i++) {
-            ricetta.getImmagini().add(Utils.getRicettaRelativePathImmagineDirectoryName(this.ricettaService.getRicetteCount() - 1) + Utils.getRicettaImmagineFileName(ricetta, i));
-         }
+         Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
+         final Integer numeroImmagini = immaginiRicetta.length;
          if(cuocoId != null) {
             Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
             ricetta.setCuoco(cuoco);
          }
-         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaId, ricetta);
+         for(Integer i = 0; i < numeroImmagini; i++) {
+            if(!immaginiRicetta[i].isEmpty()) {
+               ricetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
+            }
+         }
+         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta);
          if (updatedRicetta != null) {
-            final Integer numeroImmagini = immaginiRicetta.length;
             for(Integer i = 0; i < numeroImmagini; i++) {
                Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
             }
@@ -181,12 +182,9 @@ public class RicettaController {
       } else {
          List<ObjectError> ricettaErrors = ricettaBindingResult.getAllErrors();
          for (ObjectError ricettaError : ricettaErrors) {
-            System.out.println(ricettaError.getObjectName() + " " + ricettaError.getCode() + " " + ricettaError.getDefaultMessage());
             modelAndView.addObject(Objects.requireNonNull(ricettaError.getCode()), ricettaError.getDefaultMessage());
          }
       }
       return modelAndView;
    }
-
-
 }

@@ -78,7 +78,7 @@ public class Ingrediente {
               " id = " + this.getId().toString() +
               ", nome = '" + this.getNome() + '\'' +
               ", quantita = " + this.getQuantita() +
-              ", ricetta = " + this.getRicetta() +
+              //", ricetta = " + this.getRicetta() +
               " }";
    }
 
@@ -96,6 +96,6 @@ public class Ingrediente {
 
    @Override
    public int hashCode() {
-      return Objects.hash(this.getId(), this.getNome(), this.getQuantita());
+      return Objects.hash(this.getId(), this.getRicetta(), this.getNome(), this.getQuantita());
    }
 }

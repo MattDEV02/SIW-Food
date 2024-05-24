@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -66,10 +65,14 @@ public class AuthConfiguration implements WebMvcConfigurer {
       httpSecurity
               .cors(AbstractHttpConfigurer::disable)
               .csrf(AbstractHttpConfigurer::disable)
-
               .authorizeHttpRequests(
                       auth -> auth
-                              .requestMatchers(HttpMethod.GET, "/", "/register", "/login", "/logout", "/cuochi", "/ricette/**", "/ingredienti","/css/**", "/js/**", "/images/**").permitAll()
+                              .requestMatchers(HttpMethod.GET,
+                                      "/", "/register", "/login", "/logout",
+                                      "/cuochi", "/cuochi/","/cuochi/{cuocoId}",
+                                      "/ricette", "/ricette/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
+                                      "/ingredienti", "/ingredienti/", "/ingredienti/{ricettaId}", "/ingredienti/{ricettaId}/{ingredienteId}",
+                                      "/css/**", "/js/**", "/images/**").permitAll()
                               .requestMatchers(HttpMethod.POST, "/register").permitAll()
                               .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
                               .requestMatchers(HttpMethod.GET,"/cuochi/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
@@ -77,7 +80,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
                               .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
                               .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
                               .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers("/ingredienti/register").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers("/ingredienti/register/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
                               .requestMatchers(HttpMethod.GET,"/ingredienti/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
                               .requestMatchers("/ingredienti/update/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
                               .anyRequest().authenticated()

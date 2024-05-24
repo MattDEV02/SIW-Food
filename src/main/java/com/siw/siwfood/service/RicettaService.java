@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.siw.siwfood.helpers.ricetta.Utils;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class RicettaService {
@@ -44,7 +42,12 @@ public class RicettaService {
 
    @Transactional
    public Ricetta saveRicetta(@NotNull Ricetta ricetta) {
-      return this.ricettaRepository.save(ricetta);
+      Ricetta savedRicetta = this.ricettaRepository.save(ricetta);
+      if(ricetta.getCuoco() != null) {
+         Cuoco cuoco = savedRicetta.getCuoco();
+         cuoco.getRicette().add(savedRicetta);
+      }
+      return savedRicetta;
    }
 
    public Iterable<Ricetta> getAllRicettaByNome(String nome) {
@@ -74,15 +77,29 @@ public class RicettaService {
    }
 
 
-   public Ricetta updateRicetta(Long ricettaId, Ricetta ricetta) {
-      Ricetta ricettaToUpdate = null;
-      ricettaToUpdate = this.ricettaRepository.findById(ricettaId).orElse(null);
+   public Ricetta updateRicetta(Ricetta ricettaToUpdate, @NotNull Ricetta ricetta) {
       if(ricettaToUpdate != null) {
          ricettaToUpdate.setNome(ricetta.getNome());
          ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
-         ricettaToUpdate.setImmagini(ricetta.getImmagini());
+         if(ricetta.getCuoco() != null) {
+            ricettaToUpdate.setCuoco(ricetta.getCuoco());
+         }
+         if(!ricetta.getImmagini().isEmpty()) {
+            Utils.deleteRicettaImmagini(ricetta);
+            ricettaToUpdate.setImmagini(ricetta.getImmagini());
+         }
          ricettaToUpdate = this.ricettaRepository.save(ricettaToUpdate);
       }
       return ricettaToUpdate;
+   }
+
+   public Ingrediente updateIngrediente(Ricetta ricetta, Long ingredienteId, Ingrediente ingrediente) {
+      Ingrediente ingredienteToUpdate = this.findIngrediente(ricetta, ingredienteId);
+      if(ingredienteToUpdate != null) {
+         ingredienteToUpdate.setNome(ingrediente.getNome());
+         ingredienteToUpdate.setQuantita(ingrediente.getQuantita());
+         ingredienteToUpdate = this.ingredientRepository.save(ingredienteToUpdate);
+      }
+      return ingredienteToUpdate;
    }
 }

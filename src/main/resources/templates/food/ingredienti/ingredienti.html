@@ -4,28 +4,30 @@
 <head th:replace="~{fragments/shared/head.html :: head(title = 'Ingredienti')}">
 
 </head>
-<link rel="stylesheet" th:href="@{/css/shared/style.css}"/>
+
 <body>
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
-   <div class="container" th:with="areIngredientiValid = ${ingredienti != null && !#sets.isEmpty(ingredienti)}, isIngredienteDeleted = ${param.isIngredienteDeleted}">
+   <div class="container" th:with="areIngredientiValid = ${ingredienti != null && !#sets.isEmpty(ingredienti)}, isIngredienteDeleted = ${param.isIngredienteDeleted}, isIngredienteUpdated = ${param.isIngredienteUpdated}">
       <div class="row justify-content-center">
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente eliminato con successo.', condition = ${isIngredienteDeleted})}"></div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente aggiornato con successo.', condition = ${isIngredienteUpdated})}"></div>
+         <div class="col-12 mt-5">
+            <div class="row text-center">
+               <h1 th:text="'Ingredienti ' + ${#strings.isEmpty(nomeRicetta) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : nomeRicetta}"></h1>
+            </div>
+         </div>
          <div class="col-12 mb-5" th:if="${areIngredientiValid}">
             <div class="row">
                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4" th:each="ingrediente : ${ingredienti}">
-                  <div th:replace="~{fragments/food/ingrediente.html :: ingrediente(ingrediente = ${ingrediente})}"></div>
+                  <div th:replace="~{fragments/shared/food/ingrediente.html :: ingrediente(ingrediente = ${ingrediente})}"></div>
                </div>
             </div>
          </div>
-         <!--
-           <div th:unless="${areIngredientiValid}"
-               th:with="productName = ${searchedProductName}, productCategory = ${searchedProductCategoryName}">
-             <div
-                   th:replace="~{fragments/home/ingredientiNotFound.html :: salesNotFound(hasSearchedSales = ${hasSearchedSales}, productName = ${productName}, productCategory = ${productCategory})}"></div>
-          </div>
-         -->
+         <div th:unless="${areIngredientiValid}">
+            <div th:replace="~{fragments/shared/food/notFound/ingredientiNotFound.html :: ingredientiNotFound()}"></div>
+         </div>
       </div>
    </div>
 </main>

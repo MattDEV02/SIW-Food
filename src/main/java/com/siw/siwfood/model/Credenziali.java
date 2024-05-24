@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 

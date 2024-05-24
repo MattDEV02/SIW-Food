@@ -3,7 +3,6 @@
 
 <head th:replace="~{fragments/shared/head.html :: head(title = 'Registration')}">
 </head>
-<link rel="stylesheet" th:href="@{/css/registration/style.css}"/>
 <body>
 <div class="container">
    <div class="row justify-content-center">
@@ -74,8 +73,8 @@
                                id="password" name="password" placeholder="Inserisci la tua password"
                                required
                                th:field="${credenziali.password}"
-                               th:maxlength="${FIELD_SIZES_MAP.get('PASSWORD_MAX_LENGTH')}"
-                               th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_MIN_LENGTH')}"
+                               th:maxlength="${FIELD_SIZES_MAP.get('PASSWORD_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_LENGTH')}"
                                th:title="'Inserisci la tua password ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + '.'"
                                type="password"/>
                         <div
@@ -88,26 +87,26 @@
                      <label class="form-label" for="confirm-password">Conferma Password:</label>
                      <input class="form-control py-2" id="confirm-password" name="confirm-password"
                             placeholder="Conferma la tua password"
-                            required th:maxlength="${FIELD_SIZES_MAP.get('PASSWORD_MAX_LENGTH')}"
-                            th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_MIN_LENGTH')}"
+                            required th:maxlength="${FIELD_SIZES_MAP.get('PASSWORD_LENGTH')}"
+                            th:minlength="${FIELD_SIZES_MAP.get('PASSWORD_LENGTH')}"
                             th:title="'Conferma la tua password ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}"
                             type="password"/>
                   </div>
                   <div class="mb-3">
-                     <label class="form-label" for="fotografia-utente">Fotografia</label>
+                     <label class="form-label" for="fotografia-cuoco">Fotografia</label>
                      <input  class="form-control py-2"
                             form="registration-form"
-                            id="fotografia-utente"
-                            name="fotografia-utente"
+                            id="fotografia-cuoco"
+                            name="fotografia-cuoco"
                             placeholder="Inserisci la tua fotografia"
-                           
+                            required
                             type="file"/>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaEmptyFile}, condition = ${utenteFotografiaEmptyFile != null})}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${cuocoFotografiaEmptyFile}, condition = ${cuocoFotografiaEmptyFile != null})}"></div>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaFileSizeExceedsLimit}, condition = ${utenteFotografiaFileSizeExceedsLimit != null})}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${cuocoFotografiaFileSizeExceedsLimit}, condition = ${cuocoFotografiaFileSizeExceedsLimit != null})}"></div>
                      <div
-                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${utenteFotografiaUnsupportedFileType}, condition = ${utenteFotografiaUnsupportedFileType != null})}"></div>
+                           th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${cuocoFotografiaUnsupportedFileType}, condition = ${cuocoFotografiaUnsupportedFileType != null})}"></div>
                   </div>
                   <div class="my-4">
                      <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="registration-form"
@@ -123,9 +122,9 @@
                <div class="col-12">
                   <div class="row text-center" id="registration-footer">
                      <p>
-                        <a class="text-decoration-none mx-4" th:href="@{/}"
+                        <a class="text-decoration-none fs-5 mx-4" th:href="@{/}"
                            th:title="'Vai alla pagina di Home di ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">Home</a>
-                        <a class="text-decoration-none mx-4" th:href="@{/login}"
+                        <a class="text-decoration-none fs-5 mx-4" th:href="@{/login}"
                            th:title="'Vai alla pagina di Login di ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">Login</a>
                      </p>
                   </div>

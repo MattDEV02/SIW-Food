@@ -12,12 +12,12 @@
          <div class="col-12 my-5">
             <div class="row justify-content-center">
                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
-                    th:title="'Form di registrazione nuovo ingrediente ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
+                    th:title="'Form di ' + ${isUpdate ? 'aggiornamento' : 'registrazione'} + ' nuovo ingrediente ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <div class="row text-center mt-2 mb-4">
-                     <h3 th:text="'Registrazione ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'"></h3>
+                     <h3 th:text="'Form ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'"></h3>
                   </div>
                   <form id="ingrediente-registration-form" method="POST" name="ingrediente-registration-form"
-                        th:action="@{'/ingredienti/' + ${ricetta.id} + '/register'}">
+                        th:action="@{'/ingredienti' + ${isUpdate ? '/update/' : '/register/'} + ${ricetta.id} + ${isUpdate ? ('/' + ingrediente.id) : ''}}">
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
