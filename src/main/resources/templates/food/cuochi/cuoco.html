@@ -9,13 +9,13 @@
 <main>
    <div class="container" th:with="isCuocoValid = ${cuoco != null}, isCuocoRegistered = ${param.isCuocoRegistered}, isCuocoUpdated = ${param.isCuocoUpdated}">
       <div class="row justify-content-center">
-         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco registrato con successo.', condition = ${isCuocoRegistered})}"></div>
-         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco aggiornato con successo.', condition = ${isCuocoUpdated})}"></div>
          <div class="col-12 mt-5" th:if="${isCuocoValid}">
             <div class="row text-center">
                <h1 th:text="'Cuoco ' + ${cuoco.utente.credenziali.username}"></h1>
             </div>
          </div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco registrato con successo.', condition = ${isCuocoRegistered})}"></div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco aggiornato con successo.', condition = ${isCuocoUpdated})}"></div>
          <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4 mb-5" th:if="${isCuocoValid}">
             <div th:replace="~{fragments/shared/food/cuoco.html :: cuoco(cuoco = ${cuoco})}"></div>
          </div>

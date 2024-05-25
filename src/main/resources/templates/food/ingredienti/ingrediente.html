@@ -9,9 +9,8 @@
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
-   <div class="container" th:with="isIngredienteValid = ${ingrediente != null}, isIngredienteRegistered = ${param.isIngredienteRegistered}">
+   <div class="container" th:with="isIngredienteValid = ${ingrediente != null}">
       <div class="row justify-content-center">
-         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente registrato con successo.', condition = ${isIngredienteRegistered})}"></div>
          <div class="col-12 mt-5" th:if="${isIngredienteValid}">
             <div class="row text-center">
                <h1 th:text="'Ingrediente ' + ${ingrediente.nome}"></h1>

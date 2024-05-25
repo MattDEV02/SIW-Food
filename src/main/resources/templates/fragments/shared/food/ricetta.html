@@ -1,6 +1,6 @@
 <div class="card text-center shadow mt-5" th:fragment="ricetta(ricetta)"
      th:title="${ricetta.descrizione}">
-  <a th:href="@{'/ricette/' + ${ricetta.id}}">
+  <a th:href="@{'/ricette/ricetta/' + ${ricetta.id}}">
      <div th:id="'carouselExampleIndicators#' + ${ricetta.id}" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
            <button th:each="immagine, iterStat : ${ricetta.immagini}" type="button" th:data-bs-target="'#carouselExampleIndicators#' + ${ricetta.id}" th:data-bs-slide-to="${iterStat.count - 1}" class="active" th:aria-current="${iterStat.count == 1}" th:aria-label="'Slide ' + ${iterStat.count}"></button>
@@ -17,36 +17,38 @@
       <p class="card-text" th:text="${ricetta.descrizione}"></p>
    </div>
    <div class="card-footer pb-3">
-      <a class="card-link link-primary text-decoration-underline fs-6 ms-4"
-         th:href="@{'/cuochi/' + ${ricetta.cuoco.id}}"
+      <a class="card-link link-primary text-decoration-underline fs-6"
+         th:href="@{'/cuochi/cuoco/' + ${ricetta.cuoco.id}}"
          th:title="'Visualizza i dati del Cuoco ' + ${ricetta.cuoco.utente.credenziali.username}"
          th:text="'Cuoco ' + ${ricetta.cuoco.utente.credenziali.username}"
       >
       </a>
-      <a class="card-link link-primary text-decoration-underline fs-6 me-2"
-         th:href="@{'/ingredienti/' + ${ricetta.id}}"
+      <a class="card-link link-primary text-decoration-underline fs-6 ms-3"
+         th:href="@{'/ingredienti/ricetta/' + ${ricetta.id}}"
          title="Visualizza gli ingredienti di questa ricetta."
       >Ingredienti</a>
-      <a class="btn btn-primary ms-2 me-2" role="button"
-         th:href="@{'/ingredienti/register/' + ${ricetta.id}}"
-         th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
-         title="Aggiungi un ingrediente per questa ricetta"
-      >
-         <i class="fas fa-plus"></i>
-      </a>
-      <a class="btn btn-danger" role="button"
-         th:href="@{'/ricette/delete/' + ${ricetta.id}}"
-         th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
-         title="Rimuovi questa ricetta"
-      >
-         <i class="fas fa-trash"></i>
-      </a>
-      <a class="btn btn-warning ms-2" role="button"
-         th:href="@{'/ricette/update/' + ${ricetta.id}}"
-         th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
-         title="Modifica questa ricetta"
-      >
-         <i class="fas fa-pen"></i>
-      </a>
+     <div class="mt-3" th:if="${#authentication.getPrincipal() != 'anonymousUser' && loggedUser == ricetta.cuoco.utente}">
+        <a class="btn btn-primary" role="button"
+           th:href="@{'/ingredienti/register/' + ${ricetta.id}}"
+           th:if="${(#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
+           title="Aggiungi un ingrediente per questa ricetta"
+        >
+           <i class="fas fa-plus"></i>
+        </a>
+        <a class="btn btn-danger ms-2" role="button"
+           th:href="@{'/ricette/delete/' + ${ricetta.id}}"
+           th:if="${(#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
+           title="Rimuovi questa ricetta"
+        >
+           <i class="fas fa-trash"></i>
+        </a>
+        <a class="btn btn-warning ms-2" role="button"
+           th:href="@{'/ricette/update/' + ${ricetta.id}}"
+           th:if="${(#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ricetta.cuoco.utente == loggedUser))}"
+           title="Modifica questa ricetta"
+        >
+           <i class="fas fa-pen"></i>
+        </a>
+     </div>
    </div>
 </div>

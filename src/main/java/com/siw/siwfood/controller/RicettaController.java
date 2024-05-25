@@ -1,7 +1,6 @@
 package com.siw.siwfood.controller;
 
 import com.siw.siwfood.controller.validator.RicettaValidator;
-import com.siw.siwfood.helpers.credenziali.Roles;
 import com.siw.siwfood.helpers.ricetta.Utils;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.siw.siwfood.model.Credenziali;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,22 +41,22 @@ public class RicettaController {
    @Autowired
    private RicettaValidator ricettaValidator;
 
-   @GetMapping(value ={"", "/"})
+   @GetMapping(value ="")
    public ModelAndView showAllRicette() {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricette.html");
       modelAndView.addObject("ricette", this.ricettaService.getAllRicette());
       return modelAndView;
    }
 
-   @GetMapping(value = {"/{ricettaId}", "/{ricettaId}/"})
-   public ModelAndView showCuoco(@PathVariable("ricettaId") Long ricettaId) {
+   @GetMapping(value = "/ricetta/{ricettaId}")
+   public ModelAndView showRicetta(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricetta.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       modelAndView.addObject("ricetta", ricetta);
       return modelAndView;
    }
 
-   @GetMapping(value = {"/register", "/register/"})
+   @GetMapping(value ="/register")
    public ModelAndView showRicetteForm() {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       modelAndView.addObject("ricetta", new Ricetta());
@@ -64,7 +65,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @PostMapping(value = {"/register", "/register/"})
+   @PostMapping(value = "/register")
    public ModelAndView registerRicetta(
                                     @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
                                     @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
@@ -86,7 +87,7 @@ public class RicettaController {
             for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
                Utils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
             }
-            modelAndView.setViewName("redirect:/ricette/" + savedRicetta.getId());
+            modelAndView.setViewName("redirect:/ricette/ricetta/" + savedRicetta.getId());
             modelAndView.addObject("isRicettaRegistered", true);
          }
       } else {
@@ -99,7 +100,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/delete/{ricettaId}", "/delete/{ricettaId}/"})
+   @GetMapping(value ="/delete/{ricettaId}")
    public ModelAndView deleteRicetta(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/ricette");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -109,17 +110,22 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/cuoco/{cuocoId}", "/cuoco/{cuocoId}/"})
+   @GetMapping(value ="/cuoco/{cuocoId}")
    public ModelAndView showRicetteCuoco(@PathVariable("cuocoId") Long cuocoId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricette.html");
       Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
-      Iterable<Ricetta> ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
-      modelAndView.addObject("ricette", ricette);
-      modelAndView.addObject("usernameCuoco", cuoco.getUtente().getCredenziali().getUsername());
+      if(cuoco != null) {
+         Iterable<Ricetta> ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
+         modelAndView.addObject("ricette", ricette);
+         modelAndView.addObject("usernameCuoco", cuoco.getUtente().getCredenziali().getUsername());
+      } else {
+         modelAndView.setViewName("redirect:/ricette");
+         modelAndView.addObject("cuocoNotFound", true);
+      }
       return modelAndView;
    }
 
-   @GetMapping(value = {"/searchRicette", "/searchRicette/"})
+   @GetMapping(value ="/searchRicette")
    public ModelAndView searchRicette(@NonNull HttpServletRequest request) {
       String nomeRicetta = request.getParameter("nome-ricetta");
       String usernameCuoco = request.getParameter("username-cuoco-ricetta");
@@ -140,19 +146,25 @@ public class RicettaController {
          }
       }
       modelAndView.addObject("ricette", searchedRicette);
+      modelAndView.addObject("hasSearchedRicette", true);
       return modelAndView;
    }
 
-   @GetMapping(value = {"/update/{ricettaId}", "/update/{ricettaId}"})
+   @GetMapping(value ="/update/{ricettaId}")
    public ModelAndView showUpdateRicettaForm(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      modelAndView.addObject("isUpdate", true);
-      modelAndView.addObject("ricetta", ricetta);
+      if(ricetta != null) {
+         modelAndView.addObject("isUpdate", true);
+         modelAndView.addObject("ricetta", ricetta);
+      } else {
+         modelAndView.setViewName("redirect:/ricette");
+         modelAndView.addObject("ricettaNotFound", true);
+      }
       return modelAndView;
    }
 
-   @PostMapping(value = {"/update/{ricettaId}", "/update/ricettaId/"})
+   @PostMapping(value ="/update/{ricettaId}")
    public ModelAndView updateRicetta(@Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                      @NonNull BindingResult ricettaBindingResult,
                                      @RequestParam(name = "immagini-ricetta", required = false) MultipartFile[] immaginiRicetta,
@@ -162,6 +174,7 @@ public class RicettaController {
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
          final Integer numeroImmagini = immaginiRicetta.length;
+         System.out.println("ciao" + numeroImmagini);
          if(cuocoId != null) {
             Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
             ricetta.setCuoco(cuoco);
@@ -174,9 +187,11 @@ public class RicettaController {
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta);
          if (updatedRicetta != null) {
             for(Integer i = 0; i < numeroImmagini; i++) {
-               Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
+              if(!immaginiRicetta[i].isEmpty()) {
+                 Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
+              }
             }
-            modelAndView.setViewName("redirect:/ricette/" + updatedRicetta.getId());
+            modelAndView.setViewName("redirect:/ricette/ricetta/" + updatedRicetta.getId());
             modelAndView.addObject("isRicettaUpdated", true);
          }
       } else {

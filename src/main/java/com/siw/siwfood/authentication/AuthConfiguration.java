@@ -1,6 +1,7 @@
 package com.siw.siwfood.authentication;
 
 import com.siw.siwfood.helpers.credenziali.Roles;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,23 +67,23 @@ public class AuthConfiguration implements WebMvcConfigurer {
               .cors(AbstractHttpConfigurer::disable)
               .csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(
-                      auth -> auth
+                      authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
                               .requestMatchers(HttpMethod.GET,
                                       "/", "/register", "/login", "/logout",
-                                      "/cuochi", "/cuochi/","/cuochi/{cuocoId}",
-                                      "/ricette", "/ricette/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
-                                      "/ingredienti", "/ingredienti/", "/ingredienti/{ricettaId}", "/ingredienti/{ricettaId}/{ingredienteId}",
-                                      "/css/**", "/js/**", "/images/**").permitAll()
+                                      "/cuochi","/cuochi/cuoco/{cuocoId}",
+                                      "/ricette", "/ricette/ricetta/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
+                                      "/ingredienti",  "/ingredienti/ricetta/{ricettaId}/ingrediente/{ingredienteId}", "/ingredienti/ricetta/{ricettaId}",
+                                      "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
                               .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                              .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
-                              .requestMatchers(HttpMethod.GET,"/cuochi/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
-                              .requestMatchers("/cuochi/update/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString())
-                              .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers("/ingredienti/register/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers(HttpMethod.GET,"/ingredienti/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
-                              .requestMatchers("/ingredienti/update/**").hasAnyAuthority(Roles.AMMINISTRATORE_ROLE.toString(), Roles.REGISTRATO_ROLE.toString())
+                              .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                              .requestMatchers(HttpMethod.GET,"/cuochi/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                              .requestMatchers("/cuochi/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                              .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers("/ingredienti/register/{ricettaId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers(HttpMethod.GET,"/ingredienti/delete/{ricettaId}/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers("/ingredienti/update/{ricettaId}/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
                               .anyRequest().authenticated()
               )
               .formLogin(formLogin -> formLogin
@@ -103,5 +104,4 @@ public class AuthConfiguration implements WebMvcConfigurer {
                       .permitAll());
       return httpSecurity.build();
    }
-
 }

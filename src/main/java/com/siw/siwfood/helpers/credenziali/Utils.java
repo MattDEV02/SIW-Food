@@ -12,7 +12,7 @@ public class Utils {
    }
 
    public static @NotNull Boolean isCuoco(Utente utente) {
-      return utente != null && utente.getCredenziali().getRole().contains(Roles.REGISTRATO_ROLE.toString());
+      return utente != null && utente.getCredenziali().getRole().contains(Roles.REGISTRATO.toString());
    }
 }
 

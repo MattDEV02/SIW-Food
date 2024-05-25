@@ -2,7 +2,6 @@ package com.siw.siwfood.controller;
 
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
-import com.siw.siwfood.repository.RicettaRepository;
 import com.siw.siwfood.service.IngredienteService;
 import com.siw.siwfood.service.RicettaService;
 import jakarta.validation.Valid;
@@ -25,23 +24,29 @@ public class IngredienteController {
    @Autowired
    private RicettaService ricettaService;
 
-   @GetMapping(value = {"", "/"})
+   @GetMapping(value ="")
    public ModelAndView showAllIngredienti() {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienti.html");
       modelAndView.addObject("ingredienti", this.ingredienteService.getAllIngredienti());
       return modelAndView;
    }
 
-   @GetMapping(value = {"/register/{ricettaId}", "/register/{ricettaId}/"})
+   @GetMapping(value ="/register/{ricettaId}")
    public ModelAndView registerIngrediente(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
-      modelAndView.addObject("ingrediente", new Ingrediente());
-      modelAndView.addObject("ricetta", this.ricettaService.getRicetta(ricettaId));
-      modelAndView.addObject("isUpdate", false);
+      Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
+      if(ricetta != null) {
+         modelAndView.addObject("ingrediente", new Ingrediente());
+         modelAndView.addObject("ricetta", ricetta);
+         modelAndView.addObject("isUpdate", false);
+      } else {
+         modelAndView.setViewName("redirect:/ricette");
+         modelAndView.addObject("ricettaNotFound", true);
+      }
       return modelAndView;
    }
 
-   @PostMapping(value = {"/register/{ricettaId}", "/register/{ricettaId}"})
+   @PostMapping(value ="/register/{ricettaId}")
    public ModelAndView registerIngrediente(
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,
@@ -49,8 +54,8 @@ public class IngredienteController {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(!ingredienteBindingResult.hasErrors() && ricetta != null) {
-         Ingrediente savedIngrediente = this.ricettaService.makeIngrediente(ricetta, ingrediente);
-         modelAndView.setViewName("redirect:/ingredienti/" + ricetta.getId() + "/" + savedIngrediente.getId());
+         this.ricettaService.makeIngrediente(ricetta, ingrediente);
+         modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId());
          modelAndView.addObject("isIngredienteRegistered", true);
       } else {
          List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
@@ -64,8 +69,8 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/{ricettaId}", "/{ricettaId}/"})
-   public ModelAndView showIngrediente(@PathVariable("ricettaId") Long ricettaId) {
+   @GetMapping(value ="/ricetta/{ricettaId}")
+   public ModelAndView showIngredientiRicetta(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienti.html");
       List<Ingrediente> ingredienti = null;
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -77,7 +82,7 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/{ricettaId}/{ingredienteId}", "/{ricettaId}/{ingredienteId}/"})
+   @GetMapping(value ="/ricetta/{ricettaId}/ingrediente/{ingredienteId}")
    public ModelAndView showIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -87,9 +92,9 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/delete/{ricettaId}/{ingredienteId}", "/delete/{ricettaId}/{ingredienteId}"})
+   @GetMapping(value ="/delete/{ricettaId}/{ingredienteId}")
    public ModelAndView deleteIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
-      ModelAndView modelAndView = new ModelAndView("redirect:/ingredienti/" + ricettaId);
+      ModelAndView modelAndView = new ModelAndView("redirect:/ingredienti/ricetta/" + ricettaId);
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
       this.ricettaService.destroyIngrediente(ricetta, ingrediente);
@@ -97,19 +102,25 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/update/{ricettaId}/{ingredienteId}", "/update/{ricettaId}/{ingredienteId}/"})
-   public ModelAndView updateIngrediente(@PathVariable("ricettaId") Long ricettaId,
-                                         @PathVariable("ingredienteId") Long ingredienteId) {
+   @GetMapping(value ="/update/{ricettaId}/{ingredienteId}")
+   public ModelAndView showUpdateIngredienteForm(
+            @PathVariable("ricettaId") Long ricettaId,
+            @PathVariable("ingredienteId") Long ingredienteId) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
-      modelAndView.addObject("ingrediente", ingrediente);
-      modelAndView.addObject("ricetta", ricetta);
-      modelAndView.addObject("isUpdate", true);
+      if(ricetta != null) {
+         Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
+         modelAndView.addObject("ingrediente", ingrediente);
+         modelAndView.addObject("ricetta", ricetta);
+         modelAndView.addObject("isUpdate", true);
+      } else {
+         modelAndView.setViewName("redirect:/ricette" );
+         modelAndView.addObject("ricettaNotFound", true);
+      }
       return modelAndView;
    }
 
-   @PostMapping(value = {"/update/{ricettaId}/{ingredienteId}", "/update/{ricettaId}/{ingredienteId}/"})
+   @PostMapping(value ="/update/{ricettaId}/{ingredienteId}")
    public ModelAndView updateIngrediente(
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,
@@ -119,7 +130,7 @@ public class IngredienteController {
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(!ingredienteBindingResult.hasErrors() && ricetta != null) {
          this.ricettaService.updateIngrediente(ricetta, ingredienteId, ingrediente);
-         modelAndView.setViewName("redirect:/ingredienti/" + ricetta.getId() );
+         modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId() );
          modelAndView.addObject("isIngredienteUpdated", true);
       } else {
          List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();

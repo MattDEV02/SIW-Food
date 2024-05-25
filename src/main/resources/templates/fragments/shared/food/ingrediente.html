@@ -7,7 +7,7 @@
    </div>
    <div class="card-footer pb-2">
       <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3"
-         th:href="@{'/ricette/' + ${ingrediente.ricetta.id}}"
+         th:href="@{'/ricette/ricetta/' + ${ingrediente.ricetta.id}}"
          title="Visualizza la ricette relativa a questo ingrediente."
       >Ricetta</a>
       <a class="btn btn-danger ms-2 mb-1" role="button"
@@ -20,7 +20,7 @@
       <a class="btn btn-warning ms-3 mb-1" role="button"
          th:href="@{'/ingredienti/update/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
          th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ingrediente.ricetta.cuoco.utente == loggedUser))}"
-         title="Modifica questa ricetta"
+         title="Modifica questa ingrediente"
       >
          <i class="fas fa-pen"></i>
       </a>

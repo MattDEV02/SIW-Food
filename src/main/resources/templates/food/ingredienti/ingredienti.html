@@ -9,15 +9,16 @@
 <div th:replace="~{fragments/shared/pagination/header.html :: header()}">
 </div>
 <main>
-   <div class="container" th:with="areIngredientiValid = ${ingredienti != null && !#sets.isEmpty(ingredienti)}, isIngredienteDeleted = ${param.isIngredienteDeleted}, isIngredienteUpdated = ${param.isIngredienteUpdated}">
+   <div class="container" th:with="areIngredientiValid = ${ingredienti != null && !#sets.isEmpty(ingredienti)}, isIngredienteRegistered = ${param.isIngredienteRegistered}, isIngredienteDeleted = ${param.isIngredienteDeleted}, isIngredienteUpdated = ${param.isIngredienteUpdated}">
       <div class="row justify-content-center">
-         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente eliminato con successo.', condition = ${isIngredienteDeleted})}"></div>
-         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente aggiornato con successo.', condition = ${isIngredienteUpdated})}"></div>
          <div class="col-12 mt-5">
             <div class="row text-center">
                <h1 th:text="'Ingredienti ' + ${#strings.isEmpty(nomeRicetta) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : nomeRicetta}"></h1>
             </div>
          </div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente registrato con successo.', condition = ${isIngredienteRegistered})}"></div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente eliminato con successo.', condition = ${isIngredienteDeleted})}"></div>
+         <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente aggiornato con successo.', condition = ${isIngredienteUpdated})}"></div>
          <div class="col-12 mb-5" th:if="${areIngredientiValid}">
             <div class="row">
                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4" th:each="ingrediente : ${ingredienti}">

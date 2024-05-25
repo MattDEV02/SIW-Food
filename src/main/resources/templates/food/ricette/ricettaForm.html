@@ -14,11 +14,10 @@
                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
                     th:title="'Form di registrazione nuova ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <div class="row text-center mt-2 mb-4">
-                    <b th:text="${#authentication.getAuthorities()}"></b>
                      <h2 th:text="'Form ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🥐'"></h2>
                   </div>
                   <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
-                        th:action="@{${isUpdate ? ('/ricette/update/' + ricetta.id)  : '/ricette/register'}}" enctype="multipart/form-data">
+                        th:action="@{${'/ricette/' + (isUpdate ? ('update/' + ricetta.id)  : 'register')}}" enctype="multipart/form-data">
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity(name = "Credenziali")
 @Table(name = "Credenziali", schema = GlobalValues.SQL_SCHEMA_NAME)
 public class Credenziali {
-   public static Roles DEFAULT_ROLE = Roles.REGISTRATO_ROLE;
+   public static Roles DEFAULT_ROLE = Roles.REGISTRATO;
 
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)

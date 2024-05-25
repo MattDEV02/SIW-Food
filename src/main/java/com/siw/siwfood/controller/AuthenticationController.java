@@ -9,6 +9,7 @@ import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.RicettaService;
 import com.siw.siwfood.service.UtenteService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -43,7 +44,7 @@ public class AuthenticationController {
    @Autowired
    private RicettaService ricettaService;
 
-   @GetMapping(value = {"/register", "/register/"})
+   @GetMapping(value ="/register")
    public ModelAndView showRegisterForm() {
       ModelAndView modelAndView = new ModelAndView("utenteForm.html");
       modelAndView.addObject("utente", new Utente());
@@ -51,7 +52,7 @@ public class AuthenticationController {
       return modelAndView;
    }
 
-   @PostMapping(value = {"/register", "/register/"})
+   @PostMapping(value ="/register" )
    public ModelAndView registerUser(
                                     @Valid @NonNull @ModelAttribute("utente") Utente utente,
                                     @NonNull BindingResult utenteBindingResult,
@@ -92,7 +93,7 @@ public class AuthenticationController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/login", "/login/"})
+   @GetMapping(value ="/login")
    public ModelAndView showLoginForm() {
       ModelAndView modelAndView = new ModelAndView("login.html");
       modelAndView.addObject("credenziali", new Credenziali());

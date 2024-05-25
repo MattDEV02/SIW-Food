@@ -13,14 +13,14 @@ public class CuocoController {
    @Autowired
    private CuocoService cuocoService;
 
-   @GetMapping(value = {"", "/"})
+   @GetMapping(value ="")
    public ModelAndView showAllCuochi() {
       ModelAndView modelAndView = new ModelAndView("food/cuochi/cuochi.html");
       modelAndView.addObject("cuochi", this.cuocoService.getAllCuochi());
       return modelAndView;
    }
 
-   @GetMapping(value = {"/{cuocoId}", "/{cuocoId}/"})
+   @GetMapping(value ="/cuoco/{cuocoId}")
    public ModelAndView showCuoco(@PathVariable("cuocoId") Long cuocoId) {
       ModelAndView modelAndView = new ModelAndView("food/cuochi/cuoco.html");
       Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
@@ -28,7 +28,7 @@ public class CuocoController {
       return modelAndView;
    }
 
-   @GetMapping(value = {"/delete/{cuocoId}", "/delete/{cuocoId}"})
+   @GetMapping(value ="/delete/{cuocoId}")
    public ModelAndView deleteCuoco(@PathVariable("cuocoId") Long cuocoId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/cuochi");
       this.cuocoService.deleteCuoco(cuocoId);
