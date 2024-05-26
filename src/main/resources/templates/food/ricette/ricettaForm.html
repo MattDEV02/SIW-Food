@@ -18,6 +18,7 @@
                   </div>
                   <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
                         th:action="@{${'/ricette/' + (isUpdate ? ('update/' + ricetta.id)  : 'register')}}" enctype="multipart/form-data">
+                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ricettaAlrearyExists}, condition = ${ricettaAlrearyExists != null})}"></div>
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"

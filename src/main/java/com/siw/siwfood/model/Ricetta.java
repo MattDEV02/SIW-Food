@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity(name = "Ricetta")
-@Table(name = "Ricette", schema = GlobalValues.SQL_SCHEMA_NAME)
+@Table(name = "Ricette", schema = GlobalValues.SQL_SCHEMA_NAME, uniqueConstraints = @UniqueConstraint(name = "riccete_nome_cuoco_unique", columnNames = {"nome", "cuoco_id"}))
 public class Ricetta {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
@@ -121,7 +121,7 @@ public class Ricetta {
          return false;
       }
       Ricetta that = (Ricetta) object;
-      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getCuoco(), that.getCuoco())) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getIngredienti(), that.getIngredienti())) ;
+      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getCuoco(), that.getCuoco()));
    }
 
    @Override

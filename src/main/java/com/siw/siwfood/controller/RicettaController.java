@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.siw.siwfood.model.Credenziali;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,10 +71,11 @@ public class RicettaController {
                                     @RequestParam(name = "cuoco-ricetta", required = false) Long cuocoId,
                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
+      Cuoco cuoco = isCuoco(loggedUser) || cuocoId == null ? this.cuocoService.getCuoco(loggedUser) : this.cuocoService.getCuoco(cuocoId);
+      this.ricettaValidator.setCuoco(cuoco);
       this.ricettaValidator.setImmagini(immaginiRicetta);
       this.ricettaValidator.validate(ricetta, ricettaBindingResult);
       if (!ricettaBindingResult.hasErrors()) {
-         Cuoco cuoco = isCuoco(loggedUser) || cuocoId == null ? this.cuocoService.getCuoco(loggedUser) : this.cuocoService.getCuoco(cuocoId);
          ricetta.setCuoco(cuoco);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
@@ -94,7 +94,7 @@ public class RicettaController {
          for (ObjectError ricettaError : ricettaErrors) {
             modelAndView.addObject(Objects.requireNonNull(ricettaError.getCode()), ricettaError.getDefaultMessage());
          }
-         modelAndView.addObject("isUpdate", true);
+         modelAndView.addObject("isUpdate", false);
       }
       return modelAndView;
    }
@@ -173,7 +173,6 @@ public class RicettaController {
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
          final Integer numeroImmagini = immaginiRicetta.length;
-         System.out.println("ciao" + numeroImmagini);
          if(cuocoId != null) {
             Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
             ricetta.setCuoco(cuoco);

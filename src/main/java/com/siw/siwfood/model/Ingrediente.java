@@ -9,7 +9,7 @@ import jdk.jfr.Unsigned;
 import java.util.Objects;
 
 @Entity(name = "Ingrediente")
-@Table(name = "Ingredienti", schema = GlobalValues.SQL_SCHEMA_NAME)
+@Table(name = "Ingredienti", schema = GlobalValues.SQL_SCHEMA_NAME,  uniqueConstraints = @UniqueConstraint(name = "ingredienti_nome_ricetta_unique", columnNames = {"nome", "ricetta_id"}))
 public class Ingrediente {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)

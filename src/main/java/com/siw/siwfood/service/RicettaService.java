@@ -97,13 +97,12 @@ public class RicettaService {
       return ricettaToUpdate;
    }
 
-   public Ingrediente updateIngrediente(Ricetta ricetta, Long ingredienteId, Ingrediente ingrediente) {
+   public void updateIngrediente(Ricetta ricetta, Long ingredienteId, Ingrediente ingrediente) {
       Ingrediente ingredienteToUpdate = this.findIngrediente(ricetta, ingredienteId);
       if(ingredienteToUpdate != null) {
          ingredienteToUpdate.setNome(ingrediente.getNome());
          ingredienteToUpdate.setQuantita(ingrediente.getQuantita());
          ingredienteToUpdate = this.ingredientRepository.save(ingredienteToUpdate);
       }
-      return ingredienteToUpdate;
    }
 }

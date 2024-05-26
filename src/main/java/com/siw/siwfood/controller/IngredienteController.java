@@ -1,5 +1,6 @@
 package com.siw.siwfood.controller;
 
+import com.siw.siwfood.controller.validator.IngredienteValidator;
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Utente;
@@ -25,6 +26,8 @@ public class IngredienteController {
    private IngredienteService ingredienteService;
    @Autowired
    private RicettaService ricettaService;
+   @Autowired
+   private IngredienteValidator ingredienteValidator;
 
    @GetMapping(value ="")
    public ModelAndView showAllIngredienti() {
@@ -58,20 +61,25 @@ public class IngredienteController {
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,
            @PathVariable("ricettaId") Long ricettaId) {
-      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      if(!ingredienteBindingResult.hasErrors() && ricetta != null) {
-         this.ricettaService.makeIngrediente(ricetta, ingrediente);
-         modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId());
-         modelAndView.addObject("isIngredienteRegistered", true);
-      } else {
-         List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
-         for (ObjectError ingredientiError : ingredientiErrors) {
-            System.out.println(ingredientiError.getObjectName() + " " + ingredientiError.getCode() + " " + ingredientiError.getDefaultMessage());
-            modelAndView.addObject(Objects.requireNonNull(ingredientiError.getCode()), ingredientiError.getDefaultMessage());
+      if(ricetta != null) {
+         this.ingredienteValidator.setRicetta(ricetta);
+         this.ingredienteValidator.validate(ingrediente, ingredienteBindingResult);
+         if(!ingredienteBindingResult.hasErrors()) {
+            this.ricettaService.makeIngrediente(ricetta, ingrediente);
+            modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId());
+            modelAndView.addObject("isIngredienteRegistered", true);
+         } else {
+            List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
+            for (ObjectError ingredientiError : ingredientiErrors) {
+               modelAndView.addObject(Objects.requireNonNull(ingredientiError.getCode()), ingredientiError.getDefaultMessage());
+            }
+            modelAndView.addObject("ricetta", ricetta);
+            modelAndView.addObject("isUpdate", false);
          }
-         modelAndView.addObject("ricetta", ricetta);
-         modelAndView.addObject("isUpdate", false);
+      } else {
+         modelAndView.setViewName("redirect:/ingredienti");
       }
       return modelAndView;
    }
@@ -133,16 +141,23 @@ public class IngredienteController {
            @NonNull BindingResult ingredienteBindingResult,
            @PathVariable("ingredienteId") Long ingredienteId,
            @PathVariable("ricettaId") Long ricettaId) {
-      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
+      ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      if(!ingredienteBindingResult.hasErrors() && ricetta != null) {
-         this.ricettaService.updateIngrediente(ricetta, ingredienteId, ingrediente);
-         modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId() );
-         modelAndView.addObject("isIngredienteUpdated", true);
-      } else {
-         List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
-         for (ObjectError ingredientiError : ingredientiErrors) {
-            modelAndView.addObject(Objects.requireNonNull(ingredientiError.getCode()), ingredientiError.getDefaultMessage());
+      if(ricetta != null) {
+         this.ingredienteValidator.setRicetta(ricetta);
+         this.ingredienteValidator.validate(ingrediente, ingredienteBindingResult);
+         if(!ingredienteBindingResult.hasErrors()) {
+            this.ricettaService.updateIngrediente(ricetta, ingredienteId, ingrediente);
+            modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId() );
+            modelAndView.addObject("isIngredienteUpdated", true);
+         } else {
+            List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
+            for (ObjectError ingredientiError : ingredientiErrors) {
+               modelAndView.addObject(Objects.requireNonNull(ingredientiError.getCode()), ingredientiError.getDefaultMessage());
+            }
+            modelAndView.addObject("ingrediente", this.ricettaService.findIngrediente(ricetta, ingredienteId));
+            modelAndView.addObject("ricetta", ricetta);
+            modelAndView.addObject("isUpdate", true);
          }
       }
       return modelAndView;

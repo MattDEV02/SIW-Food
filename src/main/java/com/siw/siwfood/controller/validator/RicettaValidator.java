@@ -1,8 +1,10 @@
 package com.siw.siwfood.controller.validator;
 
 import com.siw.siwfood.helpers.constants.FieldSizes;
+import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
-import com.siw.siwfood.model.Utente;
+import com.siw.siwfood.repository.RicettaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -11,7 +13,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class RicettaValidator implements Validator {
+   @Autowired
+   private RicettaRepository ricettaRepository;
+   private Cuoco cuoco;
    private MultipartFile[] immagini;
+
+   public Cuoco getCuoco() {
+      return this.cuoco;
+   }
+
+   public void setCuoco(Cuoco cuoco) {
+      this.cuoco = cuoco;
+   }
 
    public MultipartFile[] getImmagini() {
       return this.immagini;
@@ -23,9 +36,12 @@ public class RicettaValidator implements Validator {
 
    @Override
    public void validate(@NonNull Object object, @NonNull Errors errors) {
-      //Utente ricetta = (Utente) object;
+      Ricetta ricetta = (Ricetta) object;
       MultipartFile[] immagini = this.getImmagini();
-      if (immagini == null || immagini.length == 0) {
+      if(this.ricettaRepository.existsByCuocoAndNome(this.cuoco, ricetta.getNome())) {
+         errors.reject("ricettaAlrearyExists", "Ricetta già esistente.");
+      }
+      if (immagini == null || immagini.length == 0 || immagini[0].isEmpty()) {
          errors.reject("ricettaImmaginiEmpty", "File non presenti.");
       } else {
          for(MultipartFile immagine : immagini) {
@@ -48,4 +64,5 @@ public class RicettaValidator implements Validator {
    public boolean supports(@NonNull Class<?> aClass) {
       return Ricetta.class.equals(aClass);
    }
+
 }

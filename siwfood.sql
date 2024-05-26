@@ -35,12 +35,13 @@ INSERT INTO cuochi (id, fotografia, utente_id) VALUES
 INSERT INTO ricette (id, nome, descrizione, immagini, cuoco_id) VALUES
     (nextval('ricette_seq'), 'Pasta al sugo', 'Una bella pasta al sugo.', '{"/images/ricette/1/1.jpeg", "/images/ricette/1/2.jpeg"}', 1),
     (nextval('ricette_seq'), 'Pasta con olio', 'Una bella pasta con olio.', '{"/images/ricette/2/1.jpeg", "/images/ricette/2/2.jpeg"}', 1),
-    (nextval('ricette_seq'), 'Nuova ricetta', 'Una nuova ricetta.', '{"/images/ricette/3/1.jpeg"}', 51);;
+    (nextval('ricette_seq'), 'Ricetta vuota', 'Una ricetta vuota.', '{"/images/ricette/3/1.jpeg"}', 51);;
 
 INSERT INTO ingredienti (id, nome, quantita, ricetta_id) VALUES
     (nextval('ingredienti_seq'), 'Pomodoro', 2, 1),
     (nextval('ingredienti_seq'), 'Olio', 1, 51),
-    (nextval('ingredienti_seq'), 'Grano', 3, 51);
+    (nextval('ingredienti_seq'), 'Grano', 3, 51),
+    (nextval('ingredienti_seq'), 'Niente', 3, 101);
 
 SELECT * FROM credenziali;
 select * from utenti;

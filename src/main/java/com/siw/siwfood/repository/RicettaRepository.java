@@ -11,4 +11,6 @@ public interface RicettaRepository extends CrudRepository<Ricetta, Long> {
    public Iterable<Ricetta> findAllByNomeContainingIgnoreCaseOrderByIdDesc(String nome);
 
    public Iterable<Ricetta> findAllByCuocoAndNomeContainingIgnoreCaseOrderByIdDesc(Cuoco cuoco, String nome);
+
+   public Boolean existsByCuocoAndNome(Cuoco cuoco, String nome);
 }
