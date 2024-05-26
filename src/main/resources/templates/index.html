@@ -40,7 +40,7 @@
          </div>
          <div class="col-12 mb-5" th:if="${areRicetteValid}">
             <div class="row">
-               <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5 col-xxl-5" th:each="ricetta : ${ricette}">
+               <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 col-xxl-4" th:each="ricetta : ${ricette}">
                   <div th:replace="~{fragments/shared/food/ricetta.html :: ricetta(ricetta = ${ricetta})}"></div>
                </div>
             </div>

@@ -1,6 +1,6 @@
 <div class="card text-center shadow mt-5" th:fragment="cuoco(cuoco)"
      th:title="${cuoco.utente.credenziali.username}">
-   <a th:href="@{'/cuochi/' + ${cuoco.id}}">
+   <a th:href="@{'/cuochi/cuoco/' + ${cuoco.id}}">
       <img class="card-img-top"
            th:alt="${cuoco.utente.credenziali.username}"
            th:src="@{${cuoco.fotografia}}"
@@ -9,13 +9,14 @@
    <div class="card-body border">
       <h3 class="card-title" th:text="${cuoco.utente.nome + ' ' + cuoco.utente.cognome}"></h3>
       <p class="card-text" th:text="'Nato il ' + ${cuoco.utente.dataNascita}"></p>
-      <p class="card-text fw-bold" th:text="'Utente ' + ${#strings.capitalize(cuoco.utente.credenziali.role.toLowerCase().replace('_role', ' '))}"></p>
+      <p class="card-text fw-bold" th:text="${cuoco.utente.credenziali.username}"></p>
    </div>
    <div class="card-footer pb-3">
       <a class="card-link link-primary text-decoration-underline fs-5 ms-1 me-3 mt-1"
          th:href="@{'/ricette/cuoco/' + ${cuoco.id}}"
          th:title="'Visualizza le ricette del Cuoco ' + ${cuoco.utente.credenziali.username}"
-      >Ricette</a>
+         th:text="${loggedUser == cuoco.utente ? 'Le tue' : ''} + ' Ricette'"
+      ></a>
       <a class="btn btn-danger ms-3" role="button"
          th:href="@{'/cuochi/delete/' + ${cuoco.id}}"
          th:if="${#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}"

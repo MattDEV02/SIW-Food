@@ -11,10 +11,10 @@
       <div class="row justify-content-center">
          <div class="col-12 my-5">
             <div class="row justify-content-center">
-               <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
+               <div class="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5 shadow border rounded px-5 pt-4 pb-2"
                     th:title="'Form di registrazione nuova ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <div class="row text-center mt-2 mb-4">
-                     <h2 th:text="'Form ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🥐'"></h2>
+                     <h2 th:text="'Form ricetta ' + ${(#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')) ? ('per il cuoco ' + loggedUser.credenziali.username) : GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'"></h2>
                   </div>
                   <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
                         th:action="@{${'/ricette/' + (isUpdate ? ('update/' + ricetta.id)  : 'register')}}" enctype="multipart/form-data">
@@ -67,7 +67,9 @@
                                    th:id="${cuoco.utente.nome + '#' + cuoco.id }"
                                    th:name="${cuoco.utente.nome + '#' + cuoco.id }"
                                    th:text="${cuoco.utente.credenziali.username}"
-                                   th:value="${cuoco.id}"></option>
+                                   th:value="${cuoco.id}"
+                                   th:selected="${ricetta != null && ricetta.cuoco != null && ricetta.cuoco == cuoco}"
+                           ></option>
                         </select>
                      </div>
                      <div class="my-4">

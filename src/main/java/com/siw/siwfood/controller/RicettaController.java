@@ -57,11 +57,10 @@ public class RicettaController {
    }
 
    @GetMapping(value ="/register")
-   public ModelAndView showRicetteForm() {
+   public ModelAndView showRicettaForm() {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       modelAndView.addObject("ricetta", new Ricetta());
       modelAndView.addObject("isUpdate", false);
-      modelAndView.addObject("noCuochi", true);
       return modelAndView;
    }
 

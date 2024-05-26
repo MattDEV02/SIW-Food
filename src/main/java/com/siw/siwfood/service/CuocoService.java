@@ -47,6 +47,7 @@ public class CuocoService {
       }
    }
 
+   @Transactional
    public Cuoco getCuoco(Long cuocoId) {
       return this.cuocoRepository.findById(cuocoId).orElse(null);
    }

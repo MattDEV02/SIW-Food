@@ -5,5 +5,5 @@
 ## Modello di Dominio:
 
 <p align="center">
-<img  title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/Domain_Model.png"  width="40%">
+<img  title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/Domain_Model.png"  width="100%">
 </p>

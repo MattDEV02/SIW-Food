@@ -2,6 +2,7 @@ package com.siw.siwfood.controller;
 
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
+import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.IngredienteService;
 import com.siw.siwfood.service.RicettaService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import com.siw.siwfood.helpers.credenziali.Utils;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +34,18 @@ public class IngredienteController {
    }
 
    @GetMapping(value ="/register/{ricettaId}")
-   public ModelAndView registerIngrediente(@PathVariable("ricettaId") Long ricettaId) {
+   public ModelAndView registerIngrediente(@PathVariable("ricettaId") Long ricettaId,  @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
-         modelAndView.addObject("ingrediente", new Ingrediente());
-         modelAndView.addObject("ricetta", ricetta);
-         modelAndView.addObject("isUpdate", false);
+         if(Utils.isCuoco(loggedUser) && !ricetta.getCuoco().getUtente().equals(loggedUser)) {
+            modelAndView.setViewName("redirect:/ricette");
+            modelAndView.addObject("ricettaNonTua", true);
+         } else {
+            modelAndView.addObject("ingrediente", new Ingrediente());
+            modelAndView.addObject("ricetta", ricetta);
+            modelAndView.addObject("isUpdate", false);
+         }
       } else {
          modelAndView.setViewName("redirect:/ricette");
          modelAndView.addObject("ricettaNotFound", true);

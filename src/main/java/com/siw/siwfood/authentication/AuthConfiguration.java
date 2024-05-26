@@ -71,7 +71,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
                               .requestMatchers(HttpMethod.GET,
                                       "/", "/register", "/login", "/logout",
                                       "/cuochi","/cuochi/cuoco/{cuocoId}",
-                                      "/ricette", "/ricette/ricetta/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
+                                      "/ricette", "/ricette/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
                                       "/ingredienti",  "/ingredienti/ricetta/{ricettaId}/ingrediente/{ingredienteId}", "/ingredienti/ricetta/{ricettaId}",
                                       "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
                               .requestMatchers(HttpMethod.POST, "/register").permitAll()

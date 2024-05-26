@@ -3,6 +3,7 @@ package com.siw.siwfood.service;
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Cuoco;
+import com.siw.siwfood.repository.CuocoRepository;
 import com.siw.siwfood.repository.IngredienteRepository;
 import com.siw.siwfood.repository.RicettaRepository;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,8 @@ public class RicettaService {
    private RicettaRepository ricettaRepository;
    @Autowired
    private IngredienteRepository ingredientRepository;
+   @Autowired
+   private CuocoRepository cuocoRepository;
 
    public Iterable<Ricetta> getAllRicette() {
       return this.ricettaRepository.findAll();
@@ -43,9 +46,11 @@ public class RicettaService {
    @Transactional
    public Ricetta saveRicetta(@NotNull Ricetta ricetta) {
       Ricetta savedRicetta = this.ricettaRepository.save(ricetta);
-      if(ricetta.getCuoco() != null) {
-         Cuoco cuoco = savedRicetta.getCuoco();
-         cuoco.getRicette().add(savedRicetta);
+      if(savedRicetta.getCuoco() != null) {
+         Cuoco cuoco = this.cuocoRepository.findById(savedRicetta.getCuoco().getId()).orElse(null);
+         if(cuoco != null) {
+            cuoco.getRicette().add(savedRicetta);
+         }
       }
       return savedRicetta;
    }
@@ -59,11 +64,10 @@ public class RicettaService {
    }
 
    @Transactional
-   public Ingrediente makeIngrediente(@NotNull Ricetta ricetta, @NotNull Ingrediente ingrediente) {
+   public void makeIngrediente(@NotNull Ricetta ricetta, @NotNull Ingrediente ingrediente) {
       ingrediente.setRicetta(ricetta);
       Ingrediente savedIngrediente = this.ingredientRepository.save(ingrediente);
       ricetta.getIngredienti().add(savedIngrediente);
-      return savedIngrediente;
    }
 
    @Transactional
