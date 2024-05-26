@@ -2,13 +2,16 @@ package com.siw.siwfood.model;
 
 import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
+import com.siw.siwfood.helpers.constants.Temporals;
 import com.siw.siwfood.helpers.credenziali.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jdk.jfr.Unsigned;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity(name = "Credenziali")
@@ -36,6 +39,11 @@ public class Credenziali {
    @NotBlank
    private String role;
 
+   @Column(name = "inserted_at", nullable = false)
+   @Temporal(TemporalType.TIMESTAMP)
+   @DateTimeFormat(pattern = Temporals.DATE_TIME_FORMAT)
+   private LocalDateTime insertedAt;
+
    public Credenziali() {
      this.role = Credenziali.DEFAULT_ROLE.toString();
    }
@@ -45,7 +53,6 @@ public class Credenziali {
       this.password = password;
       this.role = Credenziali.DEFAULT_ROLE.toString();
    }
-
 
    public Long getId() {
       return this.id;
@@ -79,13 +86,29 @@ public class Credenziali {
       this.username = username;
    }
 
+   public LocalDateTime getInsertedAt() {
+      return this.insertedAt;
+   }
+
+   public void setInsertedAt(LocalDateTime insertedAt) {
+      this.insertedAt = insertedAt;
+   }
+
+   @PrePersist
+   public void prePersist() {
+      if (this.insertedAt == null) {
+         this.insertedAt = LocalDateTime.now();
+      }
+   }
+
    @Override
    public String toString() {
       return "Credenziali: {" +
               " id = " + this.getId().toString() +
-              ", username = '" + this.getUsername() + '\'' +
+              ", username = '" + this.getUsername()  +
               ", role = " + this.getRole() +
-              ", password = '" + this.getPassword() + '\'' +
+              ", password = '" + this.getPassword()  +
+              ", insertedAt = '" + this.getInsertedAt().toString()  +
               " }";
    }
 

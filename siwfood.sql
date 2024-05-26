@@ -13,11 +13,12 @@ delete from cuochi;
 delete from utenti;
 delete from credenziali;
 
-INSERT INTO credenziali (id, username, password, role) VALUES
-                                                           (nextval('credenziali_seq'), 'Lamb', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'AMMINISTRATORE'),
-                                                           (nextval('credenziali_seq'), 'Lamb2', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO'),
-                                                           (nextval('credenziali_seq'), 'Lamb3', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO'),
-                                                           (nextval('credenziali_seq'), 'Lamb4', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO');;
+
+INSERT INTO credenziali (id, username, password, role, inserted_at) VALUES
+                                                           (nextval('credenziali_seq'), 'Lamb', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'AMMINISTRATORE', CURRENT_TIMESTAMP),
+                                                           (nextval('credenziali_seq'), 'Lamb2', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO', CURRENT_TIMESTAMP),
+                                                           (nextval('credenziali_seq'), 'Lamb3', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO', CURRENT_TIMESTAMP),
+                                                           (nextval('credenziali_seq'), 'Lamb4', '$2a$10$1xyrTM4fzIZINm3GBh7H6.IyMc0RFFzplC/emdv3aXctk3k7U55oG', 'REGISTRATO', CURRENT_TIMESTAMP);
 
 
 INSERT INTO utenti (id, nome, cognome, datanascita, credenziali_id) VALUES

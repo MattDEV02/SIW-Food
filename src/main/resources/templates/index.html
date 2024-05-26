@@ -14,21 +14,21 @@
             </h1>
          </div>
       </div>
-         <div class="col-12 mt-4 py-4" th:if="${#authentication.getPrincipal() != 'anonymousUser'}">
+         <div class="col-12 mt-4 py-4" th:with="defaultUtenteRigaValue = 'Sconosciuto'">
             <div class="row justify-content-center">
                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-5 col-xxl-5 text-center me-3 mt-lg-2 mt-xl-0"
                     th:title="'Informazioni Utente ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <h2 class="mt-4 mt-md-3 mt-lg-3 mt-xl-3 mt-xxl-3 mb-5">Informazioni Utente</h2>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'nome', value = ${loggedUser.nome})}"></div>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'cognome', value =  ${loggedUser.cognome})}"></div>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property ='data nascita', type = 'date', value = ${#dates.format(loggedUser.dataNascita, TEMPORALS_MAP.get('DATE_FORMAT'))})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'nome', value = ${#authentication.getPrincipal() != 'anonymousUser' ? loggedUser.nome : defaultUtenteRigaValue})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'cognome', value =  ${#authentication.getPrincipal() != 'anonymousUser' ? loggedUser.cognome : defaultUtenteRigaValue})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property ='nato il', type = 'date', value = ${#authentication.getPrincipal() != 'anonymousUser' ? #dates.format(loggedUser.dataNascita, TEMPORALS_MAP.get('DATE_FORMAT')) : defaultUtenteRigaValue})}"></div>
                </div>
                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-5 col-xxl-5 text-center mt-4 mt-xl-0 ms-xl-3"
                     th:title="'Credenziali Utente ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <h2 class="mt-3 mb-5">Credenziali Utente</h2>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'username', value = ${loggedUser.credenziali.username})}"></div>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'role', value = ${loggedUser.credenziali.role})}"></div>
-                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'id account', value = ${loggedUser.credenziali.id})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'username', value = ${#authentication.getPrincipal() != 'anonymousUser' ? loggedUser.credenziali.username : defaultUtenteRigaValue})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'ruolo', value = ${#authentication.getPrincipal() != 'anonymousUser' ? loggedUser.credenziali.role : defaultUtenteRigaValue})}"></div>
+                  <div th:replace="~{fragments/rigaUtente.html :: rigaUtente(property = 'registrato il', value = ${#authentication.getPrincipal() != 'anonymousUser' ? #temporals.format(loggedUser.credenziali.insertedAt, TEMPORALS_MAP.get('DATE_TIME_FORMAT')) : defaultUtenteRigaValue})}"></div>
                </div>
             </div>
       </div>

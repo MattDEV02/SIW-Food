@@ -24,7 +24,7 @@ public class Cuoco {
    @JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
    private Utente utente;
 
-   @Column(name = "fotografia", nullable = false)
+   @Column(name = "fotografia")
    private String fotografia;
 
    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.REMOVE }, targetEntity = Ricetta.class, orphanRemoval = true,  mappedBy = "cuoco")
