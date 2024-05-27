@@ -9,7 +9,6 @@ import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.RicettaService;
 import com.siw.siwfood.service.UtenteService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -74,8 +73,9 @@ public class AuthenticationController {
          if (savedUtente != null) {
             Cuoco cuoco = new Cuoco(savedUtente);
             Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
+
             if(savedCuoco != null) {
-               Utils.storeCuocoFotografia(cuoco, fotografiaCuoco);
+               Utils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
             }
             modelAndView.setViewName("redirect:/login");
             modelAndView.addObject("isUtenteRegistered", true);

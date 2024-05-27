@@ -15,7 +15,7 @@ public class Utils {
    public final static String UTENTE_FOTOGRAFIE_EXTENSION = ".jpeg";
 
    public static @NonNull String getCuocoRelativePathFotografiaDirectoryName(@NonNull Long cuochiCount) {
-      return ProjectPaths.IMAGES + Utils.UTENTE_FOTOGRAFIE_DIRECTORY + "/" + String.valueOf(cuochiCount + 1) + "/";
+      return ProjectPaths.IMAGES + Utils.UTENTE_FOTOGRAFIE_DIRECTORY + "/" + String.valueOf(cuochiCount) + "/";
    }
 
    public static @NonNull String getCuocoFotografiaFileName(@NonNull Cuoco cuoco) {
@@ -30,6 +30,7 @@ public class Utils {
       try {
          //  /images/cuochi/{cuochiCount}/{cuocoId}.jpeg
          String fotografiaRelativePath = cuoco.getFotografia();
+         System.out.println(fotografiaRelativePath);
          Integer fileNameIndex = fotografiaRelativePath.indexOf(String.valueOf(cuoco.getId()) + Utils.UTENTE_FOTOGRAFIE_EXTENSION);
          String destinationDirectoryName = ProjectPaths.getStaticPath() + fotografiaRelativePath.substring(0, fileNameIndex);
          File destinationDirectory = new File(destinationDirectoryName);

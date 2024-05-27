@@ -4,10 +4,7 @@ import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.helpers.constants.GlobalValues;
 import com.siw.siwfood.helpers.constants.Temporals;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import jdk.jfr.Unsigned;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,6 +35,7 @@ public class Utente {
    @Past
    @Column(name = "datanascita", nullable = false)
    @Temporal(TemporalType.DATE)
+   @NotNull
    private Date dataNascita;
 
    @OneToOne(cascade = CascadeType.ALL, targetEntity = Credenziali.class, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
