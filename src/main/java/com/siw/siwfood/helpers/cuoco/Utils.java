@@ -35,13 +35,10 @@ public class Utils {
          String fotografiaDirectoryName = fotografiaRelativePath.substring(0, fileNameIndex);
          String destinationDirectoryName = ProjectPaths.getStaticPath() + fotografiaDirectoryName;
          File destinationDirectory = new File(destinationDirectoryName);
-         if (destinationDirectory.mkdir()) {
-            String fotografiaFileName = fotografiaRelativePath.substring(fileNameIndex);
-            File file = new File(destinationDirectoryName + fotografiaFileName);
-            fotografia.transferTo(file);
-         } else {
-            System.err.println("Directory per il nuovo Cuoco inserito (id = " + cuoco.getId().toString() + ")" + " NON creata, il file NON puo essere storicizzato.");
-         }
+         FileUtils.forceMkdir(destinationDirectory);
+         String fotografiaFileName = fotografiaRelativePath.substring(fileNameIndex);
+         File fotografiaFileOutput = new File(destinationDirectoryName + fotografiaFileName);
+         fotografia.transferTo(fotografiaFileOutput);
       } catch (IOException iOException) {
          iOException.printStackTrace();
       }

@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Component
 public class RicettaValidator implements Validator {
    @Autowired

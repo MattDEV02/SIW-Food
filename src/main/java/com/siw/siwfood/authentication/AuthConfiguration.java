@@ -1,7 +1,6 @@
 package com.siw.siwfood.authentication;
 
 import com.siw.siwfood.helpers.credenziali.Roles;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

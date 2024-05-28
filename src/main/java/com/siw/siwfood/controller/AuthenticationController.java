@@ -1,6 +1,7 @@
 package com.siw.siwfood.controller;
 import com.siw.siwfood.controller.validator.CredenzialiValidator;
 import com.siw.siwfood.controller.validator.CuocoValidator;
+import com.siw.siwfood.controller.validator.UtenteValidator;
 import com.siw.siwfood.helpers.cuoco.Utils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Cuoco;
@@ -39,6 +40,8 @@ public class AuthenticationController {
    @Autowired
    private CuocoValidator cuocoValidator;
    @Autowired
+   private UtenteValidator utenteValidator;
+   @Autowired
    private CredenzialiValidator credenzialiValidator;
    @Autowired
    private RicettaService ricettaService;
@@ -63,6 +66,7 @@ public class AuthenticationController {
       ModelAndView modelAndView = new ModelAndView("utenteForm.html");
       this.cuocoValidator.setFotografia(fotografiaCuoco);
       this.credenzialiValidator.setConfirmPassword(confirmPassword);
+      this.utenteValidator.validate(utente, utenteBindingResult);
       this.cuocoValidator.validate(utente, utenteBindingResult);
       this.credenzialiValidator.validate(credenziali, credenzialiBindingResult);
       if (!utenteBindingResult.hasErrors() && !credenzialiBindingResult.hasErrors()) {

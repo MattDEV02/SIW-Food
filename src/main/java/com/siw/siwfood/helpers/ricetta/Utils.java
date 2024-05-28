@@ -39,7 +39,8 @@ public class Utils {
          String destinationDirectoryName = ProjectPaths.getStaticPath() + immagineDirectoryName;
          File destinationDirectory = new File(destinationDirectoryName);
          if(!destinationDirectory.exists()) {
-            destinationDirectory.mkdirs();
+            System.out.println(Files.isWritable(Paths.get(ProjectPaths.getImagesPath() + Utils.RICETTA_IMMAGINI_DIRECTORY)));
+            FileUtils.forceMkdir(destinationDirectory);
          }
          String fileName = immagineRelativePathCorrente.substring(fileNameIndex);
          File file = new File(destinationDirectoryName + fileName);
