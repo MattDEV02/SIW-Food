@@ -63,7 +63,7 @@
                      <div class="mb-3" th:if="${#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}">
                         <label class="form-label" for="cuoco-ricetta">Cuoco:</label>
                         <select class="form-control form-select py-2" id="cuoco-ricetta" name="cuoco-ricetta" required
-                                title="Inserisci il cuoco della ricetta">
+                                title="Inserisci il cuoco della ricetta" th:field="${ricetta.cuoco}">
                            <option th:each="cuoco : ${cuochiSelect}"
                                    th:id="${cuoco.utente.nome + '#' + cuoco.id }"
                                    th:name="${cuoco.utente.nome + '#' + cuoco.id }"

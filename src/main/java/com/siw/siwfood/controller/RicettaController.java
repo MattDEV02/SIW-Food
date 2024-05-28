@@ -68,10 +68,9 @@ public class RicettaController {
                                     @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
                                     @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                     @NonNull BindingResult ricettaBindingResult,
-                                    @RequestParam(name = "cuoco-ricetta", required = false) Long cuocoId,
                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
-      Cuoco cuoco = isCuoco(loggedUser) || cuocoId == null ? this.cuocoService.getCuoco(loggedUser) : this.cuocoService.getCuoco(cuocoId);
+      Cuoco cuoco = isCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
       this.ricettaValidator.setCuoco(cuoco);
       this.ricettaValidator.setImmagini(immaginiRicetta);
       this.ricettaValidator.validate(ricetta, ricettaBindingResult);
@@ -161,19 +160,18 @@ public class RicettaController {
    }
 
    @PostMapping(value ="/update/ricetta/{ricettaId}")
-   public ModelAndView updateRicetta(@Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
+   public ModelAndView updateRicetta(
+                                     @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
+                                     @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                      @NonNull BindingResult ricettaBindingResult,
                                      @RequestParam(name = "immagini-ricetta", required = false) MultipartFile[] immaginiRicetta,
-                                     @RequestParam(name = "cuoco-ricetta", required = false) Long cuocoId,
                                      @PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
-         if(cuocoId != null) {
-            Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
-            ricetta.setCuoco(cuoco);
-         }
+         Cuoco cuoco = isCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
+         ricetta.setCuoco(cuoco);
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroImmaginiRicetta);
          if (updatedRicetta != null) {
             for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
