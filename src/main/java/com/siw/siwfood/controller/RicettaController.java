@@ -56,7 +56,7 @@ public class RicettaController {
    }
 
    @GetMapping(value ="/register")
-   public ModelAndView showRicettaForm() {
+   public ModelAndView showRegisterRicettaForm() {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       modelAndView.addObject("ricetta", new Ricetta());
       modelAndView.addObject("isUpdate", false);
@@ -78,10 +78,7 @@ public class RicettaController {
       if (!ricettaBindingResult.hasErrors()) {
          ricetta.setCuoco(cuoco);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
-         for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-            ricetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(this.ricettaService.getRicetteCount(), i));
-         }
-         Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta);
+         Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta, numeroImmaginiRicetta);
          if (savedRicetta != null) {
             for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
                Utils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
@@ -99,7 +96,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/delete/{ricettaId}")
+   @GetMapping(value ="/delete/ricetta/{ricettaId}")
    public ModelAndView deleteRicetta(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/ricette");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -149,7 +146,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/update/{ricettaId}")
+   @GetMapping(value ="/update/ricetta/{ricettaId}")
    public ModelAndView showUpdateRicettaForm(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -163,7 +160,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @PostMapping(value ="/update/{ricettaId}")
+   @PostMapping(value ="/update/ricetta/{ricettaId}")
    public ModelAndView updateRicetta(@Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                      @NonNull BindingResult ricettaBindingResult,
                                      @RequestParam(name = "immagini-ricetta", required = false) MultipartFile[] immaginiRicetta,
@@ -172,19 +169,14 @@ public class RicettaController {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
-         final Integer numeroImmagini = immaginiRicetta.length;
+         final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          if(cuocoId != null) {
             Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
             ricetta.setCuoco(cuoco);
          }
-         for(Integer i = 0; i < numeroImmagini; i++) {
-            if(!immaginiRicetta[i].isEmpty()) {
-               ricetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
-            }
-         }
-         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta);
+         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroImmaginiRicetta);
          if (updatedRicetta != null) {
-            for(Integer i = 0; i < numeroImmagini; i++) {
+            for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
               if(!immaginiRicetta[i].isEmpty()) {
                  Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
               }

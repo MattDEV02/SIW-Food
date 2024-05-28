@@ -17,7 +17,7 @@
                      <h3 th:text="'Form ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'"></h3>
                   </div>
                   <form id="ingrediente-registration-form" method="POST" name="ingrediente-registration-form"
-                        th:action="@{'/ingredienti' + ${isUpdate ? '/update/' : '/register/'} + ${ricetta.id} + ${isUpdate ? ('/' + ingrediente.id) : ''}}">
+                        th:action="@{'/ingredienti/' + ${isUpdate ? 'update' : 'register'} + ${'/ricetta/' + ricetta.id} + ${isUpdate ? ('/ingrediente/' + ingrediente.id) : ''}}">
                      <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ingredienteAlrearyExists}, condition = ${ingredienteAlrearyExists != null})}"></div>
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>

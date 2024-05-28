@@ -10,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.siw.siwfood.helpers.ricetta.Utils.deleteRicettaImmaginiDirectory;
 
 @Service
 public class CuocoService {
    @Autowired
    private CuocoRepository cuocoRepository;
-   @Autowired
-   private RicettaService ricettaService;
 
    public Iterable<Cuoco> getAllCuochi() {
       return this.cuocoRepository.findAll();
@@ -26,20 +26,16 @@ public class CuocoService {
    @Transactional
    public Cuoco saveCuoco(@NotNull Cuoco cuoco) {
       Cuoco savedCuoco = this.cuocoRepository.save(cuoco);
-      savedCuoco.setFotografia(Utils.getCuocoFotografiaRelativePath(this.getCuochiCount(), savedCuoco));
+      savedCuoco.setFotografia(Utils.getCuocoFotografiaRelativePath(savedCuoco));
       return this.cuocoRepository.save(cuoco);
-   }
-
-   public Long getCuochiCount() {
-      return this.cuocoRepository.count();
    }
 
    @Transactional
    public void deleteCuoco(Long cuocoId) {
-      Cuoco cuoco = this.cuocoRepository.findById(cuocoId).orElse(null);
+      Cuoco cuoco = this.getCuoco(cuocoId);
       if(cuoco != null) {
          Utils.deleteFotografiaDirectory(cuoco);
-         Iterable<Ricetta> ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
+         List<Ricetta> ricette = cuoco.getRicette();
          for(Ricetta ricetta : ricette) {
             deleteRicettaImmaginiDirectory(ricetta);
          }

@@ -30,10 +30,6 @@ public class RicettaService {
       return this.ricettaRepository.findAllByCuocoOrderByIdDesc(cuoco);
    }
 
-   public Long getRicetteCount() {
-      return this.ricettaRepository.count();
-   }
-
    public Ricetta getRicetta(Long ricettaId) {
       return this.ricettaRepository.findById(ricettaId).orElse(null);
    }
@@ -44,13 +40,16 @@ public class RicettaService {
    }
 
    @Transactional
-   public Ricetta saveRicetta(@NotNull Ricetta ricetta) {
+   public Ricetta saveRicetta(@NotNull Ricetta ricetta, Integer numeroImmaginiRicetta) {
       Ricetta savedRicetta = this.ricettaRepository.save(ricetta);
       if(savedRicetta.getCuoco() != null) {
          Cuoco cuoco = this.cuocoRepository.findById(savedRicetta.getCuoco().getId()).orElse(null);
          if(cuoco != null) {
             cuoco.getRicette().add(savedRicetta);
          }
+      }
+      for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
+         savedRicetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(savedRicetta, i));
       }
       return savedRicetta;
    }
@@ -81,19 +80,21 @@ public class RicettaService {
    }
 
 
-   public Ricetta updateRicetta(Ricetta ricettaToUpdate, @NotNull Ricetta ricetta) {
-      if(ricettaToUpdate != null) {
-         ricettaToUpdate.setNome(ricetta.getNome());
-         ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
-         if(ricetta.getCuoco() != null) {
-            ricettaToUpdate.setCuoco(ricetta.getCuoco());
-         }
-         if(!ricetta.getImmagini().isEmpty()) {
-            Utils.deleteRicettaImmagini(ricetta);
-            ricettaToUpdate.setImmagini(ricetta.getImmagini());
-         }
-         ricettaToUpdate = this.ricettaRepository.save(ricettaToUpdate);
+   public Ricetta updateRicetta(@NotNull Ricetta ricettaToUpdate, @NotNull Ricetta ricetta, Integer numeroImmaginiRicetta) {
+      ricettaToUpdate.setNome(ricetta.getNome());
+      ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
+      if(ricetta.getCuoco() != null) {
+         ricettaToUpdate.setCuoco(ricetta.getCuoco());
       }
+      if(numeroImmaginiRicetta > 0) {
+         System.out.println("numeroImmaginiRicetta " + numeroImmaginiRicetta);
+         Utils.deleteRicettaImmagini(ricettaToUpdate);
+         ricettaToUpdate.getImmagini().clear();
+         for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
+            ricettaToUpdate.getImmagini().add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
+         }
+      }
+      ricettaToUpdate = this.ricettaRepository.save(ricettaToUpdate);
       return ricettaToUpdate;
    }
 
@@ -102,7 +103,7 @@ public class RicettaService {
       if(ingredienteToUpdate != null) {
          ingredienteToUpdate.setNome(ingrediente.getNome());
          ingredienteToUpdate.setQuantita(ingrediente.getQuantita());
-         ingredienteToUpdate = this.ingredientRepository.save(ingredienteToUpdate);
+         this.ingredientRepository.save(ingredienteToUpdate);
       }
    }
 }

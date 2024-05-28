@@ -44,7 +44,7 @@ public class AuthenticationController {
    private RicettaService ricettaService;
 
    @GetMapping(value ="/register")
-   public ModelAndView showRegisterForm() {
+   public ModelAndView showRegisterUserForm() {
       ModelAndView modelAndView = new ModelAndView("utenteForm.html");
       modelAndView.addObject("utente", new Utente());
       modelAndView.addObject("credenziali", new Credenziali());
@@ -73,7 +73,6 @@ public class AuthenticationController {
          if (savedUtente != null) {
             Cuoco cuoco = new Cuoco(savedUtente);
             Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
-
             if(savedCuoco != null) {
                Utils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
             }
@@ -94,14 +93,14 @@ public class AuthenticationController {
    }
 
    @GetMapping(value ="/login")
-   public ModelAndView showLoginForm() {
+   public ModelAndView showUserLoginForm() {
       ModelAndView modelAndView = new ModelAndView("login.html");
       modelAndView.addObject("credenziali", new Credenziali());
       return modelAndView;
    }
 
    @GetMapping(value = {"", "/"})
-   public ModelAndView showDashBoard(@ModelAttribute("loggedUser") Utente loggedUser) {
+   public ModelAndView showHomePage(@ModelAttribute("loggedUser") Utente loggedUser) {
       ModelAndView modelAndView = new ModelAndView("index.html");
       Iterable<Ricetta> ricette = null;
       if(isCuoco(loggedUser)) {

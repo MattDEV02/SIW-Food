@@ -36,8 +36,8 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/register/{ricettaId}")
-   public ModelAndView registerIngrediente(@PathVariable("ricettaId") Long ricettaId,  @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser) {
+   @GetMapping(value ="/register/ricetta/{ricettaId}")
+   public ModelAndView showRegisterIngredienteForm(@PathVariable("ricettaId") Long ricettaId,  @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
@@ -56,7 +56,7 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @PostMapping(value ="/register/{ricettaId}")
+   @PostMapping(value ="/register/ricetta/{ricettaId}")
    public ModelAndView registerIngrediente(
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,
@@ -107,7 +107,7 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/delete/{ricettaId}/{ingredienteId}")
+   @GetMapping(value ="/delete/ricetta/{ricettaId}/ingrediente/{ingredienteId}")
    public ModelAndView deleteIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/ingredienti/ricetta/" + ricettaId);
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
@@ -117,7 +117,7 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/update/{ricettaId}/{ingredienteId}")
+   @GetMapping(value ="/update/ricetta/{ricettaId}/ingrediente/{ingredienteId}")
    public ModelAndView showUpdateIngredienteForm(
             @PathVariable("ricettaId") Long ricettaId,
             @PathVariable("ingredienteId") Long ingredienteId) {
@@ -135,7 +135,7 @@ public class IngredienteController {
       return modelAndView;
    }
 
-   @PostMapping(value ="/update/{ricettaId}/{ingredienteId}")
+   @PostMapping(value ="/update/ricetta/{ricettaId}/ingrediente/{ingredienteId}")
    public ModelAndView updateIngrediente(
            @Valid @NonNull @ModelAttribute("ingrediente") Ingrediente ingrediente,
            @NonNull BindingResult ingredienteBindingResult,

@@ -30,8 +30,8 @@ public class AuthConfiguration implements WebMvcConfigurer {
    private DataSource dataSource;
 
    @Override
-   public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
-      registry.addResourceHandler("/**")
+   public void addResourceHandlers(@NonNull ResourceHandlerRegistry resourceHandlerRegistry) {
+      resourceHandlerRegistry.addResourceHandler("/**")
               .addResourceLocations(AuthConfiguration.CLASSPATH_RESOURCE_LOCATIONS)
       //.setCachePeriod(0)
       ;
@@ -39,14 +39,11 @@ public class AuthConfiguration implements WebMvcConfigurer {
 
 
    @Autowired
-   public void configureGlobal(@NonNull AuthenticationManagerBuilder auth)
+   public void configureGlobal(@NonNull AuthenticationManagerBuilder authenticationManagerBuilder)
            throws Exception {
-      auth.jdbcAuthentication()
-              //use the autowired datasource to access the saved credentials
+      authenticationManagerBuilder.jdbcAuthentication()
               .dataSource(this.dataSource)
-              //retrieve username and role
               .authoritiesByUsernameQuery("SELECT username, role FROM Credenziali WHERE username = ?")
-              //retrieve username, password and a boolean flag specifying whether the user is enabled or not (always enabled in our case)
               .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM Credenziali WHERE username = ?");
    }
 
@@ -81,9 +78,10 @@ public class AuthConfiguration implements WebMvcConfigurer {
                               .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
                               .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
                               .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers("/ingredienti/register/{ricettaId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers(HttpMethod.GET,"/ingredienti/delete/{ricettaId}/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers("/ingredienti/update/{ricettaId}/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers("/ingredienti/register/ricetta/{ricettaId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers(HttpMethod.GET,"/ingredienti/delete/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers("/ingredienti/update/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                              .requestMatchers(HttpMethod.DELETE).denyAll()
                               .anyRequest().authenticated()
               )
               .formLogin(formLogin -> formLogin

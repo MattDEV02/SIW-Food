@@ -20,18 +20,17 @@
    <div class="card-footer pb-3">
      <div class="mt-2" th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || (#strings.contains(loggedUser.credenziali.role, 'REGISTRATO') && ingrediente.ricetta.cuoco.utente == loggedUser))}">
         <a class="btn btn-danger ms-2" role="button"
-           th:href="@{'/ingredienti/delete/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
+           th:href="@{'/ingredienti/delete/ricetta/' + ${ingrediente.ricetta.id} + '/ingrediente/' + ${ingrediente.id}}"
            title="Rimuovi questo ingrediente"
         >
            <i class="fas fa-trash"></i>
         </a>
         <a class="btn btn-warning ms-3" role="button"
-           th:href="@{'/ingredienti/update/' + ${ingrediente.ricetta.id} + '/' + ${ingrediente.id}}"
-           title="Modifica questa ingrediente"
+           th:href="@{'/ingredienti/update/ricetta/' + ${ingrediente.ricetta.id} + '/ingrediente/' + ${ingrediente.id}}"
+           title="Modifica questo ingrediente"
         >
            <i class="fas fa-pen"></i>
         </a>
      </div>
-     
    </div>
 </div>

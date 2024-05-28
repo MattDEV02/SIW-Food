@@ -19,7 +19,7 @@
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente registrato con successo.', condition = ${isIngredienteRegistered})}"></div>
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente eliminato con successo.', condition = ${isIngredienteDeleted})}"></div>
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente aggiornato con successo.', condition = ${isIngredienteUpdated})}"></div>
-         <div class="col-12 mt-4" th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')) && (isIngredienteRegistered != null || isIngredienteUpdated != null || isIngredienteDeleted != null)}">
+         <div class="col-12 mt-4" th:if="${#authentication.getPrincipal() != 'anonymousUser' && (#strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE') || #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')) && (isIngredienteRegistered != null)}">
             <div class="row text-center">
                <a class="fs-5"
                   href="javascript:history.back()"
