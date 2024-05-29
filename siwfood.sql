@@ -7,11 +7,11 @@ ALTER SEQUENCE cuochi_seq RESTART WITH 1;
 ALTER SEQUENCE ricette_seq RESTART WITH 1;
 ALTER SEQUENCE ingredienti_seq RESTART WITH 1;
 
-delete from ingredienti;
-delete from ricette;
-delete from cuochi;
-delete from utenti;
-delete from credenziali;
+DELETE FROM ingredienti;
+DELETE FROM ricette;
+DELETE FROM cuochi;
+DELETE FROM utenti;
+DELETE FROM credenziali;
 
 
 INSERT INTO credenziali (id, username, password, role, inserted_at) VALUES
@@ -45,10 +45,10 @@ INSERT INTO ingredienti (id, nome, quantita, ricetta_id) VALUES
     (nextval('ingredienti_seq'), 'Niente', 3, 101);
 
 SELECT * FROM credenziali;
-select * from utenti;
-select * from cuochi;
-select * from ricette;
-select * from ingredienti;
+SELECT * FROM utenti;
+SELECT * FROM cuochi;
+SELECT * FROM ricette;
+SELECT * FROM ingredienti;
 
-select * from credenziali_seq;
-select * from utenti_seq;
+SELECT * FROM credenziali_seq;
+SELECT * FROM utenti_seq;

@@ -4,6 +4,7 @@ import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.repository.RicettaRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,15 @@ public class RicettaValidator implements Validator {
       this.immagini = immagini;
    }
 
+   private static @NotNull Boolean immaginiContainsEmptyFile(MultipartFile @NotNull [] immagini) {
+      for(MultipartFile immagine: immagini) {
+         if(immagine.isEmpty()) {
+            return true;
+         }
+      }
+      return false;
+   }
+
    @Override
    public void validate(@NonNull Object object, @NonNull Errors errors) {
       Ricetta ricetta = (Ricetta) object;
@@ -42,7 +52,7 @@ public class RicettaValidator implements Validator {
       if(this.ricettaRepository.existsByCuocoAndNome(this.cuoco, ricetta.getNome())) {
          errors.reject("ricettaAlrearyExists", "Ricetta già esistente.");
       }
-      if (immagini == null || immagini.length == 0 || immagini[0].isEmpty()) {
+      if (immagini == null || immagini.length == 0 || RicettaValidator.immaginiContainsEmptyFile(immagini)) {
          errors.reject("ricettaImmaginiEmpty", "File non presenti.");
       } else {
          for(MultipartFile immagine : immagini) {
