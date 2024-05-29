@@ -41,8 +41,8 @@
 </main>
 <div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
 </div>
-<script th:src="@{/js/jquery/jquery.min.js}"></script>
-<script th:src="@{/js/bootstrap/bootstrap.js}"></script>
+<script type="text/javascript" th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}"  th:src="@{/js/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}" th:src="@{/js/bootstrap/bootstrap.js}"></script>
 </body>
 
 </html>
