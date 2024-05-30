@@ -35,7 +35,8 @@ public class Utils {
          String cuocoImageRelativePath = cuoco.getFotografia();
          Integer indexOfcuocoImageFileName = cuocoImageRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
          String cuocoImageRelativePathDirectory = cuocoImageRelativePath.substring(0, indexOfcuocoImageFileName);
-         String destinationDirectoryName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath() + cuocoImageRelativePathDirectory;
+         String destination = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
+         String destinationDirectoryName = destination + cuocoImageRelativePathDirectory;
          File destinationDirectory = new File(destinationDirectoryName);
          FileUtils.forceMkdir(destinationDirectory);
          String destinationFileName = cuocoImageRelativePath.substring(indexOfcuocoImageFileName);

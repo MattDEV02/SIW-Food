@@ -105,7 +105,7 @@
 
 - **`SiwFood.sql`**: Un file di script SQL (PostgreSQL) che consente di creare il database utilizzato per questa App.
 
-- **`pom.xml`**: Questo file è specifico per i progetti basati su Maven. Stands for "Project Object Model" ed è utilizzato da Maven per gestire la configurazione di build del progetto, le dipendenze, i plugin e altre impostazioni. Il file pom.xml è scritto in formato XML e contiene informazioni come i metadati del progetto, le dipendenze dalle librerie esterne, le istruzioni di build e i profili per diversi ambienti. È il file di configurazione centrale per i progetti Maven ed è cruciale per la costruzione, il testing e il rilascio dell'applicazione.
+- **`pom.xml`**: Questo file è specifico per i progetti basati su Maven. E' utilizzato da Maven per gestire la configurazione di build del progetto, le dipendenze, i plugin e altre impostazioni. Il file pom.xml è scritto in formato XML e contiene informazioni come i metadati del progetto, le dipendenze dalle librerie esterne, le istruzioni di build e i profili per diversi ambienti. È il file di configurazione centrale per i progetti Maven ed è cruciale per la costruzione, il testing e il rilascio dell'applicazione.
 
 - **`README.md`**: Documentazione in Markdown per questo progetto.
 
@@ -156,11 +156,11 @@ Made with ❤️ and a lot of hard work 🏋️‍♂️ by:
 
 ### Requisiti
 
-- Java 17
-- Maven 3.9
-- PostgreSQL 16.0
+- Java 17 +
+- Maven 3.9 +
+- PostgreSQL 16.0 +
 
-### Istruzioni di installazione
+### Istruzioni di utilizzo e installazione
 
 1. Clona il repository:
 
@@ -311,8 +311,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
                                       "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
                               .requestMatchers(HttpMethod.POST, "/register").permitAll()
                               .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
-                              .requestMatchers(HttpMethod.GET,"/cuochi/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
-                              .requestMatchers("/cuochi/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                              .requestMatchers(HttpMethod.GET,"/cuochi/delete/cuoco/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
                               .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
                               .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
                               .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
@@ -465,7 +464,6 @@ public class AuthenticationController {
   }
 
 }
-
 ```
 
 ### `CuocoService.java` -> `com.siw.siwfood.service.CuocoService`
@@ -525,7 +523,6 @@ public class CuocoService {
     return this.cuocoRepository.findByUtente(utente).orElse(null);
   }
 }
-
 ```
 
 ### `CredenzialiRepository.java` -> `com.siw.siwfood.repository.CredenzialiRepository`
@@ -653,11 +650,11 @@ public class Ricetta {
   @Override
   public String toString() {
     return "Ricetta: {" +
-            " id = " + this.getId().toString() +
-            ", nome = '" + this.getNome() + '\'' +
+            //  " id = " + this.getId().toString() +
+            ", nome = '" + this.getNome() +
             ", descrizione = " + this.getDescrizione() +
-            ", immagini = '" + this.getImmagini().toString() + '\'' +
-            ", ingredienti = '" + this.getIngredienti().toString() + '\'' +
+            ", immagini = '" + this.getImmagini().toString() +
+            ", ingredienti = '" + this.getIngredienti().toString() +
             " }";
   }
 
@@ -675,10 +672,9 @@ public class Ricetta {
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.getId(), this.getNome(), this.getCuoco(), this.getIngredienti());
+    return Objects.hash(this.getId(), this.getNome(), this.getCuoco());
   }
 }
-
 ```
 
 ### `/food/ricette/ricette.html`
@@ -727,8 +723,8 @@ public class Ricetta {
 </main>
 <div th:replace="~{fragments/shared/pagination/footer.html :: footer()}">
 </div>
-<script th:src="@{/js/jquery/jquery.min.js}"></script>
-<script th:src="@{/js/bootstrap/bootstrap.js}"></script>
+<script type="text/javascript" th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}"  th:src="@{/js/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:charset="${GLOBAL_CONSTANTS_MAP.get('CHARSET')}" th:src="@{/js/bootstrap/bootstrap.js}"></script>
 </body>
 
 </html>
