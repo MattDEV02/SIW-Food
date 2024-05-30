@@ -9,6 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class Utils {
    public final static String UTENTE_FOTOGRAFIE_DIRECTORY = "/cuochi";
@@ -26,30 +30,36 @@ public class Utils {
       return Utils.getCuocoFotografiaDirectoryName(cuoco) + Utils.getCuocoFotografiaFileName(cuoco);
    }
 
-   public static void storeCuocoFotografia(@NotNull Cuoco cuoco, @NonNull MultipartFile fotografia) {
+   public static void storecuocoImage(@NonNull Cuoco cuoco, @NonNull MultipartFile cuocoImage, Boolean targetFlag) {
       try {
-         //  /images/cuochi/{cuocoId}/{cuocoUtenteNome}.jpeg
-         String fotografiaRelativePath = cuoco.getFotografia();
-         Integer fotografiaFileNameIndex = fotografiaRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
-         String fotografiaDirectoryName = fotografiaRelativePath.substring(0, fotografiaFileNameIndex);
-         String destinationDirectoryName = ProjectPaths.getStaticPath() + fotografiaDirectoryName;
+         String cuocoImageRelativePath = cuoco.getFotografia();
+         Integer indexOfcuocoImageFileName = cuocoImageRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
+         String cuocoImageRelativePathDirectory = cuocoImageRelativePath.substring(0, indexOfcuocoImageFileName);
+         String destinationDirectoryName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath() + cuocoImageRelativePathDirectory;
          File destinationDirectory = new File(destinationDirectoryName);
          FileUtils.forceMkdir(destinationDirectory);
-         String fotografiaFileName = fotografiaRelativePath.substring(fotografiaFileNameIndex);
-         File fotografiaFileOutput = new File(destinationDirectoryName + fotografiaFileName);
-         fotografia.transferTo(fotografiaFileOutput);
+         String destinationFileName = cuocoImageRelativePath.substring(indexOfcuocoImageFileName);
+         Path fileOutput = Paths.get(destinationDirectoryName + destinationFileName);
+         Files.copy(cuocoImage.getInputStream(), fileOutput, StandardCopyOption.REPLACE_EXISTING);
       } catch (IOException iOException) {
          iOException.printStackTrace();
       }
+   }
+   
+   public static void storeCuocoFotografia(@NotNull Cuoco cuoco, @NonNull MultipartFile fotografia) {
+      Utils.storecuocoImage(cuoco, fotografia, false);
+      Utils.storecuocoImage(cuoco, fotografia, true);
    }
 
    public static void deleteFotografiaDirectory(@NotNull Cuoco cuoco) {
       String fotografiaDirectoryName = Utils.getCuocoFotografiaDirectoryNameFromFotografiaRelativePath(cuoco);
       File fotografiaDirectory = new File(ProjectPaths.getStaticPath() + fotografiaDirectoryName);
+      File productImageDirectoryTarget = new File(ProjectPaths.getTargetStaticPath() + fotografiaDirectoryName);
       try {
          FileUtils.deleteDirectory(fotografiaDirectory);
-      } catch (IOException e) {
-         e.printStackTrace();
+         FileUtils.deleteDirectory(productImageDirectoryTarget);
+      } catch (IOException iOException) {
+         iOException.printStackTrace();
       }
    }
 

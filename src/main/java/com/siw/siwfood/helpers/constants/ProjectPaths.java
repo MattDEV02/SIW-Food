@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 public class ProjectPaths {
    public final static String ROOT = new FileSystemResource("").getFile().getAbsolutePath();
 
+   public final static String TARGET = "/target/classes";
+
    public final static String SRC = "/src/main";
 
    public final static String RESOURCES = "/resources";
@@ -18,5 +20,10 @@ public class ProjectPaths {
    @Contract(pure = true)
    public static @NotNull String getStaticPath() {
       return ProjectPaths.ROOT + ProjectPaths.SRC + ProjectPaths.RESOURCES + ProjectPaths.STATIC;
+   }
+
+   @Contract(pure = true)
+   public static @NotNull String getTargetStaticPath() {
+      return ProjectPaths.ROOT + ProjectPaths.TARGET + ProjectPaths.STATIC;
    }
 }
