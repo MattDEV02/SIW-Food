@@ -41,7 +41,7 @@ public class IngredienteController {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingredienteForm.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
-         if(Utils.isCuoco(loggedUser) && !ricetta.getCuoco().getUtente().equals(loggedUser)) {
+         if(Utils.utenteIsCuoco(loggedUser) && !ricetta.getCuoco().getUtente().equals(loggedUser)) {
             modelAndView.setViewName("redirect:/ricette");
             modelAndView.addObject("ricettaNonTua", true);
          } else {
@@ -78,8 +78,6 @@ public class IngredienteController {
             modelAndView.addObject("ricetta", ricetta);
             modelAndView.addObject("isUpdate", false);
          }
-      } else {
-         modelAndView.setViewName("redirect:/ingredienti");
       }
       return modelAndView;
    }
@@ -101,9 +99,14 @@ public class IngredienteController {
    public ModelAndView showIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
       ModelAndView modelAndView = new ModelAndView("food/ingredienti/ingrediente.html");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
-      modelAndView.addObject("ricetta", ricetta);
-      modelAndView.addObject("ingrediente", ingrediente);
+      if(ricetta != null) {
+         Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
+         modelAndView.addObject("ricetta", ricetta);
+         modelAndView.addObject("ingrediente", ingrediente);
+      } else {
+         modelAndView.setViewName("redirect:/ingredienti" );
+         modelAndView.addObject("ingredienteNotFound", true);
+      }
       return modelAndView;
    }
 
@@ -111,9 +114,14 @@ public class IngredienteController {
    public ModelAndView deleteIngrediente(@PathVariable("ricettaId") Long ricettaId, @PathVariable("ingredienteId") Long ingredienteId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/ingredienti/ricetta/" + ricettaId);
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
-      this.ricettaService.destroyIngrediente(ricetta, ingrediente);
-      modelAndView.addObject("isIngredienteDeleted", true);
+      if(ricetta != null) {
+         Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
+         this.ricettaService.destroyIngrediente(ricetta, ingrediente);
+         modelAndView.addObject("isIngredienteDeleted", true);
+      } else {
+         modelAndView.setViewName("redirect:/ingredienti" );
+         modelAndView.addObject("ingredienteNotFound", true);
+      }
       return modelAndView;
    }
 
@@ -129,8 +137,8 @@ public class IngredienteController {
          modelAndView.addObject("ricetta", ricetta);
          modelAndView.addObject("isUpdate", true);
       } else {
-         modelAndView.setViewName("redirect:/ricette" );
-         modelAndView.addObject("ricettaNotFound", true);
+         modelAndView.setViewName("redirect:/ingredienti" );
+         modelAndView.addObject("ingredienteNotFound", true);
       }
       return modelAndView;
    }

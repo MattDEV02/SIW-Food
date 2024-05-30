@@ -18,7 +18,7 @@
          th:text="${loggedUser == cuoco.utente ? 'Le tue' : ''} + ' Ricette'"
       ></a>
       <a class="btn btn-danger ms-3" role="button"
-         th:href="@{'/cuochi/delete/' + ${cuoco.id}}"
+         th:href="@{'/cuochi/delete/cuoco/' + ${cuoco.id}}"
          th:if="${#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'AMMINISTRATORE')}"
          title="Rimuovi questo cuoco"
       >

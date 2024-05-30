@@ -37,7 +37,7 @@
                                required th:field="${ingrediente.quantita}"
                                th:maxlength="${FIELD_SIZES_MAP.get('QUANTITA_MAX_LENGTH')}"
                                th:minlength="${FIELD_SIZES_MAP.get('QUANTITA_MIN_LENGTH')}"
-                               th:object="${ingrediente}" title="Inserisci la quantità dell' ingrediente" type="number"/>
+                               th:object="${ingrediente}" title="Inserisci la quantità dell' ingrediente" type="number" th:step="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_STEP_VALUE')}"/>
                         <div
                               th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ingrediente.quantita')}"></div>
                      </div>

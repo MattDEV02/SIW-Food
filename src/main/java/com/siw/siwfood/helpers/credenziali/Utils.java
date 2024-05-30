@@ -11,7 +11,7 @@ public class Utils {
       return !(authentication instanceof AnonymousAuthenticationToken);
    }
 
-   public static @NotNull Boolean isCuoco(Utente utente) {
+   public static @NotNull Boolean utenteIsCuoco(Utente utente) {
       return utente != null && utente.getCredenziali().getRole().contains(Roles.REGISTRATO.toString());
    }
 }

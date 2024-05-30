@@ -30,7 +30,7 @@ public class IngredienteValidator implements Validator {
    @Override
    public void validate(Object object, Errors errors) {
       Ingrediente ingrediente = (Ingrediente) object;
-      if(this.ingredienteRepository.existsByRicettaAndNomeAndQuantita(this.ricetta, ingrediente.getNome(), ingrediente.getQuantita())) {
+      if(this.ingredienteRepository.existsByRicettaAndNome(this.ricetta, ingrediente.getNome())) {
          errors.reject("ingredienteAlrearyExists", "Ingrediente già esistente.");
       }
    }

@@ -24,8 +24,6 @@ public class GlobalValues {
 
    public final static String ROOT_PATH = ProjectPaths.ROOT;
 
-   public final static String TEMPLATES_EXTENSION = ".html";
-
    public final static String TEMPLATES_XMLNS = "http://www.thymeleaf.org";
 
    public static void fillGlobalMap(@NotNull Class<?> _class, Map<String, Object> GLOBAL_MAP) {

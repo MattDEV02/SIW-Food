@@ -27,7 +27,7 @@ public class Ricetta {
    @Column(name = "nome", nullable = false)
    private String nome;
 
-   @NotBlank 
+   @NotBlank
    @Size(min = FieldSizes.DESCRIZIONE_RICETTA_MIN_LENGTH, max = FieldSizes.DESCRIZIONE_RICETTA_MAX_LENGTH)
    @Column(name = "descrizione", nullable = false)
    private String descrizione;
@@ -103,11 +103,11 @@ public class Ricetta {
    @Override
    public String toString() {
       return "Ricetta: {" +
-              " id = " + this.getId().toString() +
-              ", nome = '" + this.getNome() + '\'' +
+            //  " id = " + this.getId().toString() +
+              ", nome = '" + this.getNome() +
               ", descrizione = " + this.getDescrizione() +
-              ", immagini = '" + this.getImmagini().toString() + '\'' +
-              ", ingredienti = '" + this.getIngredienti().toString() + '\'' +
+              ", immagini = '" + this.getImmagini().toString() +
+              ", ingredienti = '" + this.getIngredienti().toString() +
               " }";
    }
 
@@ -125,6 +125,6 @@ public class Ricetta {
 
    @Override
    public int hashCode() {
-      return Objects.hash(this.getId(), this.getNome(), this.getCuoco(), this.getIngredienti());
+      return Objects.hash(this.getId(), this.getNome(), this.getCuoco());
    }
 }

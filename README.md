@@ -347,6 +347,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
 
 ```java
 package com.siw.siwfood.controller;
+
 import com.siw.siwfood.controller.validator.CredenzialiValidator;
 import com.siw.siwfood.controller.validator.CuocoValidator;
 import com.siw.siwfood.controller.validator.UtenteValidator;
@@ -372,7 +373,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import static com.siw.siwfood.helpers.credenziali.Utils.isCuoco;
+import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
 
 import java.util.List;
 import java.util.Objects;
@@ -394,7 +395,7 @@ public class AuthenticationController {
   @Autowired
   private RicettaService ricettaService;
 
-  @GetMapping(value ="/register")
+  @GetMapping(value = "/register")
   public ModelAndView showRegisterUserForm() {
     ModelAndView modelAndView = new ModelAndView("utenteForm.html");
     modelAndView.addObject("utente", new Utente());
@@ -402,7 +403,7 @@ public class AuthenticationController {
     return modelAndView;
   }
 
-  @PostMapping(value ="/register" )
+  @PostMapping(value = "/register")
   public ModelAndView registerUser(
           @Valid @NonNull @ModelAttribute("utente") Utente utente,
           @NonNull BindingResult utenteBindingResult,
@@ -425,7 +426,7 @@ public class AuthenticationController {
       if (savedUtente != null) {
         Cuoco cuoco = new Cuoco(savedUtente);
         Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
-        if(savedCuoco != null) {
+        if (savedCuoco != null) {
           Utils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
         }
         modelAndView.setViewName("redirect:/login");
@@ -444,7 +445,7 @@ public class AuthenticationController {
     return modelAndView;
   }
 
-  @GetMapping(value ="/login")
+  @GetMapping(value = "/login")
   public ModelAndView showUserLoginForm() {
     ModelAndView modelAndView = new ModelAndView("login.html");
     modelAndView.addObject("credenziali", new Credenziali());
@@ -455,7 +456,7 @@ public class AuthenticationController {
   public ModelAndView showHomePage(@ModelAttribute("loggedUser") Utente loggedUser) {
     ModelAndView modelAndView = new ModelAndView("index.html");
     Iterable<Ricetta> ricette = null;
-    if(isCuoco(loggedUser)) {
+    if (utenteIsCuoco(loggedUser)) {
       Cuoco cuoco = this.cuocoService.getCuoco(loggedUser);
       ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
     }

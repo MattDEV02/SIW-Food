@@ -91,7 +91,7 @@ public class Cuoco {
    @Override
    public String toString() {
       return "Utente: {" +
-              "id = " + this.getId().toString() +
+             // "id = " + this.getId().toString() +
               ", utente: = '" + this.getUtente().toString() +
               ", fotografia = " + this.getFotografia() +
               // ", ricette = " + this.getRicette().toString() +

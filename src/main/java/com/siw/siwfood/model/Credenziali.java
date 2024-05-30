@@ -104,11 +104,11 @@ public class Credenziali {
    @Override
    public String toString() {
       return "Credenziali: {" +
-              " id = " + this.getId().toString() +
+             // " id = " + this.getId().toString() +
               ", username = '" + this.getUsername()  +
               ", role = " + this.getRole() +
               ", password = '" + this.getPassword()  +
-              ", insertedAt = '" + this.getInsertedAt().toString()  +
+             // ", insertedAt = '" + this.getInsertedAt().toString()  +
               " }";
    }
 

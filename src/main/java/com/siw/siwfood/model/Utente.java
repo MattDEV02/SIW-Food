@@ -111,9 +111,9 @@ public class Utente {
    @Override
    public String toString() {
       return "Utente: {" +
-              "id = " + this.getId().toString() +
-              ", nome = '" + this.getNome() + '\'' +
-              ", cognome = '" + this.getCognome() + '\'' +
+             // "id = " + this.getId().toString() +
+              ", nome = '" + this.getNome() +
+              ", cognome = '" + this.getCognome() +
               ", dataNascita = " + this.getDataNascita().toString() +
               ", credenziali = " + this.getCredenziali().toString() +
               " }";

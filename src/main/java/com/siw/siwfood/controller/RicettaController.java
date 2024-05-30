@@ -24,7 +24,7 @@ import com.siw.siwfood.model.Credenziali;
 import java.util.List;
 import java.util.Objects;
 
-import static com.siw.siwfood.helpers.credenziali.Utils.isCuoco;
+import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
 
 @Controller
 @RequestMapping(value = "/ricette")
@@ -70,7 +70,7 @@ public class RicettaController {
                                     @NonNull BindingResult ricettaBindingResult,
                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
-      Cuoco cuoco = isCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
+      Cuoco cuoco = utenteIsCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
       this.ricettaValidator.setCuoco(cuoco);
       this.ricettaValidator.setImmagini(immaginiRicetta);
       this.ricettaValidator.validate(ricetta, ricettaBindingResult);
@@ -99,9 +99,14 @@ public class RicettaController {
    public ModelAndView deleteRicetta(@PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/ricette");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
-      Utils.deleteRicettaImmaginiDirectory(ricetta);
-      this.ricettaService.deleteRicetta(ricetta);
-      modelAndView.addObject("isRicettaDeleted", true);
+      if(ricetta != null) {
+         Utils.deleteRicettaImmaginiDirectory(ricetta);
+         this.ricettaService.deleteRicetta(ricetta);
+         modelAndView.addObject("isRicettaDeleted", true);
+      } else {
+         modelAndView.setViewName("redirect:/ricette");
+         modelAndView.addObject("ricettaNotFound", true);
+      }
       return modelAndView;
    }
 
@@ -170,14 +175,14 @@ public class RicettaController {
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
-         Cuoco cuoco = isCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
+         Cuoco cuoco = utenteIsCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
          ricetta.setCuoco(cuoco);
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroImmaginiRicetta);
          if (updatedRicetta != null) {
             for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-              if(!immaginiRicetta[i].isEmpty()) {
-                 Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
-              }
+               if(!immaginiRicetta[i].isEmpty()) {
+                  Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
+               }
             }
             modelAndView.setViewName("redirect:/ricette/ricetta/" + updatedRicetta.getId());
             modelAndView.addObject("isRicettaUpdated", true);

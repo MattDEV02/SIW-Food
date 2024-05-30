@@ -28,11 +28,17 @@ public class CuocoController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/delete/{cuocoId}")
+   @GetMapping(value ="/delete/cuoco/{cuocoId}")
    public ModelAndView deleteCuoco(@PathVariable("cuocoId") Long cuocoId) {
       ModelAndView modelAndView = new ModelAndView("redirect:/cuochi");
-      this.cuocoService.deleteCuoco(cuocoId);
-      modelAndView.addObject("isCuocoDeleted", true);
+      Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
+      if(cuoco != null) {
+         this.cuocoService.deleteCuoco(cuoco.getId());
+         modelAndView.addObject("isCuocoDeleted", true);
+      } else {
+         modelAndView.setViewName("redirect:/cuochi");
+         modelAndView.addObject("cuocoNotFound", true);
+      }
       return modelAndView;
    }
 }

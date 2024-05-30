@@ -75,10 +75,10 @@ public class Ingrediente {
    @Override
    public String toString() {
       return "Ingrediente: {" +
-              " id = " + this.getId().toString() +
-              ", nome = '" + this.getNome() + '\'' +
+              //" id = " + this.getId().toString() +
+              ", nome = '" + this.getNome() +
               ", quantita = " + this.getQuantita() +
-              //", ricetta = " + this.getRicetta() +
+              ", ricetta = " + this.getRicetta() +
               " }";
    }
 
@@ -91,11 +91,11 @@ public class Ingrediente {
          return false;
       }
       Ingrediente that = (Ingrediente) object;
-      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getRicetta(), that.getRicetta()) && Objects.equals(this.getNome(), that.getNome()) && Objects.equals(this.getQuantita(), that.getQuantita()));
+      return Objects.equals(this.getId(), that.getId()) || (Objects.equals(this.getRicetta(), that.getRicetta()) && Objects.equals(this.getNome(), that.getNome()));
    }
 
    @Override
    public int hashCode() {
-      return Objects.hash(this.getId(), this.getRicetta(), this.getNome(), this.getQuantita());
+      return Objects.hash(this.getId(), this.getRicetta(), this.getNome());
    }
 }

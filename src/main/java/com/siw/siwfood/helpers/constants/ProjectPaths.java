@@ -19,14 +19,4 @@ public class ProjectPaths {
    public static @NotNull String getStaticPath() {
       return ProjectPaths.ROOT + ProjectPaths.SRC + ProjectPaths.RESOURCES + ProjectPaths.STATIC;
    }
-
-   @Contract(pure = true)
-   public static @NotNull String getResourcesPath() {
-      return ProjectPaths.getStaticPath() + ProjectPaths.IMAGES;
-   }
-
-   @Contract(pure = true)
-   public static @NotNull String getImagesPath() {
-      return ProjectPaths.getStaticPath() + ProjectPaths.IMAGES;
-   }
 }

@@ -2,7 +2,6 @@ package com.siw.siwfood.helpers.cuoco;
 
 import com.siw.siwfood.helpers.constants.ProjectPaths;
 import com.siw.siwfood.model.Cuoco;
-import com.siw.siwfood.model.Ricetta;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
@@ -29,14 +28,14 @@ public class Utils {
 
    public static void storeCuocoFotografia(@NotNull Cuoco cuoco, @NonNull MultipartFile fotografia) {
       try {
-         //  /images/cuochi/{cuochiCount}/{cuocoId}.jpeg
+         //  /images/cuochi/{cuocoId}/{cuocoUtenteNome}.jpeg
          String fotografiaRelativePath = cuoco.getFotografia();
-         Integer fileNameIndex = fotografiaRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
-         String fotografiaDirectoryName = fotografiaRelativePath.substring(0, fileNameIndex);
+         Integer fotografiaFileNameIndex = fotografiaRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
+         String fotografiaDirectoryName = fotografiaRelativePath.substring(0, fotografiaFileNameIndex);
          String destinationDirectoryName = ProjectPaths.getStaticPath() + fotografiaDirectoryName;
          File destinationDirectory = new File(destinationDirectoryName);
          FileUtils.forceMkdir(destinationDirectory);
-         String fotografiaFileName = fotografiaRelativePath.substring(fileNameIndex);
+         String fotografiaFileName = fotografiaRelativePath.substring(fotografiaFileNameIndex);
          File fotografiaFileOutput = new File(destinationDirectoryName + fotografiaFileName);
          fotografia.transferTo(fotografiaFileOutput);
       } catch (IOException iOException) {
@@ -46,9 +45,9 @@ public class Utils {
 
    public static void deleteFotografiaDirectory(@NotNull Cuoco cuoco) {
       String fotografiaDirectoryName = Utils.getCuocoFotografiaDirectoryNameFromFotografiaRelativePath(cuoco);
-      File directory = new File(ProjectPaths.getStaticPath() + fotografiaDirectoryName);
+      File fotografiaDirectory = new File(ProjectPaths.getStaticPath() + fotografiaDirectoryName);
       try {
-         FileUtils.deleteDirectory(directory);
+         FileUtils.deleteDirectory(fotografiaDirectory);
       } catch (IOException e) {
          e.printStackTrace();
       }
@@ -56,6 +55,8 @@ public class Utils {
 
    public static @NonNull String getCuocoFotografiaDirectoryNameFromFotografiaRelativePath(@NonNull Cuoco cuoco) {
       String fotografiaRelativePath = cuoco.getFotografia();
-      return fotografiaRelativePath.substring(0, fotografiaRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco)));
+      Integer fotografiaFileNameIndex = fotografiaRelativePath.indexOf(Utils.getCuocoFotografiaFileName(cuoco));
+      String fotografiaDirectoryName = fotografiaRelativePath.substring(0, fotografiaFileNameIndex);
+      return fotografiaDirectoryName;
    }
 }

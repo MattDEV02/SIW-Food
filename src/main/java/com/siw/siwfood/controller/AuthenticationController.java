@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import static com.siw.siwfood.helpers.credenziali.Utils.isCuoco;
+import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
 
 import java.util.List;
 import java.util.Objects;
@@ -107,7 +107,7 @@ public class AuthenticationController {
    public ModelAndView showHomePage(@ModelAttribute("loggedUser") Utente loggedUser) {
       ModelAndView modelAndView = new ModelAndView("index.html");
       Iterable<Ricetta> ricette = null;
-      if(isCuoco(loggedUser)) {
+      if(utenteIsCuoco(loggedUser)) {
          Cuoco cuoco = this.cuocoService.getCuoco(loggedUser);
          ricette = this.ricettaService.getAllRicetteCuoco(cuoco);
       }

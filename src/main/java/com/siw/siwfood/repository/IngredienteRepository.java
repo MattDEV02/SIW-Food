@@ -5,5 +5,5 @@ import com.siw.siwfood.model.Ricetta;
 import org.springframework.data.repository.CrudRepository;
 
 public interface IngredienteRepository extends CrudRepository<Ingrediente, Long> {
-   public Boolean existsByRicettaAndNomeAndQuantita(Ricetta ricetta, String nome, Integer quantita);
+   public Boolean existsByRicettaAndNome(Ricetta ricetta, String nome);
 }

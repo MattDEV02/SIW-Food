@@ -12,9 +12,7 @@ public class FieldSizes {
 
    public static final int PASSWORD_LENGTH = 8;
 
-   public static final int IMAGE_RELATIVEPATH_MIN_LENGTH = 3;
-   //public static final int PRODUCT_IMAGERELATIVEPATH_MAX_LENGTH = 60;
-   public static final int IMAGE_MAX_BYTE_SIZE = 5000000; // 5 MB
+   public static final int IMAGE_MAX_BYTE_SIZE = 5000000; // 5 MB = 5000 KB
 
 
    public static final int QUANTITA_INGREDIENTE_MIN_VALUE = 1;
