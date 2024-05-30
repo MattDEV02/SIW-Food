@@ -103,7 +103,7 @@
 
 - **`target/`**: Questa directory è una directory standard creata da strumenti di build come Maven o Gradle (Maven) durante il processo di build. Di solito non fa parte del repository del codice sorgente ed è generata dinamicamente. Contiene anche una documentazione e il JAR del progetto .
 
-- **`SiwFood.sql`**: Un file di script SQL (PostgreSQL) che consente di creare il database utilizzato per questa App.
+- **`siwFood.sql`**: Un file script SQL (PostgreSQL) che consente di inserire i dati nel database utilizzato da questa App.
 
 - **`pom.xml`**: Questo file è specifico per i progetti basati su Maven. E' utilizzato da Maven per gestire la configurazione di build del progetto, le dipendenze, i plugin e altre impostazioni. Il file pom.xml è scritto in formato XML e contiene informazioni come i metadati del progetto, le dipendenze dalle librerie esterne, le istruzioni di build e i profili per diversi ambienti. È il file di configurazione centrale per i progetti Maven ed è cruciale per la costruzione, il testing e il rilascio dell'applicazione.
 
@@ -174,7 +174,7 @@ git clone https://github.com/MattDEV02/SiwFood.git
 cd SiwFood
 ```
 
-3. Installa le dipendenze:
+3. Installa le dipendenze (ricordati anche di creare il database con PostgreSQL):
 
 ```bash
 mvnw install
