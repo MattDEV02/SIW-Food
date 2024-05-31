@@ -9,7 +9,7 @@
 ## Modello di Dominio 🔢
 
 <p align="center">
-<img title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model2.png" width="100%"/>
+<img title="SIW-Food Domain Model 2"  alt="SIW-Food Domain Model 2 "  src="/src/main/resources/static/images/README/progettazione/Domain_Model2.png?version=2" width="100%"/>
 </p>
 
 ## Funzionalità Principali ✨
