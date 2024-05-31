@@ -94,12 +94,14 @@
                   </div>
                   <div class="mb-3">
                      <label class="form-label" for="fotografia-cuoco">Fotografia</label>
-                     <input  class="form-control py-2"
+                     <input class="form-control py-2"
                             form="registration-form"
                             id="fotografia-cuoco"
                             name="fotografia-cuoco"
                             placeholder="Inserisci la tua fotografia"
                             required
+                            th:size="${FIELD_SIZES_MAP.get('IMAGE_MAX_BYTE_SIZE')}"
+                            accept="image/png, image/jpeg, image/jpg, image/"
                             type="file"/>
                      <div
                            th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${cuocoFotografiaEmptyFile}, condition = ${cuocoFotografiaEmptyFile != null})}"></div>

@@ -72,6 +72,8 @@
                                    th:selected="${ricetta != null && ricetta.cuoco != null && ricetta.cuoco == cuoco}"
                            ></option>
                         </select>
+                        <div
+                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ricetta.cuoco')}"></div>
                      </div>
                      <div class="my-4">
                         <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="ricetta-registration-form"

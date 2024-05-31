@@ -1,7 +1,7 @@
 # SIW-Food
 
 <p align="center">
-<img  title="SIW-Food Logo"  alt="SIW-Food Logo"  width="19.5%"  src="/src/main/resources/static/images/logo/logo.png">
+<img title="SIW-Food Logo"  alt="SIW-Food Logo"  width="19.5%"  src="/src/main/resources/static/images/logo/logo.png">
 </p>
 
 ### Progetto SIW-Food, corso Sistemi informativi su Web, CDL Ingegneria informatica, Università degli studi di Roma Tre.
@@ -9,7 +9,7 @@
 ## Modello di Dominio 🔢
 
 <p align="center">
-<img  title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model.png"  width="100%"/>
+<img title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model2.png" width="100%"/>
 </p>
 
 ## Funzionalità Principali ✨

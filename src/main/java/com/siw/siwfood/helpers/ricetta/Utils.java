@@ -33,9 +33,9 @@ public class Utils {
          String immagineRelativePathCorrente = ricetta.getImmagini().get(index);
          Integer immagineFileNameIndex = immagineRelativePathCorrente.indexOf(Utils.getRicettaImmagineFileName(index));
          String immagineDirectoryName = immagineRelativePathCorrente.substring(0, immagineFileNameIndex);
-         String destination = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
-         String destinationDirectoryName = destination + immagineDirectoryName;
-         File destinationDirectory = new File(destinationDirectoryName + immagineDirectoryName);
+         String staticDestinationName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
+         String destinationDirectoryName = staticDestinationName + immagineDirectoryName;
+         File destinationDirectory = new File(destinationDirectoryName);
          if(!destinationDirectory.exists()) {
             FileUtils.forceMkdir(destinationDirectory);
          }
@@ -79,7 +79,8 @@ public class Utils {
 
    public static void deleteRicettaImmagini(@NotNull Ricetta ricetta, Boolean targetFlag) {
       String ricettaImmagineDirectoryName =  Utils.getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(ricetta);
-      Path ricettaImmagineDirectoryPath = Paths.get(targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath() + ricettaImmagineDirectoryName);
+      String staticDestinationName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
+      Path ricettaImmagineDirectoryPath = Paths.get(staticDestinationName + ricettaImmagineDirectoryName);
       try (DirectoryStream<Path> stream = Files.newDirectoryStream(ricettaImmagineDirectoryPath)) {
          for (Path filePath : stream) {
             if (Files.exists(filePath)) {

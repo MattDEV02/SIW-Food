@@ -1,7 +1,6 @@
 package com.siw.siwfood.controller.validator;
 
 import com.siw.siwfood.helpers.constants.FieldSizes;
-import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.repository.RicettaRepository;
 import org.jetbrains.annotations.NotNull;
@@ -17,16 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class RicettaValidator implements Validator {
    @Autowired
    private RicettaRepository ricettaRepository;
-   private Cuoco cuoco;
    private MultipartFile[] immagini;
-
-   public Cuoco getCuoco() {
-      return this.cuoco;
-   }
-
-   public void setCuoco(Cuoco cuoco) {
-      this.cuoco = cuoco;
-   }
+   private Boolean isUpdate = false;
 
    public MultipartFile[] getImmagini() {
       return this.immagini;
@@ -36,35 +27,39 @@ public class RicettaValidator implements Validator {
       this.immagini = immagini;
    }
 
-   private static @NotNull Boolean immaginiContainsEmptyFile(MultipartFile @NotNull [] immagini) {
-      for(MultipartFile immagine: immagini) {
-         if(immagine.isEmpty()) {
-            return true;
-         }
-      }
-      return false;
+   public Boolean getIsUpdate() {
+      return this.isUpdate;
+   }
+
+   public void setIsUpdate(Boolean isUpdate) {
+      this.isUpdate = isUpdate;
    }
 
    @Override
    public void validate(@NonNull Object object, @NonNull Errors errors) {
       Ricetta ricetta = (Ricetta) object;
       MultipartFile[] immagini = this.getImmagini();
-      if(this.ricettaRepository.existsByCuocoAndNome(this.cuoco, ricetta.getNome())) {
+      if(this.ricettaRepository.existsByCuocoAndNome(ricetta.getCuoco(), ricetta.getNome())) {
          errors.reject("ricettaAlrearyExists", "Ricetta già esistente.");
       }
-      if (immagini == null || immagini.length == 0 || RicettaValidator.immaginiContainsEmptyFile(immagini)) {
-         errors.reject("ricettaImmaginiEmpty", "File non presenti.");
-      } else {
-         for(MultipartFile immagine : immagini) {
-            if(immagine == null) {
-               errors.reject("ricettaImmagineEmptyFile", "File non valid o vuoto.");
-            } else {
-               if (immagine.getSize() > FieldSizes.IMAGE_MAX_BYTE_SIZE) {
-                  errors.reject("ricettaImmagineFileSizeExceedsLimit", "La dimensione del file supera il limite di 5 KB.");
-               }
-               String originalFilename = immagine.getOriginalFilename();
-               if (originalFilename == null || (!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpeg"))) {
-                  errors.reject( "ricettaImmagineUnsupportedFileType", "Tipo file non valido. Sono validi file immagine di tipo .jpeg, .jpg, .png");
+      if(ricetta.getCuoco() == null ) {
+         errors.rejectValue("cuoco", "ricetta.cuoco", "Cuoco inserito non esistente.");
+      }
+      if(!this.getIsUpdate()) {
+         if (immagini == null || immagini.length == 0) {
+            errors.reject("ricettaImmaginiEmpty", "File non presenti.");
+         } else {
+            for(MultipartFile immagine : immagini) {
+               if(immagine == null || immagine.isEmpty()) {
+                  errors.reject("ricettaImmagineEmptyFile", "File non valido o vuoto.");
+               } else {
+                  if (immagine.getSize() > FieldSizes.IMAGE_MAX_BYTE_SIZE) {
+                     errors.reject("ricettaImmagineFileSizeExceedsLimit", "La dimensione del file supera il limite di 5 KB.");
+                  }
+                  String originalFilename = immagine.getOriginalFilename();
+                  if (originalFilename == null || (!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpeg"))) {
+                     errors.reject( "ricettaImmagineUnsupportedFileType", "Tipo file non valido. Sono validi file immagine di tipo .jpeg, .jpg, .png");
+                  }
                }
             }
          }

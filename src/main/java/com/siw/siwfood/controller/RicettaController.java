@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.siw.siwfood.model.Credenziali;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,26 +66,23 @@ public class RicettaController {
 
    @PostMapping(value = "/register")
    public ModelAndView registerRicetta(
-                                    @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
+                                    @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
                                     @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                     @NonNull BindingResult ricettaBindingResult,
                                     @NonNull @RequestParam("immagini-ricetta") MultipartFile[] immaginiRicetta) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
       Cuoco cuoco = utenteIsCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
-      this.ricettaValidator.setCuoco(cuoco);
+      ricetta.setCuoco(cuoco);
       this.ricettaValidator.setImmagini(immaginiRicetta);
       this.ricettaValidator.validate(ricetta, ricettaBindingResult);
       if (!ricettaBindingResult.hasErrors()) {
-         ricetta.setCuoco(cuoco);
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta, numeroImmaginiRicetta);
-         if (savedRicetta != null) {
-            for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-               Utils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
-            }
-            modelAndView.setViewName("redirect:/ricette/ricetta/" + savedRicetta.getId());
-            modelAndView.addObject("isRicettaRegistered", true);
+         for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
+            Utils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
          }
+         modelAndView.setViewName("redirect:/ricette/ricetta/" + savedRicetta.getId());
+         modelAndView.addObject("isRicettaRegistered", true);
       } else {
          List<ObjectError> ricettaErrors = ricettaBindingResult.getAllErrors();
          for (ObjectError ricettaError : ricettaErrors) {
@@ -166,28 +164,30 @@ public class RicettaController {
 
    @PostMapping(value ="/update/ricetta/{ricettaId}")
    public ModelAndView updateRicetta(
-                                     @Valid @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
+                                     @ModelAttribute("loggedUser") @NonNull Utente loggedUser,
                                      @Valid @NonNull @ModelAttribute("ricetta") Ricetta ricetta,
                                      @NonNull BindingResult ricettaBindingResult,
                                      @RequestParam(name = "immagini-ricetta", required = false) MultipartFile[] immaginiRicetta,
                                      @PathVariable("ricettaId") Long ricettaId) {
       ModelAndView modelAndView = new ModelAndView("food/ricette/ricettaForm.html");
+      Cuoco cuoco = utenteIsCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
+      ricetta.setCuoco(cuoco);
+      this.ricettaValidator.setIsUpdate(true);
+      this.ricettaValidator.validate(ricetta, ricettaBindingResult);
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
-         final Integer numeroImmaginiRicetta = immaginiRicetta.length;
-         Cuoco cuoco = utenteIsCuoco(loggedUser) ? this.cuocoService.getCuoco(loggedUser) : ricetta.getCuoco();
-         ricetta.setCuoco(cuoco);
-         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroImmaginiRicetta);
-         if (updatedRicetta != null) {
-            for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-               if(!immaginiRicetta[i].isEmpty()) {
-                  Utils.storeRicettaImmagine(updatedRicetta, immaginiRicetta[i], i);
-               }
-            }
-            modelAndView.setViewName("redirect:/ricette/ricetta/" + updatedRicetta.getId());
-            modelAndView.addObject("isRicettaUpdated", true);
+         MultipartFile[] notEmptyImmaginiRicetta = Arrays.stream(immaginiRicetta).filter(immagineRicetta -> !immagineRicetta.isEmpty()).toArray(MultipartFile[]::new);
+         final Integer numeroNotEmptyImmaginiRicetta = notEmptyImmaginiRicetta.length;
+         Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroNotEmptyImmaginiRicetta);
+         for(Integer i = 0; i < numeroNotEmptyImmaginiRicetta; i++) {
+            Utils.storeRicettaImmagine(updatedRicetta, notEmptyImmaginiRicetta[i], i);
          }
+         modelAndView.setViewName("redirect:/ricette/ricetta/" + updatedRicetta.getId());
+         modelAndView.addObject("isRicettaUpdated", true);
       } else {
+         ricetta.setId(ricettaId);
+         modelAndView.addObject("ricetta", ricetta);
+         modelAndView.addObject("isUpdate", true);
          List<ObjectError> ricettaErrors = ricettaBindingResult.getAllErrors();
          for (ObjectError ricettaError : ricettaErrors) {
             modelAndView.addObject(Objects.requireNonNull(ricettaError.getCode()), ricettaError.getDefaultMessage());

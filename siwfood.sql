@@ -1,6 +1,8 @@
 --drop schema if exists public cascade;
 --create schema if not exists public;
 
+SET TIME ZONE 'Europe/Rome';
+
 ALTER SEQUENCE credenziali_seq RESTART WITH 1;
 ALTER SEQUENCE utenti_seq RESTART WITH 1;
 ALTER SEQUENCE cuochi_seq RESTART WITH 1;
@@ -41,8 +43,7 @@ INSERT INTO ricette (id, nome, descrizione, immagini, cuoco_id) VALUES
 INSERT INTO ingredienti (id, nome, quantita, ricetta_id) VALUES
     (nextval('ingredienti_seq'), 'Pomodoro', 2, 1),
     (nextval('ingredienti_seq'), 'Olio', 1, 51),
-    (nextval('ingredienti_seq'), 'Grano', 3, 51),
-    (nextval('ingredienti_seq'), 'Niente', 3, 101);
+    (nextval('ingredienti_seq'), 'Grano', 3, 51);
 
 SELECT * FROM credenziali;
 SELECT * FROM utenti;

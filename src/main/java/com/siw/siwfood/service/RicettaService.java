@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.siw.siwfood.helpers.ricetta.Utils;
 
+import java.util.List;
+
 
 @Service
 public class RicettaService {
@@ -83,19 +85,16 @@ public class RicettaService {
    public Ricetta updateRicetta(@NotNull Ricetta ricettaToUpdate, @NotNull Ricetta ricetta, Integer numeroImmaginiRicetta) {
       ricettaToUpdate.setNome(ricetta.getNome());
       ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
-      if(ricetta.getCuoco() != null) {
-         ricettaToUpdate.setCuoco(ricetta.getCuoco());
-      }
+      ricettaToUpdate.setCuoco(ricetta.getCuoco());
       if(numeroImmaginiRicetta > 0) {
-         System.out.println("numeroImmaginiRicetta " + numeroImmaginiRicetta);
          Utils.deleteRicettaImmagini(ricettaToUpdate);
-         ricettaToUpdate.getImmagini().clear();
+         List<String> immaginiRicetta = ricettaToUpdate.getImmagini();
+         immaginiRicetta.clear();
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-            ricettaToUpdate.getImmagini().add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
+            immaginiRicetta.add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
          }
       }
-      ricettaToUpdate = this.ricettaRepository.save(ricettaToUpdate);
-      return ricettaToUpdate;
+      return this.ricettaRepository.save(ricettaToUpdate);
    }
 
    public void updateIngrediente(Ricetta ricetta, Long ingredienteId, Ingrediente ingrediente) {
