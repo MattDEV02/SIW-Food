@@ -350,7 +350,7 @@ package com.siw.siwfood.controller;
 import com.siw.siwfood.controller.validator.CredenzialiValidator;
 import com.siw.siwfood.controller.validator.CuocoValidator;
 import com.siw.siwfood.controller.validator.UtenteValidator;
-import com.siw.siwfood.helpers.cuoco.Utils;
+import com.siw.siwfood.helpers.cuoco.FotografiaFileUtils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
@@ -426,7 +426,7 @@ public class AuthenticationController {
         Cuoco cuoco = new Cuoco(savedUtente);
         Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
         if (savedCuoco != null) {
-          Utils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
+          FotografiaFileUtils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
         }
         modelAndView.setViewName("redirect:/login");
         modelAndView.addObject("isUtenteRegistered", true);
@@ -471,6 +471,7 @@ public class AuthenticationController {
 ```java
 package com.siw.siwfood.service;
 
+import com.siw.siwfood.helpers.cuoco.FotografiaFileUtils;
 import com.siw.siwfood.helpers.cuoco.Utils;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
@@ -483,7 +484,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.siw.siwfood.helpers.ricetta.Utils.deleteRicettaImmaginiDirectory;
+import static com.siw.siwfood.helpers.ricetta.RicettaImmaginiFileUtils.deleteRicettaImmaginiDirectory;
 
 @Service
 public class CuocoService {
@@ -497,17 +498,17 @@ public class CuocoService {
   @Transactional
   public Cuoco saveCuoco(@NotNull Cuoco cuoco) {
     Cuoco savedCuoco = this.cuocoRepository.save(cuoco);
-    savedCuoco.setFotografia(Utils.getCuocoFotografiaRelativePath(savedCuoco));
+    savedCuoco.setFotografia(FotografiaFileUtils.getCuocoFotografiaRelativePath(savedCuoco));
     return this.cuocoRepository.save(cuoco);
   }
 
   @Transactional
   public void deleteCuoco(Long cuocoId) {
     Cuoco cuoco = this.getCuoco(cuocoId);
-    if(cuoco != null) {
-      Utils.deleteFotografiaDirectory(cuoco);
+    if (cuoco != null) {
+      FotografiaFileUtils.deleteFotografiaDirectory(cuoco);
       List<Ricetta> ricette = cuoco.getRicette();
-      for(Ricetta ricetta : ricette) {
+      for (Ricetta ricetta : ricette) {
         deleteRicettaImmaginiDirectory(ricetta);
       }
       this.cuocoRepository.delete(cuoco);

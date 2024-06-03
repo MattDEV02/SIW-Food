@@ -1,6 +1,6 @@
 package com.siw.siwfood.service;
 
-import com.siw.siwfood.helpers.cuoco.Utils;
+import com.siw.siwfood.helpers.cuoco.FotografiaFileUtils;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Utente;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.siw.siwfood.helpers.ricetta.Utils.deleteRicettaImmaginiDirectory;
+import static com.siw.siwfood.helpers.ricetta.RicettaImmaginiFileUtils.deleteRicettaImmaginiDirectory;
 
 @Service
 public class CuocoService {
@@ -26,7 +26,7 @@ public class CuocoService {
    @Transactional
    public Cuoco saveCuoco(@NotNull Cuoco cuoco) {
       Cuoco savedCuoco = this.cuocoRepository.save(cuoco);
-      savedCuoco.setFotografia(Utils.getCuocoFotografiaRelativePath(savedCuoco));
+      savedCuoco.setFotografia(FotografiaFileUtils.getCuocoFotografiaRelativePath(savedCuoco));
       return this.cuocoRepository.save(cuoco);
    }
 
@@ -34,7 +34,7 @@ public class CuocoService {
    public void deleteCuoco(Long cuocoId) {
       Cuoco cuoco = this.getCuoco(cuocoId);
       if(cuoco != null) {
-         Utils.deleteFotografiaDirectory(cuoco);
+         FotografiaFileUtils.deleteFotografiaDirectory(cuoco);
          List<Ricetta> ricette = cuoco.getRicette();
          for(Ricetta ricetta : ricette) {
             deleteRicettaImmaginiDirectory(ricetta);

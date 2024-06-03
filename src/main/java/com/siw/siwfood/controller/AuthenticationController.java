@@ -2,7 +2,7 @@ package com.siw.siwfood.controller;
 import com.siw.siwfood.controller.validator.CredenzialiValidator;
 import com.siw.siwfood.controller.validator.CuocoValidator;
 import com.siw.siwfood.controller.validator.UtenteValidator;
-import com.siw.siwfood.helpers.cuoco.Utils;
+import com.siw.siwfood.helpers.cuoco.FotografiaFileUtils;
 import com.siw.siwfood.model.Credenziali;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
@@ -78,7 +78,7 @@ public class AuthenticationController {
             Cuoco cuoco = new Cuoco(savedUtente);
             Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
             if(savedCuoco != null) {
-               Utils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
+               FotografiaFileUtils.storeCuocoFotografia(savedCuoco, fotografiaCuoco);
             }
             modelAndView.setViewName("redirect:/login");
             modelAndView.addObject("isUtenteRegistered", true);

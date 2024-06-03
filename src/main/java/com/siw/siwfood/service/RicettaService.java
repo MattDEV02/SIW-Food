@@ -1,5 +1,6 @@
 package com.siw.siwfood.service;
 
+import com.siw.siwfood.helpers.ricetta.RicettaImmaginiFileUtils;
 import com.siw.siwfood.model.Ingrediente;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Cuoco;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.siw.siwfood.helpers.ricetta.Utils;
 
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class RicettaService {
          }
       }
       for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-         savedRicetta.getImmagini().add(Utils.getRicettaImmagineRelativePath(savedRicetta, i));
+         savedRicetta.getImmagini().add(RicettaImmaginiFileUtils.getRicettaImmagineRelativePath(savedRicetta, i));
       }
       return savedRicetta;
    }
@@ -87,11 +87,11 @@ public class RicettaService {
       ricettaToUpdate.setDescrizione(ricetta.getDescrizione());
       ricettaToUpdate.setCuoco(ricetta.getCuoco());
       if(numeroImmaginiRicetta > 0) {
-         Utils.deleteRicettaImmagini(ricettaToUpdate);
+         RicettaImmaginiFileUtils.deleteRicettaImmagini(ricettaToUpdate);
          List<String> immaginiRicetta = ricettaToUpdate.getImmagini();
          immaginiRicetta.clear();
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-            immaginiRicetta.add(Utils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
+            immaginiRicetta.add(RicettaImmaginiFileUtils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
          }
       }
       return this.ricettaRepository.save(ricettaToUpdate);

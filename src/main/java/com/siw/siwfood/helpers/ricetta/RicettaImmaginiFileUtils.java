@@ -11,27 +11,27 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
-public class Utils {
+public class RicettaImmaginiFileUtils {
    public final static String RICETTA_IMMAGINI_DIRECTORY = "/ricette";
    public final static String RICETTA_IMMAGINI_EXTENSION = ".jpeg";
 
    public static @NonNull String getRicettaImmagineDirectoryName(@NonNull Ricetta ricetta) {
-      return ProjectPaths.IMAGES + Utils.RICETTA_IMMAGINI_DIRECTORY + "/" + ricetta.getId().toString() + "/";
+      return ProjectPaths.IMAGES + RicettaImmaginiFileUtils.RICETTA_IMMAGINI_DIRECTORY + "/" + ricetta.getId().toString() + "/";
    }
 
    public static @NonNull String getRicettaImmagineFileName(@NotNull Integer index) {
-      return String.valueOf(index + 1) + Utils.RICETTA_IMMAGINI_EXTENSION;
+      return String.valueOf(index + 1) + RicettaImmaginiFileUtils.RICETTA_IMMAGINI_EXTENSION;
    }
 
    public static @NonNull String getRicettaImmagineRelativePath(@NonNull Ricetta ricetta, @NonNull Integer index) {
-      return Utils.getRicettaImmagineDirectoryName(ricetta) + Utils.getRicettaImmagineFileName(index);
+      return RicettaImmaginiFileUtils.getRicettaImmagineDirectoryName(ricetta) + RicettaImmaginiFileUtils.getRicettaImmagineFileName(index);
    }
 
    public static void storeRicettaImmagine(@NotNull Ricetta ricetta, @NonNull MultipartFile immagine, Integer index, Boolean targetFlag) {
       try {
          //  /images/ricette/{ricettaId}/{immagineRicettaIndex + 1}.jpeg
          String immagineRelativePathCorrente = ricetta.getImmagini().get(index);
-         Integer immagineFileNameIndex = immagineRelativePathCorrente.indexOf(Utils.getRicettaImmagineFileName(index));
+         Integer immagineFileNameIndex = immagineRelativePathCorrente.indexOf(RicettaImmaginiFileUtils.getRicettaImmagineFileName(index));
          String immagineDirectoryName = immagineRelativePathCorrente.substring(0, immagineFileNameIndex);
          String staticDestinationName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
          String destinationDirectoryName = staticDestinationName + immagineDirectoryName;
@@ -48,20 +48,20 @@ public class Utils {
    }
 
    public static void storeRicettaImmagine(@NotNull Ricetta ricetta, @NonNull MultipartFile immagine, Integer index) {
-      Utils.storeRicettaImmagine(ricetta, immagine, index, false);
-      Utils.storeRicettaImmagine(ricetta, immagine, index, true);
+      RicettaImmaginiFileUtils.storeRicettaImmagine(ricetta, immagine, index, false);
+      RicettaImmaginiFileUtils.storeRicettaImmagine(ricetta, immagine, index, true);
    }
 
    public static @NonNull String getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(@NonNull Ricetta ricetta) {
       final Integer firstIndex = 0;
       String firstImmagineRicettaName = ricetta.getImmagini().get(firstIndex);
-      Integer firstImmagineFileNameIndex = firstImmagineRicettaName.indexOf(Utils.getRicettaImmagineFileName(firstIndex));
+      Integer firstImmagineFileNameIndex = firstImmagineRicettaName.indexOf(RicettaImmaginiFileUtils.getRicettaImmagineFileName(firstIndex));
       String firstImmagineDirectoryName = firstImmagineRicettaName.substring(0, firstImmagineFileNameIndex);
       return firstImmagineDirectoryName;
    }
 
    public static void deleteRicettaImmaginiDirectory(@NotNull Ricetta ricetta) {
-      String ricettaImmagineDirectoryName = Utils.getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(ricetta);
+      String ricettaImmagineDirectoryName = RicettaImmaginiFileUtils.getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(ricetta);
       File ricettaImmagineDirectory = new File(ProjectPaths.getStaticPath() + ricettaImmagineDirectoryName);
       File ricettaImmagineDirectoryTarget = new File(ProjectPaths.getTargetStaticPath() + ricettaImmagineDirectoryName);
       try {
@@ -73,12 +73,12 @@ public class Utils {
    }
 
    public static void deleteRicettaImmagini(@NotNull Ricetta ricetta) {
-      Utils.deleteRicettaImmagini(ricetta, false);
-      Utils.deleteRicettaImmagini(ricetta, true);
+      RicettaImmaginiFileUtils.deleteRicettaImmagini(ricetta, false);
+      RicettaImmaginiFileUtils.deleteRicettaImmagini(ricetta, true);
    }
 
    public static void deleteRicettaImmagini(@NotNull Ricetta ricetta, Boolean targetFlag) {
-      String ricettaImmagineDirectoryName =  Utils.getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(ricetta);
+      String ricettaImmagineDirectoryName =  RicettaImmaginiFileUtils.getRicettaImmaginiDirectoryNameFromImmaginiRelativePath(ricetta);
       String staticDestinationName = targetFlag ? ProjectPaths.getTargetStaticPath() : ProjectPaths.getStaticPath();
       Path ricettaImmagineDirectoryPath = Paths.get(staticDestinationName + ricettaImmagineDirectoryName);
       try (DirectoryStream<Path> stream = Files.newDirectoryStream(ricettaImmagineDirectoryPath)) {

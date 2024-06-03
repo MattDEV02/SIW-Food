@@ -1,7 +1,7 @@
 package com.siw.siwfood.controller;
 
 import com.siw.siwfood.controller.validator.RicettaValidator;
-import com.siw.siwfood.helpers.ricetta.Utils;
+import com.siw.siwfood.helpers.ricetta.RicettaImmaginiFileUtils;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Utente;
@@ -79,7 +79,7 @@ public class RicettaController {
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta, numeroImmaginiRicetta);
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
-            Utils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
+            RicettaImmaginiFileUtils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
          }
          modelAndView.setViewName("redirect:/ricette/ricetta/" + savedRicetta.getId());
          modelAndView.addObject("isRicettaRegistered", true);
@@ -98,7 +98,7 @@ public class RicettaController {
       ModelAndView modelAndView = new ModelAndView("redirect:/ricette");
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
-         Utils.deleteRicettaImmaginiDirectory(ricetta);
+         RicettaImmaginiFileUtils.deleteRicettaImmaginiDirectory(ricetta);
          this.ricettaService.deleteRicetta(ricetta);
          modelAndView.addObject("isRicettaDeleted", true);
       } else {
@@ -180,7 +180,7 @@ public class RicettaController {
          final Integer numeroNotEmptyImmaginiRicetta = notEmptyImmaginiRicetta.length;
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroNotEmptyImmaginiRicetta);
          for(Integer i = 0; i < numeroNotEmptyImmaginiRicetta; i++) {
-            Utils.storeRicettaImmagine(updatedRicetta, notEmptyImmaginiRicetta[i], i);
+            RicettaImmaginiFileUtils.storeRicettaImmagine(updatedRicetta, notEmptyImmaginiRicetta[i], i);
          }
          modelAndView.setViewName("redirect:/ricette/ricetta/" + updatedRicetta.getId());
          modelAndView.addObject("isRicettaUpdated", true);
