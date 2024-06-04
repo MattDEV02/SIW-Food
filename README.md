@@ -103,7 +103,7 @@
 
 - **`target/`**: Questa directory è una directory standard creata da strumenti di build come Maven o Gradle (Maven) durante il processo di build. Di solito non fa parte del repository del codice sorgente ed è generata dinamicamente. Contiene anche una documentazione e il JAR del progetto .
 
-- **`siwFood.sql`**: Un file script SQL (PostgreSQL) che consente di inserire i dati nel database utilizzato da questa App.
+- **`src/main/resources/import.sql`**: Un file script SQL (PostgreSQL) che consente di inserire dati nel database relazionale utilizzato da questa App.
 
 - **`pom.xml`**: Questo file è specifico per i progetti basati su Maven. E' utilizzato da Maven per gestire la configurazione di build del progetto, le dipendenze, i plugin e altre impostazioni. Il file pom.xml è scritto in formato XML e contiene informazioni come i metadati del progetto, le dipendenze dalle librerie esterne, le istruzioni di build e i profili per diversi ambienti. È il file di configurazione centrale per i progetti Maven ed è cruciale per la costruzione, il testing e il rilascio dell'applicazione.
 
