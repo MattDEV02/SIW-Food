@@ -25,6 +25,8 @@
 
 - **Modularità:** Il progetto è diviso in vari moduli, package, fragments e directory.
 
+- **Deployed:** Grazie alla piattaforma [Heroku](https://dashboard.heroku.com/) il progetto è disponibile a tutti tramite il link: https://siw-food-0dd5e15adbbe.herokuapp.com
+
 - **Visualizzazione di guide tramite tooltips:** Sono presenti molti tooltips che guidano l'utente nel sito.
 
 - **Lingua:** È disponibile solo la lingua italiana al momento.
@@ -40,28 +42,28 @@
 ## `Pagina di login Utenti`
 
 <p align="center">
-	<img  title="SiwFood LoginScreen screenshoot 1"  alt="SiwFood LoginScreen screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/login/1.png"  width="100%"/>
+	<img  title="SiwFood LoginScreen screenshoot 1" alt="SiwFood LoginScreen screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/login/1.png"  width="100%"/>
 </p>
 
 ## `Home page`
 
 <p align="center">
-	<img  title="SiwFood HomeScreen screenshoot 1"  alt="SiwFood HomeScreen screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/home/1.png"  width="100%"/>
-    <img  title="SiwFood HomeScreen screenshoot 2"  alt="SiwFood HomeScreen screenshoot 2"  src="/src/main/resources/static/images/README/screenshots/home/2.png"  width="100%"/>
+	<img  title="SiwFood HomeScreen screenshoot 1" alt="SiwFood HomeScreen screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/home/1.png"  width="100%"/>
+    <img  title="SiwFood HomeScreen screenshoot 2" alt="SiwFood HomeScreen screenshoot 2"  src="/src/main/resources/static/images/README/screenshots/home/2.png"  width="100%"/>
 </p>
 
 ## `Pagina Cuochi`
 
 <p align="center">
-	<img  title="SiwFood Cuochi screenshoot 1"  alt="SiwFood Cuochi screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/cuochi/1.png"  width="100%"/>
+	<img  title="SiwFood Cuochi screenshoot 1" alt="SiwFood Cuochi screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/cuochi/1.png"  width="100%"/>
 </p>
 
 ## `Pagina ricette`
 
 <p align="center">
 	<img  title="SiwFood Ricette screenshoot 1"  alt="SiwFood HomeScreen screenshoot 1"  src="/src/main/resources/static/images/README/screenshots/ricette/1.png"  width="100%"/>
-<img  title="SiwFood Ricette screenshoot 2"  alt="SiwFood HomeScreen screenshoot 2"  src="/src/main/resources/static/images/README/screenshots/ricette/2.png"  width="100%"/>
-<img  title="SiwFood Ricette screenshoot 3"  alt="SiwFood HomeScreen screenshoot 3"  src="/src/main/resources/static/images/README/screenshots/ricette/3.png"  width="100%"/>
+    <img  title="SiwFood Ricette screenshoot 2"  alt="SiwFood HomeScreen screenshoot 2"  src="/src/main/resources/static/images/README/screenshots/ricette/2.png"  width="100%"/>
+    <img  title="SiwFood Ricette screenshoot 3"  alt="SiwFood HomeScreen screenshoot 3"  src="/src/main/resources/static/images/README/screenshots/ricette/3.png"  width="100%"/>
 </p>
 
 ## `Pagina ingredienti`
