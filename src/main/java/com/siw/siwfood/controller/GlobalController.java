@@ -70,7 +70,7 @@ public class GlobalController {
       Utente loggedUser = null;
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (Utils.userIsLoggedIn(authentication)) {
-         userDetails = (UserDetails) authentication.getPrincipal();
+         userDetails = (UserDetails) (authentication.getPrincipal());
          credenziali = this.credenzialiService.getCredenziali(userDetails.getUsername());
          loggedUser = this.utenteService.getUtente(credenziali);
          model.addAttribute("loggedUser", loggedUser);

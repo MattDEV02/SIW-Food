@@ -132,6 +132,7 @@
 |    Windows     |       11       |
 |      GIT       |     2.43.0     |
 |     GITHUB     |     3.12.3     |
+|     Heroku     |    v8.11.5     |
 | IntelliJ IDEA  |     2024.1     |
 |     Chrome     | 124.0.6367.201 |
 | Microsoft EDGE | 123.0.2420.65  |
