@@ -9,7 +9,7 @@
 ## Modello di Dominio 🔢
 
 <p align="center">
-<img title="SIW-Food Domain Model 2"  alt="SIW-Food Domain Model 2 "  src="/src/main/resources/static/images/README/progettazione/Domain_Model2.png?version=2" width="100%"/>
+<img title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model.png" width="100%"/>
 </p>
 
 ## Funzionalità Principali ✨
@@ -211,6 +211,12 @@ mvnw package
 
 ```bash
 java -jar target/SIW-Food-0.0.1-SNAPSHOT.jar
+```
+
+P.S. = Ricorda di creare il Database relazionale con PostgreSQL 16.0:
+
+```postgresql
+CREATE DATABASE IF NOT EXISTS siwfood;
 ```
 
 ## Alcuni snippet di codice 🤖
@@ -697,8 +703,8 @@ public class Ricetta {
     <div class="row justify-content-center">
       <div class="col-12 mt-5">
         <div class="row text-center">
-          <h1 th:if="${hasSearchedRicette}" th:text="'Ricette ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME') + ' ricercate'} + ' 🥐'"></h1>
-          <h1 th:unless="${hasSearchedRicette}" th:text="'Ricette ' + ${#strings.isEmpty(usernameCuoco) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : usernameCuoco} + ' 🥐'"></h1>
+          <h1 th:if="${hasSearchedRicette}" th:text="'Ricette ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME') + ' ricercate'} + ' 🥐'">Ricette</h1>
+          <h1 th:unless="${hasSearchedRicette}" th:text="'Ricette ' + ${#strings.isEmpty(usernameCuoco) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : usernameCuoco} + ' 🥐'">Ricette</h1>
         </div>
       </div>
       <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ricetta eliminata con successo.', condition = ${isRicettaDeleted})}"></div>
@@ -755,3 +761,37 @@ togglePasswordVisibilityButton.addEventListener("click", () => {
 });
 ```
 
+# Documentazione API 👨‍💻
+
+## AuthenticationController:
+
+### GET "/"
+**Descrizione:** Mostra la homepage del sito che sarà "diversa" a seconda se l'Utente corrente è autenticato o meno.
+
+### GET "/register"
+**Descrizione:** Mostra il form per registrare un nuovo Utente.
+
+### POST "/register"
+**Descrizione:** Prende i dati dal form precedente e li usa per registrare un nuovo Utente.
+
+**Request Parameters:**
+
+- `confirm-password` (form parameter, required): La password di conferma dell'Utente.
+- `fotografia-cuoco` (form parameter, required): Il multipart file relativo alla fotografia dell'Utente.
+
+### GET "/login"
+**Descrizione:** Mostra il form per il login di un Utente.
+
+## CuocoController:
+
+### GET "/"
+**Descrizione:** Mostra tutti i Cuochi registrati sul sito.
+
+### GET "/cuoco/{cuocoId}"
+**Descrizione:** Mostra uno specifico Cuoco registrato sul sito in base alla corrispondenza con cuocoId.
+
+**Request Parameters:**
+
+`cuocoId` (path parameter, required): L'ID di un Cuoco registrato sul sito.
+
+...

@@ -46,10 +46,8 @@ public class RicettaService {
    public Ricetta saveRicetta(@NotNull Ricetta ricetta, Integer numeroImmaginiRicetta) {
       Ricetta savedRicetta = this.ricettaRepository.save(ricetta);
       if(savedRicetta.getCuoco() != null) {
-         Cuoco cuoco = this.cuocoRepository.findById(savedRicetta.getCuoco().getId()).orElse(null);
-         if(cuoco != null) {
-            cuoco.getRicette().add(savedRicetta);
-         }
+         this.cuocoRepository.findById(savedRicetta.getCuoco().getId())
+                 .ifPresent(cuoco -> cuoco.getRicette().add(savedRicetta));
       }
       for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
          savedRicetta.getImmagini().add(RicettaImmaginiFileUtils.getRicettaImmagineRelativePath(savedRicetta, i));

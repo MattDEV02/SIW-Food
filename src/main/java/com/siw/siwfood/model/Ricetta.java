@@ -35,7 +35,7 @@ public class Ricetta {
    @Column(name = "immagini", nullable = false, columnDefinition = "TEXT[] NOT NULL")
    private List<String> immagini;
 
-   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
+   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
    @OrderBy(value = "id DESC")
    private List<Ingrediente> ingredienti;
 

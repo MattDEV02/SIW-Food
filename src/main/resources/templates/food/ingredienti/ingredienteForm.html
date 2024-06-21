@@ -19,7 +19,7 @@
                   <form id="ingrediente-registration-form" method="POST" name="ingrediente-registration-form"
                         th:object="${ingrediente}"
                         th:action="@{'/ingredienti/' + ${isUpdate ? 'update' : 'register'} + ${'/ricetta/' + ricetta.id} + ${isUpdate ? ('/ingrediente/' + ingrediente.id) : ''}}">
-                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ingredienteAlreadyExists}, condition = ${ingredienteAlreadyExists != null})}"></div>
+                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = #{ingredienteAlreadyExists}, condition = ${ingredienteAlreadyExists != null})}"></div>
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
