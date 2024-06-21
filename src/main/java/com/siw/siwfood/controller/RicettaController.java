@@ -176,6 +176,7 @@ public class RicettaController {
       this.ricettaValidator.validate(ricetta, ricettaBindingResult);
       if (!ricettaBindingResult.hasErrors()) {
          Ricetta ricettaToUpdate = this.ricettaService.getRicetta(ricettaId);
+         ricetta.setIngredienti(ricettaToUpdate.getIngredienti());
          MultipartFile[] notEmptyImmaginiRicetta = Arrays.stream(immaginiRicetta).filter(immagineRicetta -> !immagineRicetta.isEmpty()).toArray(MultipartFile[]::new);
          final Integer numeroNotEmptyImmaginiRicetta = notEmptyImmaginiRicetta.length;
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroNotEmptyImmaginiRicetta);

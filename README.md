@@ -29,7 +29,7 @@
 
 - **Visualizzazione di guide tramite tooltips:** Sono presenti molti tooltips che guidano l'utente nel sito.
 
-- **Lingua:** È disponibile la lingua italiana al momento con internalizzazione.
+- **Lingua:** È disponibile la lingua italiana al momento con un pò di internazionalizzazione.
 
 ## Screenshots 📸
 

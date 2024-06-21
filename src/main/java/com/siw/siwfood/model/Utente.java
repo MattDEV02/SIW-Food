@@ -8,6 +8,7 @@ import jakarta.validation.constraints.*;
 import jdk.jfr.Unsigned;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -45,6 +46,13 @@ public class Utente {
 
    public Utente() {
 
+   }
+
+   public Utente(String nome, String cognome, Date dataNascita, Credenziali credenziali) {
+      this.nome = nome;
+      this.cognome = cognome;
+      this.dataNascita = dataNascita;
+      this.credenziali = credenziali;
    }
 
    public Utente(Credenziali credenziali) {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,8 +38,10 @@ public class RicettaService {
    }
 
    @Transactional
-   public void deleteRicetta(Ricetta ricetta) {
-      RicettaImmaginiFileUtils.deleteRicettaImmagini(ricetta);
+   public void deleteRicetta(@NotNull Ricetta ricetta) {
+      if(!ricetta.getImmagini().isEmpty()) {
+         RicettaImmaginiFileUtils.deleteRicettaImmagini(ricetta);
+      }
       this.ricettaRepository.delete(ricetta);
    }
 
@@ -92,6 +95,7 @@ public class RicettaService {
             immaginiRicetta.add(RicettaImmaginiFileUtils.getRicettaImmagineRelativePath(ricettaToUpdate, i));
          }
       }
+      ricettaToUpdate.setIngredienti(ricetta.getIngredienti());
       return this.ricettaRepository.save(ricettaToUpdate);
    }
 
@@ -102,5 +106,13 @@ public class RicettaService {
          ingredienteToUpdate.setQuantita(ingrediente.getQuantita());
          this.ingredientRepository.save(ingredienteToUpdate);
       }
+   }
+
+   public Boolean existsIngredienteById(Long ingredienteId) {
+      return this.ingredientRepository.existsById(ingredienteId);
+   }
+
+   public Boolean existsRicettaById(Long ricettaId) {
+      return this.ricettaRepository.existsById(ricettaId);
    }
 }
