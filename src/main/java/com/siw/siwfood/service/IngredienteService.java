@@ -11,6 +11,6 @@ public class IngredienteService {
    private IngredienteRepository ingredienteRepository;
 
    public Iterable<Ingrediente> getAllIngredienti() {
-      return this.ingredienteRepository.findAll();
+      return this.ingredienteRepository.findAllByOrderByIdDesc();
    }
 }

@@ -159,13 +159,13 @@ public class IngredienteController {
             modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId() );
             modelAndView.addObject("isIngredienteUpdated", true);
          } else {
+            modelAndView.addObject("ingrediente", this.ricettaService.findIngrediente(ricetta, ingredienteId));
+            modelAndView.addObject("ricetta", ricetta);
+            modelAndView.addObject("isUpdate", true);
             List<ObjectError> ingredientiErrors = ingredienteBindingResult.getAllErrors();
             for (ObjectError ingredientiError : ingredientiErrors) {
                modelAndView.addObject(Objects.requireNonNull(ingredientiError.getCode()), ingredientiError.getDefaultMessage());
             }
-            modelAndView.addObject("ingrediente", this.ricettaService.findIngrediente(ricetta, ingredienteId));
-            modelAndView.addObject("ricetta", ricetta);
-            modelAndView.addObject("isUpdate", true);
          }
       }
       return modelAndView;

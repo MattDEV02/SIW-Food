@@ -20,7 +20,7 @@ public class CuocoService {
    private CuocoRepository cuocoRepository;
 
    public Iterable<Cuoco> getAllCuochi() {
-      return this.cuocoRepository.findAll();
+      return this.cuocoRepository.findAllByOrderByIdDesc();
    }
 
    @Transactional

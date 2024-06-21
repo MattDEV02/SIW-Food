@@ -14,32 +14,33 @@
                <div class="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5 shadow border rounded px-5 pt-4 pb-2"
                     th:title="'Form di ' + ${isUpdate ? 'aggiornamento' : 'registrazione'} + ' nuovo ingrediente ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <div class="row text-center mt-2 mb-4">
-                     <h3 th:text="'Form ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'"></h3>
+                     <h3 th:text="'Form ingrediente per la ricetta ' + ${ricetta.nome} + ' 🥐'">Form ingrediente</h3>
                   </div>
                   <form id="ingrediente-registration-form" method="POST" name="ingrediente-registration-form"
+                        th:object="${ingrediente}"
                         th:action="@{'/ingredienti/' + ${isUpdate ? 'update' : 'register'} + ${'/ricetta/' + ricetta.id} + ${isUpdate ? ('/ingrediente/' + ingrediente.id) : ''}}">
-                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ingredienteAlrearyExists}, condition = ${ingredienteAlrearyExists != null})}"></div>
+                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ingredienteAlreadyExists}, condition = ${ingredienteAlreadyExists != null})}"></div>
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
                                placeholder="Inserisci il nome dell' ingrediente"
-                               required th:field="${ingrediente.nome}"
+                               required th:field="*{nome}"
                                th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
                                th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
-                               th:object="${ingrediente}" title="Inserisci nome della ingrediente" type="text"/>
+                               th:object="${ingrediente}" title="Inserisci nome dell' ingrediente" type="text"/>
                         <div
-                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ingrediente.nome')}"></div>
+                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'nome')}"></div>
                      </div>
                      <div class="mb-3">
                         <label class="form-label" for="quantita">Quantità:</label>
                         <input class="form-control py-2" id="quantita" name="quantita"
                                placeholder="Inserisci la quantita dell'ingrediente"
-                               required th:field="${ingrediente.quantita}"
-                               th:maxlength="${FIELD_SIZES_MAP.get('QUANTITA_MAX_LENGTH')}"
-                               th:minlength="${FIELD_SIZES_MAP.get('QUANTITA_MIN_LENGTH')}"
+                               required th:field="*{quantita}"
+                               th:min="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_MIN_VALUE')}"
+                               th:max="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_MAX_VALUE')}"
                                th:object="${ingrediente}" title="Inserisci la quantità dell' ingrediente" type="number" th:step="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_STEP_VALUE')}"/>
                         <div
-                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ingrediente.quantita')}"></div>
+                              th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'quantita')}"></div>
                      </div>
                      <div class="my-4">
                         <button class="btn btn-primary form-control py-2 fw-bold mt-2" form="ingrediente-registration-form"

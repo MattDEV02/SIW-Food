@@ -29,7 +29,7 @@
 
 - **Visualizzazione di guide tramite tooltips:** Sono presenti molti tooltips che guidano l'utente nel sito.
 
-- **Lingua:** È disponibile solo la lingua italiana al momento.
+- **Lingua:** È disponibile la lingua italiana al momento con internalizzazione.
 
 ## Screenshots 📸
 
@@ -213,7 +213,7 @@ mvnw package
 java -jar target/SIW-Food-0.0.1-SNAPSHOT.jar
 ```
 
-## Alcuni esempi di codice 🤖
+## Alcuni snippet di codice 🤖
 
 ### `SiwFoodApplication.java` -> `com.siw.siwFood.SiwFoodApplication`
 
@@ -229,7 +229,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @SpringBootApplication
 public class SiwFoodApplication {
-
    public static void main(String[] args) {
       SpringApplication.run(SiwFoodApplication.class, args);
    }
@@ -252,6 +251,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -263,85 +263,84 @@ import com.siw.siwfood.helpers.constants.ProjectPaths;
 import javax.sql.DataSource;
 
 @Configuration
-//@EnableWebMvc
+@EnableWebSecurity
 public class AuthConfiguration implements WebMvcConfigurer {
 
-   private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:" + ProjectPaths.STATIC + "/"};
-   @Autowired
-   private DataSource dataSource;
+  private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:" + ProjectPaths.STATIC + "/"};
+  @Autowired
+  private DataSource dataSource;
 
-   @Override
-   public void addResourceHandlers(@NonNull ResourceHandlerRegistry resourceHandlerRegistry) {
-      resourceHandlerRegistry.addResourceHandler("/**")
-              .addResourceLocations(AuthConfiguration.CLASSPATH_RESOURCE_LOCATIONS)
-      //.setCachePeriod(0)
-      ;
-   }
-
-
-   @Autowired
-   public void configureGlobal(@NonNull AuthenticationManagerBuilder authenticationManagerBuilder)
-           throws Exception {
-      authenticationManagerBuilder.jdbcAuthentication()
-              .dataSource(this.dataSource)
-              .authoritiesByUsernameQuery("SELECT username, role FROM Credenziali WHERE username = ?")
-              .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM Credenziali WHERE username = ?");
-   }
+  @Override
+  public void addResourceHandlers(@NonNull ResourceHandlerRegistry resourceHandlerRegistry) {
+    resourceHandlerRegistry.addResourceHandler("/**")
+            .addResourceLocations(AuthConfiguration.CLASSPATH_RESOURCE_LOCATIONS)
+    //.setCachePeriod(0)
+    ;
+  }
 
 
-   @Bean
-   public PasswordEncoder passwordEncoder() { // Bcrypt algorithm
-      return new BCryptPasswordEncoder();
-   }
+  @Autowired
+  public void configureGlobal(@NonNull AuthenticationManagerBuilder authenticationManagerBuilder)
+          throws Exception {
+    authenticationManagerBuilder.jdbcAuthentication()
+            .dataSource(this.dataSource)
+            .authoritiesByUsernameQuery("SELECT username, role FROM Credenziali WHERE username = ?")
+            .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM Credenziali WHERE username = ?");
+  }
 
-   @Bean
-   public AuthenticationManager authenticationManager(@NonNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
-      return authenticationConfiguration.getAuthenticationManager();
-   }
+  @Bean
+  public PasswordEncoder passwordEncoder() { // Bcrypt algorithm
+    return new BCryptPasswordEncoder();
+  }
 
-   @Bean
-   protected SecurityFilterChain configure(final @NonNull HttpSecurity httpSecurity) throws Exception {
-      httpSecurity
-              .cors(AbstractHttpConfigurer::disable)
-              .csrf(AbstractHttpConfigurer::disable)
-              .authorizeHttpRequests(
-                      authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
-                              .requestMatchers(HttpMethod.GET,
-                                      "/", "/register", "/login", "/logout",
-                                      "/cuochi","/cuochi/cuoco/{cuocoId}",
-                                      "/ricette", "/ricette/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
-                                      "/ingredienti",  "/ingredienti/ricetta/{ricettaId}/ingrediente/{ingredienteId}", "/ingredienti/ricetta/{ricettaId}",
-                                      "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
-                              .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                              .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
-                              .requestMatchers(HttpMethod.GET,"/cuochi/delete/cuoco/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
-                              .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers("/ingredienti/register/ricetta/{ricettaId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers(HttpMethod.GET,"/ingredienti/delete/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers("/ingredienti/update/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
-                              .requestMatchers(HttpMethod.DELETE).denyAll()
-                              .anyRequest().authenticated()
-              )
-              .formLogin(formLogin -> formLogin
-                      .loginPage("/login")
-                      .defaultSuccessUrl("/", true)
-                      .failureUrl("/login?invalidCredentials=true")
-                      .usernameParameter("username")
-                      .passwordParameter("password")
-                      .permitAll()
-              )
-              .logout(logout -> logout
-                      .logoutUrl("/logout")
-                      .logoutSuccessUrl("/login?logoutSuccessful=true")
-                      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                      .invalidateHttpSession(true)
-                      .clearAuthentication(true)
-                      .deleteCookies("JSESSIONID")
-                      .permitAll());
-      return httpSecurity.build();
-   }
+  @Bean
+  public AuthenticationManager authenticationManager(@NonNull AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
+
+  @Bean
+  protected SecurityFilterChain configure(final @NonNull HttpSecurity httpSecurity) throws Exception {
+    httpSecurity
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(
+                    authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
+                            .requestMatchers(HttpMethod.GET,
+                                    "/", "/register", "/login", "/logout",
+                                    "/cuochi","/cuochi/cuoco/{cuocoId}",
+                                    "/ricette", "/ricette/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}",
+                                    "/ingredienti",  "/ingredienti/ricetta/{ricettaId}/ingrediente/{ingredienteId}", "/ingredienti/ricetta/{ricettaId}",
+                                    "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/register", "/ricette/searchRicette").permitAll()
+                            .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                            .requestMatchers(HttpMethod.GET,"/cuochi/delete/cuoco/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
+                            .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers(HttpMethod.GET,"/ricette/delete/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers("/ricette/update/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers("/ingredienti/register/ricetta/{ricettaId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers(HttpMethod.GET,"/ingredienti/delete/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers("/ingredienti/update/ricetta/{ricettaId}/ingrediente/{ingredienteId}").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())
+                            .requestMatchers(HttpMethod.DELETE).denyAll()
+                            .anyRequest().authenticated()
+            )
+            .formLogin(formLogin -> formLogin
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/login?invalidCredentials=true")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logoutSuccessful=true")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .deleteCookies("JSESSIONID")
+                    .permitAll());
+    return httpSecurity.build();
+  }
 }
 ```
 
@@ -468,14 +467,12 @@ public class AuthenticationController {
 
 }
 ```
-
 ### `CuocoService.java` -> `com.siw.siwfood.service.CuocoService`
 
 ```java
 package com.siw.siwfood.service;
 
 import com.siw.siwfood.helpers.cuoco.FotografiaFileUtils;
-import com.siw.siwfood.helpers.cuoco.Utils;
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.model.Utente;
@@ -495,7 +492,7 @@ public class CuocoService {
   private CuocoRepository cuocoRepository;
 
   public Iterable<Cuoco> getAllCuochi() {
-    return this.cuocoRepository.findAll();
+    return this.cuocoRepository.findAllByOrderByIdDesc();
   }
 
   @Transactional
@@ -508,10 +505,10 @@ public class CuocoService {
   @Transactional
   public void deleteCuoco(Long cuocoId) {
     Cuoco cuoco = this.getCuoco(cuocoId);
-    if (cuoco != null) {
+    if(cuoco != null) {
       FotografiaFileUtils.deleteFotografiaDirectory(cuoco);
       List<Ricetta> ricette = cuoco.getRicette();
-      for (Ricetta ricetta : ricette) {
+      for(Ricetta ricetta : ricette) {
         deleteRicettaImmaginiDirectory(ricetta);
       }
       this.cuocoRepository.delete(cuoco);
@@ -587,6 +584,7 @@ public class Ricetta {
   private List<String> immagini;
 
   @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER, targetEntity = Ingrediente.class, orphanRemoval = true, mappedBy = "ricetta")
+  @OrderBy(value = "id DESC")
   private List<Ingrediente> ingredienti;
 
   @ManyToOne(targetEntity = Cuoco.class, optional = false)

@@ -25,7 +25,7 @@ public class RicettaService {
    private CuocoRepository cuocoRepository;
 
    public Iterable<Ricetta> getAllRicette() {
-      return this.ricettaRepository.findAll();
+      return this.ricettaRepository.findAllByOrderByIdDesc();
    }
 
    public Iterable<Ricetta> getAllRicetteCuoco(Cuoco cuoco) {
@@ -38,6 +38,7 @@ public class RicettaService {
 
    @Transactional
    public void deleteRicetta(Ricetta ricetta) {
+      RicettaImmaginiFileUtils.deleteRicettaImmagini(ricetta);
       this.ricettaRepository.delete(ricetta);
    }
 
@@ -80,7 +81,6 @@ public class RicettaService {
    public Ingrediente findIngrediente(@NotNull Ricetta ricetta, Long ingredienteId) {
       return ricetta.getIngredienti().stream().filter(ingrediente -> ingrediente.getId().equals(ingredienteId)).findFirst().orElse(null);
    }
-
 
    public Ricetta updateRicetta(@NotNull Ricetta ricettaToUpdate, @NotNull Ricetta ricetta, Integer numeroImmaginiRicetta) {
       ricettaToUpdate.setNome(ricetta.getNome());

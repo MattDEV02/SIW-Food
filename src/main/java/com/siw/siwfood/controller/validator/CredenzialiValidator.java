@@ -39,11 +39,6 @@ public class CredenzialiValidator implements Validator {
       if (this.getConfirmPassword() == null || !credenziali.getPassword().equals(this.getConfirmPassword())) {
          errors.rejectValue("password", "credenziali.password.passwordDifferentFromConfirmPasswordError");
       }
-      /*
-      if (!Utils.existsRole(credenziali.getRole())) {
-         errors.rejectValue("role", "credenziali.role.notExists");
-      }
-      */
    }
 
    @Override

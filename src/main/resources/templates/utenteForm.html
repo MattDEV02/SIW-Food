@@ -11,7 +11,7 @@
             <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6 shadow border rounded px-5 pt-4 pb-2"
                  th:title="'Form di registrazione ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                <div class="row text-center mt-2 mb-4">
-                  <h1 th:text="'Registrazione ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🕵️‍♂️'"></h1>
+                  <h1 th:text="'Registrazione ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 🕵️‍♂️'">Registrazione</h1>
                </div>
                <form id="registration-form" method="POST" name="registration-form"
                      th:action="@{/register}" enctype="multipart/form-data">
@@ -51,7 +51,6 @@
                      <div
                            th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'utente.dataNascita')}"></div>
                   </div>
-                  
                   <div class="mb-3">
                      <label class="form-label" for="username">Username:</label>
                      <input class="form-control py-2" id="username" name="username"
@@ -64,7 +63,6 @@
                      <div
                            th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'credenziali.username')}"></div>
                   </div>
-                  
                   <div class="mb-3">
                      <label class="form-label" for="password">Password:</label>
                      <div class="input-group">
@@ -93,7 +91,7 @@
                             type="password"/>
                   </div>
                   <div class="mb-3">
-                     <label class="form-label" for="fotografia-cuoco">Fotografia</label>
+                     <label class="form-label" for="fotografia-cuoco">Fotografia:</label>
                      <input class="form-control py-2"
                             form="registration-form"
                             id="fotografia-cuoco"

@@ -14,11 +14,11 @@
                <div class="col-12 col-sm-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5 shadow border rounded px-5 pt-4 pb-2"
                     th:title="'Form di registrazione nuova ricetta ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')}">
                   <div class="row text-center mt-2 mb-4">
-                     <h2 th:text="'Form ricetta ' + ${(#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')) ? ('per il cuoco ' + loggedUser.credenziali.username) : GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'"></h2>
+                     <h2 th:text="'Form ricetta ' + ${(#authentication.getPrincipal() != 'anonymousUser' && #strings.contains(loggedUser.credenziali.role, 'REGISTRATO')) ? ('per il cuoco ' + loggedUser.credenziali.username) : GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'">Form ricetta</h2>
                   </div>
                   <form id="ricetta-registration-form" method="POST" name="ricetta-registration-form"
                         th:action="@{${'/ricette/' + (isUpdate ? ('update/ricetta/' + ricetta.id)  : 'register')}}" enctype="multipart/form-data">
-                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ricettaAlrearyExists}, condition = ${ricettaAlrearyExists != null})}"></div>
+                     <div th:replace="~{fragments/shared/message/error/errorMessage.html :: errorMessage(text = ${ricettaAlreadyExists}, condition = ${ricettaAlreadyExists != null})}"></div>
                      <div class="mb-3">
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
@@ -42,7 +42,7 @@
                               th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'ricetta.descrizione')}"></div>
                      </div>
                      <div class="mb-3">
-                        <label class="form-label" for="immagini-ricetta">Immagini</label>
+                        <label class="form-label" for="immagini-ricetta">Immagini:</label>
                         <input accept="image/png, image/jpeg, image/jpg, image/" class="form-control py-2"
                                form="ricetta-registration-form"
                                id="immagini-ricetta"

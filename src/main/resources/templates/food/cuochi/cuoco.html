@@ -11,7 +11,7 @@
       <div class="row justify-content-center">
          <div class="col-12 mt-5" th:if="${isCuocoValid}">
             <div class="row text-center">
-               <h1 th:text="'Cuoco ' + ${cuoco.utente.credenziali.username} + ' 👨‍🍳'"></h1>
+               <h1 th:text="'Cuoco ' + ${cuoco.utente.credenziali.username} + ' 👨‍🍳'">Cuoco</h1>
             </div>
          </div>
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco registrato con successo.', condition = ${isCuocoRegistered})}"></div>

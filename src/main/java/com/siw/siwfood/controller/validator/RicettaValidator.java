@@ -3,7 +3,6 @@ package com.siw.siwfood.controller.validator;
 import com.siw.siwfood.helpers.constants.FieldSizes;
 import com.siw.siwfood.model.Ricetta;
 import com.siw.siwfood.repository.RicettaRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -40,10 +39,10 @@ public class RicettaValidator implements Validator {
       Ricetta ricetta = (Ricetta) object;
       MultipartFile[] immagini = this.getImmagini();
       if(this.ricettaRepository.existsByCuocoAndNome(ricetta.getCuoco(), ricetta.getNome())) {
-         errors.reject("ricettaAlrearyExists", "Ricetta già esistente.");
+         errors.reject("ricettaAlreadyExists", "Ricetta già esistente.");
       }
       if(ricetta.getCuoco() == null ) {
-         errors.rejectValue("cuoco", "ricetta.cuoco", "Cuoco inserito non esistente.");
+         errors.rejectValue("cuoco", "ricetta.cuocoNotExists");
       }
       if(!this.getIsUpdate()) {
          if (immagini == null || immagini.length == 0) {

@@ -123,7 +123,7 @@ public class RicettaController {
       return modelAndView;
    }
 
-   @GetMapping(value ="/searchRicette")
+   @PostMapping(value ="/searchRicette")
    public ModelAndView searchRicette(@NonNull HttpServletRequest request) {
       String nomeRicetta = request.getParameter("nome-ricetta");
       String usernameCuoco = request.getParameter("username-cuoco-ricetta");

@@ -13,7 +13,7 @@
       <div class="row justify-content-center">
          <div class="col-12 mt-5">
             <div class="row text-center">
-               <h1 th:text="'Ingredienti ' + ${#strings.isEmpty(nomeRicetta) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : nomeRicetta} + ' 🧈'"></h1>
+               <h1 th:text="'Ingredienti ' + ${#strings.isEmpty(nomeRicetta) ? GLOBAL_CONSTANTS_MAP.get('APP_NAME') : nomeRicetta} + ' 🧈'">Ingredienti</h1>
             </div>
          </div>
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Ingrediente registrato con successo.', condition = ${isIngredienteRegistered})}"></div>

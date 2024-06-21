@@ -47,7 +47,6 @@ public class AuthConfiguration implements WebMvcConfigurer {
               .usersByUsernameQuery("SELECT username, password, TRUE AS enabled FROM Credenziali WHERE username = ?");
    }
 
-
    @Bean
    public PasswordEncoder passwordEncoder() { // Bcrypt algorithm
       return new BCryptPasswordEncoder();
@@ -68,10 +67,10 @@ public class AuthConfiguration implements WebMvcConfigurer {
                               .requestMatchers(HttpMethod.GET,
                                       "/", "/register", "/login", "/logout",
                                       "/cuochi","/cuochi/cuoco/{cuocoId}",
-                                      "/ricette", "/ricette/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}", "/ricette/searchRicette",
+                                      "/ricette", "/ricette/ricetta/{ricettaId}", "/ricette/cuoco/{cuocoId}",
                                       "/ingredienti",  "/ingredienti/ricetta/{ricettaId}/ingrediente/{ingredienteId}", "/ingredienti/ricetta/{ricettaId}",
                                       "/css/**", "/js/**", "/images/**", "/webfonts/**").permitAll()
-                              .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                              .requestMatchers(HttpMethod.POST, "/register", "/ricette/searchRicette").permitAll()
                               .requestMatchers("/cuochi/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
                               .requestMatchers(HttpMethod.GET,"/cuochi/delete/cuoco/**").hasAnyAuthority(Roles.AMMINISTRATORE.toString())
                               .requestMatchers("/ricette/register").hasAnyAuthority(Roles.AMMINISTRATORE.toString(), Roles.REGISTRATO.toString())

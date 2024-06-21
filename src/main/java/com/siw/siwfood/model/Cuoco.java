@@ -28,6 +28,7 @@ public class Cuoco {
    private String fotografia;
 
    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.REMOVE }, targetEntity = Ricetta.class, orphanRemoval = true,  mappedBy = "cuoco")
+   @OrderBy(value = "id DESC")
    private List<Ricetta> ricette;
 
    public Cuoco() {

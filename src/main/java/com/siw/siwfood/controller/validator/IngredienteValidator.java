@@ -31,7 +31,7 @@ public class IngredienteValidator implements Validator {
    public void validate(Object object, Errors errors) {
       Ingrediente ingrediente = (Ingrediente) object;
       if(this.ingredienteRepository.existsByRicettaAndNome(this.ricetta, ingrediente.getNome())) {
-         errors.reject("ingredienteAlrearyExists", "Ingrediente già esistente.");
+         errors.reject("ingredienteAlreadyExists", "Ingrediente già esistente.");
       }
    }
 }

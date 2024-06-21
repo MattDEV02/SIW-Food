@@ -9,5 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface CuocoRepository extends CrudRepository<Cuoco, Long> {
-   Optional<Cuoco> findByUtente(Utente utente);
+   public Optional<Cuoco> findByUtente(Utente utente);
+   public Iterable<Cuoco> findAllByOrderByIdDesc();
+
 }

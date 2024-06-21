@@ -10,12 +10,10 @@ import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.CredenzialiService;
 import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.UtenteService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -64,24 +62,20 @@ public class GlobalController {
    }
 
    @ModelAttribute("loggedUser")
-   public Utente getLoggedUser(@NotNull Model model) {
-      UserDetails userDetails = null;
-      Credenziali credenziali = null;
+   public Utente getLoggedUser() {
       Utente loggedUser = null;
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       if (Utils.userIsLoggedIn(authentication)) {
-         userDetails = (UserDetails) (authentication.getPrincipal());
-         credenziali = this.credenzialiService.getCredenziali(userDetails.getUsername());
+         UserDetails userDetails = (UserDetails) (authentication.getPrincipal());
+         Credenziali credenziali = this.credenzialiService.getCredenziali(userDetails.getUsername());
          loggedUser = this.utenteService.getUtente(credenziali);
-         model.addAttribute("loggedUser", loggedUser);
       }
       return loggedUser;
    }
 
    @ModelAttribute("cuochiSelect")
-   public Iterable<Cuoco> getCuochiSelect(@NotNull Model model) {
+   public Iterable<Cuoco> getCuochiSelect() {
       Iterable<Cuoco> cuochiSelect = this.cuocoService.getAllCuochi();
-      model.addAttribute("cuochiSelect", cuochiSelect);
       return cuochiSelect;
    }
 

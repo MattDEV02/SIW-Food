@@ -12,7 +12,7 @@
       <div class="row justify-content-center">
          <div class="col-12 mt-5">
             <div class="row text-center">
-               <h1 th:text="'Cuochi ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'"></h1>
+               <h1 th:text="'Cuochi ' + ${GLOBAL_CONSTANTS_MAP.get('APP_NAME')} + ' 👨‍🍳'">Cuochi</h1>
             </div>
          </div>
          <div th:replace="~{fragments/shared/message/success/successMessage.html :: successMessage(text = 'Cuoco eliminato con successo.', condition = ${isCuocoDeleted})}"></div>

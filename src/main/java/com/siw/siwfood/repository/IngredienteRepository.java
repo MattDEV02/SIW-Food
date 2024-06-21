@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface IngredienteRepository extends CrudRepository<Ingrediente, Long> {
    public Boolean existsByRicettaAndNome(Ricetta ricetta, String nome);
+   public Iterable<Ingrediente> findAllByOrderByIdDesc();
 }
