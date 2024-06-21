@@ -782,7 +782,7 @@ togglePasswordVisibilityButton.addEventListener("click", () => {
 ### GET "/login"
 **Descrizione:** Mostra il form per il login di un Utente.
 
-## CuocoController:
+## CuocoController ("/cuochi"): 
 
 ### GET "/"
 **Descrizione:** Mostra tutti i Cuochi registrati sul sito.
