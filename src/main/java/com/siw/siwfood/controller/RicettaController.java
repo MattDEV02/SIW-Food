@@ -11,6 +11,8 @@ import com.siw.siwfood.service.RicettaService;
 import com.siw.siwfood.service.UtenteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,7 @@ import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
 @Controller
 @RequestMapping(value = "/ricette")
 public class RicettaController {
+   private static final Logger LOGGER = LoggerFactory.getLogger(RicettaController.class);
    @Autowired
    private RicettaService ricettaService;
    @Autowired
@@ -78,6 +81,7 @@ public class RicettaController {
       if (!ricettaBindingResult.hasErrors()) {
          final Integer numeroImmaginiRicetta = immaginiRicetta.length;
          Ricetta savedRicetta = this.ricettaService.saveRicetta(ricetta, numeroImmaginiRicetta);
+         RicettaController.LOGGER.info("Registrata Ricetta con questo ID: {}", savedRicetta.getId());
          for(Integer i = 0; i < numeroImmaginiRicetta; i++) {
             RicettaImmaginiFileUtils.storeRicettaImmagine(savedRicetta, immaginiRicetta[i], i);
          }
@@ -100,6 +104,7 @@ public class RicettaController {
       if(ricetta != null) {
          RicettaImmaginiFileUtils.deleteRicettaImmaginiDirectory(ricetta);
          this.ricettaService.deleteRicetta(ricetta);
+         RicettaController.LOGGER.info("Cancellata Ricetta con questo ID: {}", ricetta.getId());
          modelAndView.addObject("isRicettaDeleted", true);
       } else {
          modelAndView.setViewName("redirect:/ricette");
@@ -137,11 +142,7 @@ public class RicettaController {
          Credenziali credenzialiCuoco = this.credenzialiService.getCredenziali(usernameCuoco);
          Utente utenteCuoco = this.utenteService.getUtente(credenzialiCuoco);
          Cuoco cuoco = this.cuocoService.getCuoco(utenteCuoco);
-         if (nomeRicetta.isEmpty()) {
-            searchedRicette = this.ricettaService.getAllRicetteCuoco(cuoco);
-         } else {
-            searchedRicette = this.ricettaService.getAllRicettaCuocoByNome(cuoco, nomeRicetta);
-         }
+         searchedRicette = nomeRicetta.isEmpty() ? this.ricettaService.getAllRicetteCuoco(cuoco) : this.ricettaService.getAllRicettaCuocoByNome(cuoco, nomeRicetta);
       }
       modelAndView.addObject("ricette", searchedRicette);
       modelAndView.addObject("hasSearchedRicette", true);
@@ -180,6 +181,7 @@ public class RicettaController {
          MultipartFile[] notEmptyImmaginiRicetta = Arrays.stream(immaginiRicetta).filter(immagineRicetta -> !immagineRicetta.isEmpty()).toArray(MultipartFile[]::new);
          final Integer numeroNotEmptyImmaginiRicetta = notEmptyImmaginiRicetta.length;
          Ricetta updatedRicetta = this.ricettaService.updateRicetta(ricettaToUpdate, ricetta, numeroNotEmptyImmaginiRicetta);
+         RicettaController.LOGGER.info("Aggiornata Ricetta con questo ID: {}", updatedRicetta.getId());
          for(Integer i = 0; i < numeroNotEmptyImmaginiRicetta; i++) {
             RicettaImmaginiFileUtils.storeRicettaImmagine(updatedRicetta, notEmptyImmaginiRicetta[i], i);
          }

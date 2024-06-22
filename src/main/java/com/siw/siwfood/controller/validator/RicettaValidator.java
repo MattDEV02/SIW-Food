@@ -46,7 +46,7 @@ public class RicettaValidator implements Validator {
       }
       if(!this.getIsUpdate()) {
          if (immagini == null || immagini.length == 0) {
-            errors.reject("ricettaImmaginiEmpty", "File non presenti.");
+            errors.reject("ricettaImmaginiEmpty", "File immagini non presenti.");
          } else {
             for(MultipartFile immagine : immagini) {
                if(immagine == null || immagine.isEmpty()) {

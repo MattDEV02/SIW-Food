@@ -24,7 +24,7 @@ import java.util.Map;
 public class GlobalController {
    private static final Map<String, Object> GLOBAL_CONSTANTS_MAP = new HashMap<String, Object>();
    private static final Map<String, Object> FIELD_SIZES_MAP = new HashMap<String, Object>();
-   private static final Map<String, Object> TEMPORALS_MAP = new HashMap<String, Object>();;
+   private static final Map<String, Object> TEMPORALS_MAP = new HashMap<String, Object>();
 
    static {
       GlobalValues.fillGlobalMap(GlobalValues.class, GlobalController.GLOBAL_CONSTANTS_MAP);

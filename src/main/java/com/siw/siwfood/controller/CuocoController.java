@@ -2,6 +2,8 @@ package com.siw.siwfood.controller;
 
 import com.siw.siwfood.model.Cuoco;
 import com.siw.siwfood.service.CuocoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping(value = "/cuochi")
 public class CuocoController {
+   private static final Logger LOGGER = LoggerFactory.getLogger(CuocoController.class);
    @Autowired
    private CuocoService cuocoService;
 
@@ -34,6 +37,7 @@ public class CuocoController {
       Cuoco cuoco = this.cuocoService.getCuoco(cuocoId);
       if(cuoco != null) {
          this.cuocoService.deleteCuoco(cuoco.getId());
+         CuocoController.LOGGER.info("Cancellato Cuoco con questo ID: {}", cuoco.getId());
          modelAndView.addObject("isCuocoDeleted", true);
       } else {
          modelAndView.setViewName("redirect:/cuochi");

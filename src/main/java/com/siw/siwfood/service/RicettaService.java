@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -96,7 +95,8 @@ public class RicettaService {
          }
       }
       ricettaToUpdate.setIngredienti(ricetta.getIngredienti());
-      return this.ricettaRepository.save(ricettaToUpdate);
+      Ricetta updatedRicetta = this.ricettaRepository.save(ricettaToUpdate);
+      return updatedRicetta;
    }
 
    public void updateIngrediente(Ricetta ricetta, Long ingredienteId, Ingrediente ingrediente) {

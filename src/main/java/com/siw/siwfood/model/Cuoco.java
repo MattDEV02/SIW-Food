@@ -20,7 +20,7 @@ public class Cuoco {
    @Min(FieldSizes.ENTITY_ID_MIN_VALUE)
    private Long id;
 
-   @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REMOVE }, targetEntity = Utente.class, fetch = FetchType.EAGER, optional = false, orphanRemoval = true)
+   @OneToOne(cascade = { CascadeType.REMOVE }, targetEntity = Utente.class, fetch = FetchType.EAGER, optional = false, orphanRemoval = true)
    @JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
    private Utente utente;
 

@@ -25,13 +25,16 @@ public class CuocoValidator implements Validator {
    public void validate(@NonNull Object object, @NonNull Errors errors) {
       //Cuoco cuoco = (Cuoco) object;
       if (this.getFotografia() == null || this.getFotografia().isEmpty()) {
+         System.out.println("1");
          errors.reject("cuocoFotografiaEmptyFile", "File non valido o vuoto.");
       } else {
          if (this.getFotografia().getSize() > FieldSizes.IMAGE_MAX_BYTE_SIZE) {
+            System.out.println("2");
             errors.reject("cuocoFotografiaFileSizeExceedsLimit", "La dimensione del file supera il limite di 5 KB.");
          }
          String originalFilename = this.getFotografia().getOriginalFilename();
          if (originalFilename == null || (!originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png") && !originalFilename.endsWith(".jpeg"))) {
+            System.out.println("3");
             errors.reject( "cuocoFotografiaUnsupportedFileType", "Tipo file non valido. Sono validi file immagine di tipo .jpeg, .jpg, .png");
          }
       }

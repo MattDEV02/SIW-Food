@@ -12,7 +12,7 @@
 <img title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model.png" width="100%"/>
 </p>
 
-## Funzionalità Principali ✨
+## Funzionalità e caratteristiche Principali ✨
 
 - **Utilizzo:** Gli utenti possono essere di 3 tipi: 
   - Utenti occasionali: NON sono Utenti registrati sul sito, possono solo visualizzare e ricercare Cuochi, ricette e ingredienti. 
@@ -23,7 +23,7 @@
 
 - **Sicurezza e controllo degli errori utente:** I dati sensibili dell'utente, come la password, vengono crittografati e memorizzati in un database molto robusto. Sono inoltre presenti controlli degli errori sia lato client che lato server.
 
-- **Modularità:** Il progetto è diviso in vari moduli, package, fragments e directory.
+- **Modularità:** Il progetto è diviso in vari moduli, package, fragments, directory, variabili globali...
 
 - **Deployed:** Grazie alla piattaforma [Heroku](https://dashboard.heroku.com/) il progetto è disponibile a tutti tramite il link: https://siw-food-0dd5e15adbbe.herokuapp.com
 
@@ -121,6 +121,7 @@
 |   Hibernate    |     4.3.11     |
 |   PostgreSQL   |      16.0      |
 |   thymeleaf    |     3.0.14     |
+|     JUnit      |       4        |
 |      XML       |      1.1       |
 |   Bootstrap    |     5.3.3      |
 |  FontAwesome   |     5.15.4     |
@@ -136,6 +137,7 @@
 | IntelliJ IDEA  |     2024.1     |
 |     Chrome     | 124.0.6367.201 |
 | Microsoft EDGE | 123.0.2420.65  |
+|     Opera      | 111.0.5168.15  |
 
 ## Autore ©️
 

@@ -11,6 +11,8 @@ import com.siw.siwfood.service.CuocoService;
 import com.siw.siwfood.service.RicettaService;
 import com.siw.siwfood.service.UtenteService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,13 +26,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
-
 import java.util.List;
 import java.util.Objects;
 
+import static com.siw.siwfood.helpers.credenziali.Utils.utenteIsCuoco;
+
 @Controller
 public class AuthenticationController {
+   private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
    @Autowired
    private PasswordEncoder passwordEncoder;
    @Autowired
@@ -75,6 +78,7 @@ public class AuthenticationController {
          utente.setCredenziali(credenziali);
          Utente savedUtente = this.utenteService.saveUtente(utente);
          if (savedUtente != null) {
+            AuthenticationController.LOGGER.info("Registrato nuovo Utente con questo ID: {}", savedUtente.getId());
             Cuoco cuoco = new Cuoco(savedUtente);
             Cuoco savedCuoco = this.cuocoService.saveCuoco(cuoco);
             if(savedCuoco != null) {
@@ -87,10 +91,6 @@ public class AuthenticationController {
          List<ObjectError> userErrors = utenteBindingResult.getAllErrors();
          for (ObjectError userError : userErrors) {
             modelAndView.addObject(Objects.requireNonNull(userError.getCode()), userError.getDefaultMessage());
-         }
-         List<ObjectError> credentialsErrors = credenzialiBindingResult.getAllErrors();
-         for (ObjectError credentialErrors : credentialsErrors) {
-            modelAndView.addObject(Objects.requireNonNull(credentialErrors.getCode()), credentialErrors.getDefaultMessage());
          }
       }
       return modelAndView;

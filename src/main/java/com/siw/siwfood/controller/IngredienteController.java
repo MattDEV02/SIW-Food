@@ -7,6 +7,8 @@ import com.siw.siwfood.model.Utente;
 import com.siw.siwfood.service.IngredienteService;
 import com.siw.siwfood.service.RicettaService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import java.util.Objects;
 @Controller
 @RequestMapping(value = "/ingredienti")
 public class IngredienteController {
+   private static final Logger LOGGER = LoggerFactory.getLogger(IngredienteController.class);
    @Autowired
    private IngredienteService ingredienteService;
    @Autowired
@@ -116,8 +119,14 @@ public class IngredienteController {
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
          Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
-         this.ricettaService.destroyIngrediente(ricetta, ingrediente);
-         modelAndView.addObject("isIngredienteDeleted", true);
+         if(ingrediente != null) {
+            this.ricettaService.destroyIngrediente(ricetta, ingrediente);
+            IngredienteController.LOGGER.info("Cancellato Ingrediente con questo ID: {}", ingrediente.getId());
+            modelAndView.addObject("isIngredienteDeleted", true);
+         } else {
+            modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId());
+            modelAndView.addObject("ingredienteNotFound", true);
+         }
       } else {
          modelAndView.setViewName("redirect:/ingredienti" );
          modelAndView.addObject("ingredienteNotFound", true);
@@ -133,12 +142,17 @@ public class IngredienteController {
       Ricetta ricetta = this.ricettaService.getRicetta(ricettaId);
       if(ricetta != null) {
          Ingrediente ingrediente = this.ricettaService.findIngrediente(ricetta, ingredienteId);
-         modelAndView.addObject("ingrediente", ingrediente);
-         modelAndView.addObject("ricetta", ricetta);
-         modelAndView.addObject("isUpdate", true);
+         if(ingrediente != null) {
+            modelAndView.addObject("ingrediente", ingrediente);
+            modelAndView.addObject("ricetta", ricetta);
+            modelAndView.addObject("isUpdate", true);
+         } else {
+            modelAndView.setViewName("redirect:/ingredienti/ricetta/" + ricetta.getId());
+            modelAndView.addObject("ingredienteNotFound", true);
+         }
       } else {
-         modelAndView.setViewName("redirect:/ingredienti" );
-         modelAndView.addObject("ingredienteNotFound", true);
+         modelAndView.setViewName("redirect:/ricette" );
+         modelAndView.addObject("ricettaNotFound", true);
       }
       return modelAndView;
    }
