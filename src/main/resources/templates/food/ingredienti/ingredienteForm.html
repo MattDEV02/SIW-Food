@@ -24,8 +24,10 @@
                         <label class="form-label" for="nome">Nome:</label>
                         <input class="form-control py-2" id="nome" name="nome"
                                placeholder="Inserisci il nome dell' ingrediente"
-                                th:field="*{nome}"
-                              
+                               th:field="*{nome}"
+                               required
+                               th:maxlength="${FIELD_SIZES_MAP.get('NOME_MAX_LENGTH')}"
+                               th:minlength="${FIELD_SIZES_MAP.get('NOME_MIN_LENGTH')}"
                                th:object="${ingrediente}" title="Inserisci nome dell' ingrediente" type="text"/>
                         <div
                               th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'nome')}"></div>
@@ -34,8 +36,10 @@
                         <label class="form-label" for="quantita">Quantità:</label>
                         <input class="form-control py-2" id="quantita" name="quantita"
                                placeholder="Inserisci la quantita dell'ingrediente"
-                                th:field="*{quantita}"
-                              
+                               th:field="*{quantita}"
+                               th:min="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_MIN_VALUE')}"
+                               th:max="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_MAX_VALUE')}"
+                               required
                                th:object="${ingrediente}" title="Inserisci la quantità dell' ingrediente" type="number" th:step="${FIELD_SIZES_MAP.get('QUANTITA_INGREDIENTE_STEP_VALUE')}"/>
                         <div
                               th:replace="~{fragments/shared/message/error/fieldErrorMessage.html :: fieldErrorMessage(field = 'quantita')}"></div>
