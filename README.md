@@ -12,6 +12,14 @@
 <img title="SIW-Food Domain Model"  alt="SIW-Food Domain Model"  src="/src/main/resources/static/images/README/progettazione/Domain_Model.png" width="100%"/>
 </p>
 
+## Modello ER 🔢
+
+<img title="SIW-Food ER model" alt="SIW-Food ER model" src="/src/main/resources/static/images/README/progettazione/ER_Model.png" width="100%" />
+
+## Modello relazionale 👨‍🎓
+
+<img title="MarketNexus Relational model" alt="MarketNexus Relational model" src="/src/main/resources/static/images/README/progettazione/Relational_Model.png" width="100%" />
+
 ## Funzionalità e caratteristiche Principali ✨
 
 - **Utilizzo:** Gli utenti possono essere di 3 tipi: 
